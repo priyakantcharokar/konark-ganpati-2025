@@ -298,10 +298,6 @@ const FlatSelection: React.FC<FlatSelectionProps> = ({ onFlatSelect }) => {
               animate={{ opacity: 1, y: 0 }}
               className="mt-6 text-center p-4 bg-primary-50 rounded-xl border border-primary-200"
             >
-              <div className="flex items-center justify-center gap-2 text-primary-700">
-                <Home className="w-5 h-5" />
-                <span className="font-semibold">Selected: {selectedFlat}</span>
-              </div>
             </motion.div>
           )}
         </div>

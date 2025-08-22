@@ -271,8 +271,29 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
   }
 
   const handleSubmit = async () => {
-    if (!userName.trim() || !mobileNumber.trim() || mobileNumber.length !== 10) {
-      showToastMessage('Please enter both name and valid 10-digit mobile number', 'error');
+    // Enhanced validation with specific error messages
+    if (!userName.trim()) {
+      showToastMessage('Please enter your name', 'error');
+      return;
+    }
+
+    if (userName.trim().length < 2) {
+      showToastMessage('Name must be at least 2 characters long', 'error');
+      return;
+    }
+
+    if (!/^[a-zA-Z\s]+$/.test(userName.trim())) {
+      showToastMessage('Name should contain only letters and spaces', 'error');
+      return;
+    }
+
+    if (!mobileNumber.trim()) {
+      showToastMessage('Please enter your mobile number', 'error');
+      return;
+    }
+
+    if (!/^\d{10}$/.test(mobileNumber)) {
+      showToastMessage('Please enter exactly 10 digits for mobile number (numbers only)', 'error');
       return;
     }
 
@@ -717,11 +738,26 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 type="text"
                               placeholder="Enter your name"
                               value={userName}
-                              onChange={(e) => setUserName(e.target.value)}
+                              onChange={(e) => {
+                                // Only allow letters and spaces
+                                const value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                                setUserName(value);
+                              }}
                               className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
                               style={{ fontFamily: 'Söhne, sans-serif' }}
                               required
               />
+              {/* Name Validation Feedback */}
+              {userName && userName.length > 0 && userName.length < 2 && (
+                <p className="text-xs text-red-500 mt-1" style={{ fontFamily: 'Söhne, sans-serif' }}>
+                  Please enter at least 2 characters
+                </p>
+              )}
+              {userName && userName.length >= 2 && (
+                <p className="text-xs text-green-500 mt-1" style={{ fontFamily: 'Söhne, sans-serif' }}>
+                  ✓ Valid name
+                </p>
+              )}
             </div>
 
                           {/* Mobile Number Input */}
@@ -733,7 +769,11 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                               type="tel"
                               placeholder="Enter 10-digit mobile number"
                               value={mobileNumber}
-                              onChange={(e) => setMobileNumber(e.target.value)}
+                              onChange={(e) => {
+                                // Only allow digits
+                                const value = e.target.value.replace(/\D/g, '');
+                                setMobileNumber(value);
+                              }}
                               pattern="[0-9]{10}"
                               maxLength={10}
                               className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
@@ -743,13 +783,25 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                             <p className="text-xs text-gray-500 mt-1" style={{ fontFamily: 'Söhne, sans-serif' }}>
                               10-digit mobile number for contact purposes
                             </p>
+                            {/* Mobile Number Validation Error */}
+                            {mobileNumber && mobileNumber.length > 0 && !/^\d{10}$/.test(mobileNumber) && (
+                              <p className="text-xs text-red-500 mt-1" style={{ fontFamily: 'Söhne, sans-serif' }}>
+                                Please enter exactly 10 digits (numbers only)
+                              </p>
+                            )}
+                            {/* Mobile Number Success Indicator */}
+                            {mobileNumber && /^\d{10}$/.test(mobileNumber) && (
+                              <p className="text-xs text-green-500 mt-1" style={{ fontFamily: 'Söhne, sans-serif' }}>
+                                ✓ Valid mobile number
+                              </p>
+                            )}
                           </div>
 
                           <button
                             onClick={handleSubmit}
-                            disabled={!userName.trim() || !mobileNumber.trim() || mobileNumber.length !== 10}
+                            disabled={!userName.trim() || userName.trim().length < 2 || !/^[a-zA-Z\s]+$/.test(userName.trim()) || !/^\d{10}$/.test(mobileNumber)}
                             className={`w-full font-semibold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg text-sm sm:text-base ${
-                              userName.trim() && mobileNumber.length === 10
+                              userName.trim() && userName.trim().length >= 2 && /^[a-zA-Z\s]+$/.test(userName.trim()) && /^\d{10}$/.test(mobileNumber)
                                 ? 'bg-primary-500 hover:bg-primary-600 text-white'
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             }`}
