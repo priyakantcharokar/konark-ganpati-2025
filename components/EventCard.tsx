@@ -1,7 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, Clock, Users, MapPin } from 'lucide-react'
+import Link from 'next/link'
+import EventNominationFlow from './EventNominationFlow'
+import EventNominations from './EventNominations'
 
 // WhatsApp SVG Icon Component
 const WhatsAppIcon = () => (
@@ -30,6 +34,13 @@ interface EventCardProps {
 }
 
 const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
+  const [showNominationForm, setShowNominationForm] = useState(false)
+  const [showNominations, setShowNominations] = useState(false)
+
+  const generateEventSlug = (eventTitle: string) => {
+    return eventTitle.toLowerCase().replace(/[^a-z0-9]/g, '-')
+  }
+
   const getEventIcon = (eventTitle: string) => {
     const title = eventTitle.toLowerCase()
     
@@ -120,9 +131,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
           </div>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200 mb-2 leading-tight font-jaf-bernino">
-            {event.title}
-          </h3>
+          <Link href={`/events/${generateEventSlug(event.title)}`}>
+            <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200 mb-2 leading-tight font-jaf-bernino">
+              {event.title}
+            </h3>
+          </Link>
         </div>
       </div>
 
@@ -181,7 +194,41 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
         )}
       </div>
 
-      
+      {/* Action Buttons */}
+      <div className="flex gap-2 mt-4">
+        <button
+          onClick={() => setShowNominations(true)}
+          className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 text-sm"
+        >
+          Nominations
+        </button>
+        <button
+          onClick={() => setShowNominationForm(true)}
+          className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-sm"
+        >
+          Nominate
+        </button>
+      </div>
+
+      {/* Modals */}
+      {showNominationForm && (
+        <EventNominationFlow
+          eventData={{ title: event.title, date: event.date }}
+          onClose={() => setShowNominationForm(false)}
+          onSuccess={(message: string) => {
+            setShowNominationForm(false)
+            // Optionally refresh nominations
+          }}
+        />
+      )}
+
+      {showNominations && (
+        <EventNominations
+          eventTitle={event.title}
+          eventDate={event.date}
+          onClose={() => setShowNominations(false)}
+        />
+      )}
     </motion.div>
   )
 }

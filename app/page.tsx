@@ -78,9 +78,6 @@ export default function Home() {
           <p className="text-sm sm:text-base text-gray-600" style={{ fontFamily: 'Charter, serif' }}>
             © 2025 Ganesh Pooja Festival. Made with ❤️ for our community.
           </p>
-          <p className="text-xs sm:text-sm text-gray-500 mt-2" style={{ fontFamily: 'Söhne, sans-serif' }}>
-            Most events will be held after 7 PM to ensure maximum participation.
-          </p>
         </div>
       </motion.footer>
     </div>

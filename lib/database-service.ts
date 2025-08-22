@@ -32,6 +32,28 @@ export interface Submission {
   timestamp: Date
 }
 
+// Event Nomination Types
+export interface EventNomination {
+  id: string
+  event_title: string
+  event_date: string
+  user_name: string
+  mobile_number: string
+  building: string
+  flat: string
+  created_at: string
+  updated_at: string
+}
+
+export interface CreateEventNomination {
+  event_title: string
+  event_date: string
+  user_name: string
+  mobile_number: string
+  building: string
+  flat: string
+}
+
 // Database Service Class
 export class DatabaseService {
   
@@ -211,6 +233,74 @@ export class DatabaseService {
       aarti_time: submission.aartiSchedule.time,
       building: submission.building,
       flat: submission.flat
+    }
+  }
+
+  // Event Nomination Methods
+  
+  // Get all nominations for a specific event
+  async getEventNominations(eventTitle: string): Promise<EventNomination[]> {
+    try {
+      const { data, error } = await supabase
+        .from('event_nominations')
+        .select('*')
+        .eq('event_title', eventTitle)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data || []
+    } catch (error) {
+      console.error('Error fetching event nominations:', error)
+      return []
+    }
+  }
+
+  // Create a new event nomination
+  async createEventNomination(nomination: CreateEventNomination): Promise<EventNomination | null> {
+    try {
+      const { data, error } = await supabase
+        .from('event_nominations')
+        .insert([nomination])
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error creating event nomination:', error)
+      return null
+    }
+  }
+
+  // Get all nominations (for admin purposes)
+  async getAllEventNominations(): Promise<EventNomination[]> {
+    try {
+      const { data, error } = await supabase
+        .from('event_nominations')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data || []
+    } catch (error) {
+      console.error('Error fetching all event nominations:', error)
+      return []
+    }
+  }
+
+  // Delete an event nomination (for admin purposes)
+  async deleteEventNomination(nominationId: string): Promise<boolean> {
+    try {
+      const { error } = await supabase
+        .from('event_nominations')
+        .delete()
+        .eq('id', nominationId)
+
+      if (error) throw error
+      return true
+    } catch (error) {
+      console.error('Error deleting event nomination:', error)
+      return false
     }
   }
 }
