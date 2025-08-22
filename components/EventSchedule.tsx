@@ -395,8 +395,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 transition={{ duration: 0.8, delay: 0.3 }}
                 className="mb-3 sm:mb-4"
               >
-                <div className="text-2xl sm:text-3xl mb-2">🕉️</div>
-                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-orange-800 bg-clip-text text-transparent mb-2">
+                <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-3">🕉️</div>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-orange-800 bg-clip-text text-transparent mb-3">
                   <span className="font-normal text-amber-700" style={{ fontFamily: 'Style Script, cursive', fontSize: 'clamp(20px, 4vw, 90px)' }}>Konark Exotica</span>
                   <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1" style={{ fontFamily: 'Style Script, cursive', fontSize: 'clamp(16px, 3.5vw, 20px)' }}>Ganesh Pooja 2025</span>
                 </h1>
@@ -615,9 +615,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                       </div>
 
                       {selectedFlat && (
-                        <motion.div
+        <motion.div
                           initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
                           className="mt-4 sm:mt-6 text-center p-3 sm:p-4 bg-primary-50 rounded-xl border border-primary-200"
                         >
                           <div className="flex items-center justify-center gap-2 text-primary-700">
@@ -627,7 +627,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                         </motion.div>
                       )}
                     </div>
-                  </motion.div>
+        </motion.div>
                 </div>
 
                 {/* Right Side - Selected Aarti Display */}
@@ -638,9 +638,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
 
                                         {/* Name Input and Submit Button */}
                     {selectedFlat && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
                         className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 border border-primary-200"
                       >
                         <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center" style={{ fontFamily: 'Charter, serif' }}>
@@ -800,28 +800,28 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
           ) : (
             // Aarti Schedule Page (Landing Page)
             <>
-              {/* Aarti Schedule Section */}
+                            {/* Aarti Schedule Section - Blue Theme */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-gray-100"
+                className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl sm:rounded-3xl shadow-xl border border-blue-200"
               >
                 {/* Header with Toggle Button */}
-                <div className="p-4 sm:p-6 lg:p-8 border-b border-gray-100">
+                <div className="p-4 sm:p-6 lg:p-8 border-b border-blue-200 bg-gradient-to-r from-blue-100/50 to-indigo-100/50">
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
                     <div className="text-center flex-1">
-                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-blue-800 mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
                         Daily Aarti Schedule
                       </h2>
-                      <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
+                      <p className="text-sm sm:text-base lg:text-lg text-blue-700 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
                         Select your preferred aarti session to proceed with flat booking
-            </p>
-          </div>
+                      </p>
+                    </div>
                     
                     <motion.button
                       onClick={() => setShowAartiSchedule(!showAartiSchedule)}
-                      className="w-full sm:w-auto p-2.5 sm:p-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                      className="w-full sm:w-auto p-2.5 sm:p-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -834,8 +834,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                         <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
                       )}
                     </motion.button>
-                  </div>
-        </div>
+            </div>
+          </div>
 
                 {/* Collapsible Content */}
                 <AnimatePresence>
@@ -880,7 +880,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                               ).filter(Boolean);
 
                               return (
-          <motion.div
+                                          <motion.div
                                   key={date}
                                   initial={{ opacity: 0, y: 8, scale: 0.95 }}
                                   animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -889,79 +889,81 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                     duration: 0.6, 
                                     ease: "easeOut" 
                                   }}
-                                  className={`bg-white rounded-lg sm:rounded-xl border transition-all duration-300 ${
+                                  className={`bg-white rounded-lg sm:rounded-xl border transition-all duration-300 hover:shadow-lg ${
                                     isAnyBooked
-                                      ? 'border-gray-300 bg-gray-50'
-                                      : 'border-yellow-200 hover:border-yellow-300 hover:shadow-md'
+                                      ? 'border-gray-200 bg-gray-50'
+                                      : 'border-blue-200 hover:border-blue-300'
                                   }`}
                                 >
-                                  {/* Date Header - Always Visible */}
-                                  <div className="p-2.5 sm:p-3 border-b border-gray-100">
-                                    <h3 className="text-sm sm:text-base lg:text-lg font-bold text-gray-800 text-center leading-tight" style={{ fontFamily: 'Charter, serif' }}>
+
+
+                                  {/* Date Header - Clean & Simple */}
+                                  <div className="p-3 sm:p-4 border-b border-gray-100">
+                                    <h3 className="text-sm sm:text-base font-bold text-gray-800 text-center" style={{ fontFamily: 'Charter, serif' }}>
                                       {date}
                                     </h3>
-                                  </div>
+          </div>
 
-                                  {/* Time Slots - Collapsible */}
-                                  <div className="p-2.5 sm:p-3">
-                                    {sessions.map((session, sessionIndex) => {
-                                      const isBooked = submissions.some(submission => 
-                                        submission.aartiSchedule.date === session.date && 
-                                        submission.aartiSchedule.time === session.time
-                                      );
-                                      
-                                      const booking = submissions.find(submission => 
-                                        submission.aartiSchedule.date === session.date && 
-                                        submission.aartiSchedule.time === session.time
-                                      );
+                                  {/* Time Slots - Single Row Layout */}
+                                  <div className="p-3 sm:p-4">
+                                    <div className="flex gap-2 sm:gap-3">
+                                      {sessions.map((session, sessionIndex) => {
+                                        const isBooked = submissions.some(submission => 
+                                          submission.aartiSchedule.date === session.date && 
+                                          submission.aartiSchedule.time === session.time
+                                        );
+                                        
+                                        const booking = submissions.find(submission => 
+                                          submission.aartiSchedule.date === session.date && 
+                                          submission.aartiSchedule.time === session.time
+                                        );
 
-                                      return (
-                                        <motion.button
-                                          key={`${date}-${session.time}`}
-                                          initial={{ opacity: 0, x: -10 }}
-                                          animate={{ opacity: 1, x: 0 }}
-                                          transition={{ delay: sessionIndex * 0.1 }}
-                                          onClick={isBooked ? undefined : () => handleAartiCardClick(session)}
-                                          disabled={isBooked}
-                                          className={`w-full mb-2 last:mb-0 p-2 sm:p-2.5 rounded-lg transition-all duration-200 ${
-                                            isBooked
-                                              ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                              : 'bg-yellow-50 hover:bg-yellow-100 cursor-pointer border border-yellow-200 hover:border-yellow-300'
-                                          }`}
-                                        >
-                                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
-                                            <div className="flex items-center gap-2">
-                                              <Clock className={`w-3 h-3 sm:w-4 sm:h-4 ${
-                                                isBooked ? 'text-gray-400' : 'text-yellow-600'
-                                              }`} />
-                                              <span className={`text-xs sm:text-sm font-medium px-2 py-1 rounded-full ${
+                                        return (
+                                          <motion.button
+                                            key={`${date}-${session.time}`}
+                                            initial={{ opacity: 0, x: -10 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: sessionIndex * 0.1 }}
+                                            onClick={isBooked ? undefined : () => handleAartiCardClick(session)}
+                                            disabled={isBooked}
+                                            className={`flex-1 p-2.5 sm:p-3 rounded-lg transition-all duration-200 ${
+                                              isBooked
+                                                ? 'bg-transparent text-gray-500 cursor-not-allowed'
+                                                : 'bg-transparent hover:bg-white/20 cursor-pointer'
+                                            }`}
+                                          >
+                                            <div className="text-center">
+                                                                                                                                                                                  <div 
+                                              className={`text-xs sm:text-sm font-medium px-2 py-1 rounded-full mb-1 flex items-center justify-center ${
                                                 session.time === 'Morning' 
                                                   ? isBooked 
-                                                    ? 'text-blue-500 bg-blue-100' 
-                                                    : 'text-blue-700 bg-blue-200'
+                                                    ? 'text-gray-500 bg-transparent' 
+                                                    : 'text-white bg-orange-500'
                                                   : isBooked 
-                                                    ? 'text-yellow-500 bg-yellow-100' 
-                                                    : 'text-yellow-700 bg-yellow-200'
-                                              }`}>
-                                                {session.time}
-                                              </span>
+                                                    ? 'text-gray-500 bg-transparent' 
+                                                    : 'text-white bg-black'
+                                              }`} 
+                                              title={`${session.time} Session - Click to select aarti timing`}
+                                              aria-label={`${session.time} Session - Click to select aarti timing`}
+                                            >
+                                              {session.time}
                                             </div>
 
-                                            {isBooked ? (
-                                              <div className="text-xs text-gray-500 text-center sm:text-right">
-                                                <div className="font-medium">Booked by:</div>
-                                                <div className="truncate">{booking?.userName}</div>
-                                                <div>Flat {booking?.flat}</div>
-                                              </div>
-                                            ) : (
-                                              <div className="text-xs text-yellow-600 text-center sm:text-right opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                                Click to select
-                                              </div>
-                                            )}
-                                          </div>
-                                        </motion.button>
-                                      );
-                                    })}
+                                              {isBooked ? (
+                                                <div className="text-xs text-gray-500">
+                                                  <div className="font-medium truncate">{booking?.userName}</div>
+                                                  <div>Flat {booking?.flat}</div>
+                                                </div>
+                                              ) : (
+                                                <div className="text-xs text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                  Click to select
+                                                </div>
+                                              )}
+                                            </div>
+                                          </motion.button>
+                                        );
+                                      })}
+                                    </div>
                                   </div>
                                 </motion.div>
                               );
@@ -974,12 +976,12 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 </AnimatePresence>
               </motion.div>
 
-              {/* Events Section */}
+              {/* Events Section - Green Theme */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
-                className="bg-gradient-to-br from-white to-gray-50 rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 lg:p-8 border border-gray-100"
+                className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 lg:p-8 border border-green-200"
               >
                 <div className="text-center mb-8 sm:mb-12">
                   <motion.div
@@ -988,13 +990,13 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                     transition={{ duration: 0.6, delay: 0.7 }}
                     className="mb-4 sm:mb-6"
                   >
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
                       <span className="text-2xl sm:text-3xl">🎉</span>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-orange-800 bg-clip-text text-transparent mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-green-600 via-emerald-600 to-green-800 bg-clip-text text-transparent mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
                       Festival Events
                     </h2>
-                    <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
+                    <p className="text-sm sm:text-base lg:text-lg text-green-700 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
                       Discover all the exciting events planned for this auspicious occasion. From traditional ceremonies to thrilling competitions, experience the magic of Ganesh Pooja 2025.
                     </p>
                   </motion.div>
@@ -1100,7 +1102,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                   <X className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                 </button>
               </div>
-            </div>
+      </div>
           </motion.div>
         )}
       </AnimatePresence>

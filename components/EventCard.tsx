@@ -98,10 +98,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
         )}
       </div>
 
-      {/* Footer */}
-      <div className="text-center">
-        <span className="text-xs text-gray-400 font-medium">{event.category}</span>
-      </div>
+      
     </motion.div>
   )
 }
