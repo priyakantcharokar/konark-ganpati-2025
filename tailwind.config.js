@@ -28,8 +28,18 @@ module.exports = {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        festive: ['Poppins', 'system-ui', 'sans-serif'],
+        // Custom font families as per specification
+        'charter': ['Charter', 'serif'], // Body text (serif)
+        'kievit': ['Kievit', 'sans-serif'], // Body text (sans-serif)  
+        'jaf-bernino': ['JAF Bernino Sans', 'sans-serif'], // Headings and titles
+        'sohne': ['Söhne', 'sans-serif'], // Subheadings
+        'helvetica': ['Helvetica', 'Arial', 'sans-serif'], // Subheadings
+        'circular': ['Circular Std', 'sans-serif'], // Branding and UI
+        'style-script': ['Style Script', 'cursive'], // Keep existing for special text
+        
+        // Default fallbacks
+        'sans': ['Circular Std', 'Helvetica', 'Arial', 'sans-serif'],
+        'serif': ['Charter', 'Georgia', 'serif'],
       },
       animation: {
         'float': 'float 3s ease-in-out infinite',

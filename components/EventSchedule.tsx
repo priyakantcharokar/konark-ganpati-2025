@@ -10,7 +10,7 @@ interface Event {
   title: string
   date: string
   time: string
-  description: string
+  description?: string
   organizers: string
   category: string
 }
@@ -116,7 +116,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
           title: event.event,
           date: event.date,
           time: "7:00 PM", // Default time as most events are after 7 PM
-          description: `Contact coordinator for more details about ${event.event}`,
+          description: "", // No generic description
           organizers: event.contact,
           category: "Festival Event"
         }))
@@ -409,8 +409,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
               >
                 <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-3">🕉️</div>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-orange-800 bg-clip-text text-transparent mb-3">
-                  <span className="font-normal text-amber-700" style={{ fontFamily: 'Style Script, cursive', fontSize: 'clamp(20px, 4vw, 90px)' }}>Konark Exotica</span>
-                  <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1" style={{ fontFamily: 'Style Script, cursive', fontSize: 'clamp(16px, 3.5vw, 20px)' }}>Ganesh Pooja 2025</span>
+                  <span className="font-normal text-amber-700 font-style-script" style={{ fontSize: 'clamp(20px, 4vw, 90px)' }}>Konark Exotica</span>
+                  <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1 font-style-script" style={{ fontSize: 'clamp(16px, 3.5vw, 20px)' }}>Ganesh Pooja 2025</span>
                 </h1>
               </motion.div>
 
@@ -474,7 +474,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                         <span className="hidden sm:inline">Back to Building Selection</span>
                         <span className="sm:hidden">Back</span>
                       </motion.button>
-                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4 font-jaf-bernino">
                         Select Your Flat in Building {selectedBuilding}
                       </h2>
                       <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
@@ -733,7 +733,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                         <span className="hidden sm:inline">Back to Aarti Schedule</span>
                         <span className="sm:hidden">Back</span>
                       </motion.button>
-                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4 font-jaf-bernino">
                         Select Your Building
                       </h2>
                       <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
@@ -823,7 +823,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 <div id="aarti-schedule" className="p-4 sm:p-6 lg:p-8 border-b border-blue-200 bg-gradient-to-r from-blue-100/50 to-indigo-100/50">
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
                     <div className="text-center flex-1">
-                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-blue-800 mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-blue-800 mb-3 sm:mb-4 font-style-script">
                         Daily Aarti Schedule
                       </h2>
                       <p className="text-sm sm:text-base lg:text-lg text-blue-700 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
@@ -1001,26 +1001,24 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
-                className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 lg:p-8 border border-green-200"
-              >
-                <div className="text-center mb-8 sm:mb-12">
+                className="bg-gradient-to-br from-orange-50 via-amber-50 to-red-50 rounded-2xl sm:rounded-3xl shadow-lg border border-orange-200 overflow-hidden">
+                  {/* Header */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.7 }}
-                    className="mb-4 sm:mb-6"
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    className="text-center p-4 sm:p-6 lg:p-8"
                   >
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
                       <span className="text-2xl sm:text-3xl">🎉</span>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-green-600 via-emerald-600 to-green-800 bg-clip-text text-transparent mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-orange-800 bg-clip-text text-transparent mb-3 sm:mb-4 font-style-script">
                       Festival Events
                     </h2>
-                    <p className="text-sm sm:text-base lg:text-lg text-green-700 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
+                    <p className="text-sm sm:text-base lg:text-lg text-orange-700 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
                       Discover all the exciting events planned for this auspicious occasion. From traditional ceremonies to thrilling competitions, experience the magic of Ganesh Pooja 2025.
                     </p>
                   </motion.div>
-                </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
                   {events.map((event, index) => (
@@ -1059,7 +1057,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-md">
                     <span className="text-xl sm:text-2xl">ℹ️</span>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6" style={{ fontFamily: 'Style Script, cursive' }}>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6 font-jaf-bernino">
             Important Information
           </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-gray-600" style={{ fontFamily: 'Söhne, sans-serif' }}>

@@ -1,15 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Style+Script:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Circular+Std:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Charter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kievit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JAF+Bernino+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Söhne:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Charter', serif;
   }
   
   body {
     @apply bg-gradient-to-br from-orange-50 via-yellow-50 to-red-50 min-h-screen;
+    font-family: 'Charter', serif;
   }
 }
 
