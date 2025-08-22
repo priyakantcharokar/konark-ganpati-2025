@@ -12,12 +12,7 @@ const nextConfig = {
   },
   
   // Ensure proper asset handling
-  assetPrefix: '',
-  
-  // Disable server-side features for static export
-  experimental: {
-    appDir: true,
-  }
+  assetPrefix: ''
 }
 
 module.exports = nextConfig
