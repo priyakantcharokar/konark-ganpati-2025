@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Ensure proper output for Vercel
-  output: 'standalone',
+  // Remove standalone output for Vercel compatibility
+  // output: 'standalone', // This was causing the routing issue
   
   // Enable static exports if needed
-  trailingSlash: true,
+  trailingSlash: false,
   
   // Optimize images
   images: {
@@ -12,7 +12,12 @@ const nextConfig = {
   },
   
   // Ensure proper asset handling
-  assetPrefix: ''
+  assetPrefix: '',
+  
+  // Enable experimental features for better compatibility
+  experimental: {
+    appDir: true,
+  }
 }
 
 module.exports = nextConfig

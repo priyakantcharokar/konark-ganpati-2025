@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import EventSchedule from '@/components/EventSchedule'
+import EventSchedule from '../components/EventSchedule'
 
 export default function Home() {
   const [userData] = useState({ flatNumber: 'Guest', phone: 'Visitor' })
