@@ -49,20 +49,20 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
         scale: 1.02,
         transition: { duration: 0.3, ease: "easeOut" }
       }}
-      className={`${getCategoryColor(event.category)} p-6 rounded-2xl border shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer`}
+      className={`${getCategoryColor(event.category)} p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer`}
     >
       {/* Header with Icon and Title */}
-      <div className="flex items-start gap-4 mb-5">
+      <div className="flex items-start gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-5">
         <div className="flex-shrink-0">
-          <div className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
-            <span className="text-2xl">{getCategoryIcon(event.category)}</span>
+          <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white/80 backdrop-blur-sm rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+            <span className="text-lg sm:text-xl md:text-2xl">{getCategoryIcon(event.category)}</span>
           </div>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200 mb-2 leading-tight">
+          <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200 mb-1.5 sm:mb-2 leading-tight">
             {event.title}
           </h3>
-          <span className={`inline-block px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 backdrop-blur-sm border border-current ${
+          <span className={`inline-block px-2 sm:px-2.5 md:px-3 py-1 sm:py-1.5 rounded-full text-xs font-semibold bg-white/70 backdrop-blur-sm border border-current ${
             event.category === 'competition' ? 'text-amber-600 border-amber-300' :
             event.category === 'performance' ? 'text-orange-600 border-orange-300' :
             event.category === 'ceremony' ? 'text-red-600 border-red-300' :
@@ -75,30 +75,33 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
       </div>
 
       {/* Description */}
-      <p className="text-gray-600 mb-5 leading-relaxed text-sm group-hover:text-gray-700 transition-colors duration-200">
+      <p className="text-gray-600 mb-3 sm:mb-4 md:mb-5 leading-relaxed text-xs sm:text-sm group-hover:text-gray-700 transition-colors duration-200">
         {event.description}
       </p>
 
       {/* Event Details */}
-      <div className="space-y-3 mb-5">
-        <div className="flex items-center gap-3 text-gray-700">
-          <div className="w-8 h-8 bg-white/60 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-sm">
-            <Calendar className="w-4 h-4 text-gray-600" />
+      <div className="space-y-2 sm:space-y-3 mb-3 sm:mb-4 md:mb-5">
+        <div className="flex items-center gap-2 sm:gap-3 text-gray-700">
+          <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm">
+            <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 text-gray-600" />
           </div>
-          <span className="font-semibold text-base text-gray-800">{event.date}</span>
+          <span className="font-semibold text-xs sm:text-sm md:text-base text-gray-800">{event.date}</span>
         </div>
         
         {event.time && (
-          <div className="flex items-center gap-3 text-gray-700">
-            <div className="w-8 h-8 bg-white/60 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-sm">
-              <Clock className="w-4 h-4 text-gray-600" />
+          <div className="flex items-center gap-2 sm:gap-3 text-gray-700">
+            <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm">
+              <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 text-gray-600" />
             </div>
-            <span className="font-medium text-sm">{event.time}</span>
+            <span className="font-medium text-xs sm:text-sm">{event.time}</span>
           </div>
         )}
       </div>
 
-      
+      {/* Footer */}
+      <div className="text-center">
+        <span className="text-xs text-gray-400 font-medium">{event.category}</span>
+      </div>
     </motion.div>
   )
 }

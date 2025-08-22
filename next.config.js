@@ -12,12 +12,7 @@ const nextConfig = {
   },
   
   // Ensure proper asset handling
-  assetPrefix: '',
-  
-  // Enable experimental features for better compatibility
-  experimental: {
-    appDir: true,
-  }
+  assetPrefix: ''
 }
 
 module.exports = nextConfig
