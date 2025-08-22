@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Clock, ChevronDown, ChevronUp, Building, Home, Check, ChevronRight, Users, Calendar, ChevronLeft, X } from 'lucide-react'
 import EventCard from './EventCard'
+import NotificationToast from './NotificationToast'
 
 interface Event {
   id: string
@@ -19,6 +20,16 @@ interface EventScheduleProps {
   userPhone: string
   userFlat: string
   onLogout: () => void
+}
+
+interface Notification {
+  id: string
+  aartiSchedule: { date: string; time: string }
+  building: string
+  flat: string
+  userName: string
+  timestamp: string
+  message: string
 }
 
 const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLogout }) => {
@@ -40,6 +51,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
     userName: string
     timestamp: Date
   }>>([])
+  const [notifications, setNotifications] = useState<Notification[]>([])
 
   // Data from JSON files
   const [aartiSchedule, setAartiSchedule] = useState<Array<{ date: string; time: string }>>([])
@@ -48,6 +60,13 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
   const [events, setEvents] = useState<Event[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
+
+
+
+  // Remove notification
+  const removeNotification = (id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id))
+  }
 
   // Load data from JSON files
   useEffect(() => {
@@ -252,7 +271,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
     }, 5000)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!userName.trim()) {
       showToastMessage('Please enter your name', 'error');
       return;
@@ -267,18 +286,53 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
       timestamp: new Date()
     };
 
-    setSubmissions(prev => [...prev, submission]);
-    showToastMessage(`Pooja slot confirmed! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has booked ${selectedAarti!.time} Aarti on ${selectedAarti!.date}`);
-    
-    // Reset all states to return to landing page
-    setTimeout(() => {
-      setShowFlatSelection(false);
-      setSelectedBuilding('');
-      setSelectedFlat('');
-      setSelectedAarti(null);
-      setUserName('');
-      setIsSubmitted(false);
-    }, 2000); // Wait 2 seconds for toast to be visible
+    try {
+      // Send notification to all users
+      const response = await fetch('/api/notify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          aartiSchedule: selectedAarti!,
+          building: selectedBuilding!,
+          flat: selectedFlat!,
+          userName: userName.trim()
+        })
+      });
+
+      if (response.ok) {
+        setSubmissions(prev => [...prev, submission]);
+        showToastMessage(`Pooja slot confirmed! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has booked ${selectedAarti!.time} Aarti on ${selectedAarti!.date}`);
+        
+        // Reset all states to return to landing page
+        setTimeout(() => {
+          setShowFlatSelection(false);
+          setSelectedBuilding('');
+          setSelectedFlat('');
+          setSelectedAarti(null);
+          setUserName('');
+          setIsSubmitted(false);
+        }, 2000); // Wait 2 seconds for toast to be visible
+      } else {
+        showToastMessage('Slot booked but notification failed to send', 'error');
+      }
+    } catch (error) {
+      console.error('Error sending notification:', error);
+      // Still save the submission even if notification fails
+      setSubmissions(prev => [...prev, submission]);
+      showToastMessage(`Pooja slot confirmed! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has booked ${selectedAarti!.time} Aarti on ${selectedAarti!.date}`);
+      
+      // Reset all states to return to landing page
+      setTimeout(() => {
+        setShowFlatSelection(false);
+        setSelectedBuilding('');
+        setSelectedFlat('');
+        setSelectedAarti(null);
+        setUserName('');
+        setIsSubmitted(false);
+      }, 2000);
+    }
   };
 
 
@@ -1124,6 +1178,12 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Real-time Notifications */}
+      <NotificationToast 
+        notifications={notifications}
+        onRemove={removeNotification}
+      />
     </div>
   )
 }
