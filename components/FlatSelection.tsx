@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Building, Home, Check, ChevronRight, Users, Calendar, X } from 'lucide-react'
+import { databaseService, type Submission } from '@/lib/database-service'
 
 interface FlatSelectionProps {
   onFlatSelect: (flatNumber: string) => void
@@ -35,32 +36,24 @@ const FlatSelection: React.FC<FlatSelectionProps> = ({ onFlatSelect }) => {
   const [selectedBuilding, setSelectedBuilding] = useState<string>('')
   const [selectedFlat, setSelectedFlat] = useState<string>('')
   const [showFlatSelection, setShowFlatSelection] = useState(false)
-  const [submissions, setSubmissions] = useState<Array<{
-    id: string
-    aartiSchedule: { date: string; time: string }
-    building: string
-    flat: string
-    userName: string
-    timestamp: Date
-  }>>([])
+  const [submissions, setSubmissions] = useState<Submission[]>([])
 
-  // Load submissions from localStorage
+  // Load submissions from Supabase database
   useEffect(() => {
-    const savedSubmissions = localStorage.getItem('ganeshPoojaBookings')
-    if (savedSubmissions) {
+    const loadSubmissions = async () => {
       try {
-        const parsed = JSON.parse(savedSubmissions)
-        // Convert timestamp strings back to Date objects
-        const submissionsWithDates = parsed.map((sub: any) => ({
-          ...sub,
-          timestamp: new Date(sub.timestamp)
-        }))
-        setSubmissions(submissionsWithDates)
+        const allBookings = await databaseService.getAllBookings()
+        const submissionsFromDB = allBookings.map(booking => 
+          databaseService.convertBookingToSubmission(booking)
+        )
+        setSubmissions(submissionsFromDB)
       } catch (error) {
-        console.error('Error parsing saved submissions:', error)
+        console.error('Error loading submissions from database:', error)
         setSubmissions([])
       }
     }
+
+    loadSubmissions()
   }, [])
 
   const handleBuildingSelect = (building: string) => {

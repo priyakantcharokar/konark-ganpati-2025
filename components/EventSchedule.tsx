@@ -4,7 +4,8 @@ import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Clock, ChevronDown, ChevronUp, Building, Home, Check, ChevronRight, Users, Calendar, ChevronLeft, X } from 'lucide-react'
 import EventCard from './EventCard'
-import NotificationToast from './NotificationToast'
+
+import { databaseService, type Submission } from '@/lib/database-service'
 
 interface Event {
   id: string
@@ -22,15 +23,7 @@ interface EventScheduleProps {
   onLogout: () => void
 }
 
-interface Notification {
-  id: string
-  aartiSchedule: { date: string; time: string }
-  building: string
-  flat: string
-  userName: string
-  timestamp: string
-  message: string
-}
+
 
 const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLogout }) => {
   const [showAartiSchedule, setShowAartiSchedule] = useState(false)
@@ -39,6 +32,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
   const [selectedFlat, setSelectedFlat] = useState<string>('')
   const [selectedAarti, setSelectedAarti] = useState<{ date: string; time: string } | null>(null)
   const [userName, setUserName] = useState<string>('')
+  const [mobileNumber, setMobileNumber] = useState<string>('')
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
@@ -49,9 +43,10 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
     building: string
     flat: string
     userName: string
+    mobileNumber: string
     timestamp: Date
   }>>([])
-  const [notifications, setNotifications] = useState<Notification[]>([])
+
 
   // Data from JSON files
   const [aartiSchedule, setAartiSchedule] = useState<Array<{ date: string; time: string }>>([])
@@ -63,10 +58,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
 
 
 
-  // Remove notification
-  const removeNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id))
-  }
+
 
   // Load data from JSON files
   useEffect(() => {
@@ -80,6 +72,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
         if (!aartiResponse.ok) throw new Error('Failed to load aarti schedule')
         const aartiData = await aartiResponse.json()
         setAartiSchedule(aartiData)
+
+        // Initialize aarti schedule in Supabase
+        await databaseService.initializeAartiSchedule(aartiData)
 
         // Load flats data
         const flatsResponse = await fetch('/flats.json')
@@ -157,19 +152,23 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
     loadData()
   }, [])
 
-  // Initialize submissions from localStorage only (no hardcoded data)
+  // Load existing submissions from Supabase
   useEffect(() => {
-    // Clear any existing bookings to start fresh
-    localStorage.removeItem('ganeshPoojaBookings')
-    setSubmissions([])
-  }, [])
-
-  // Save submissions to localStorage whenever they change
-  useEffect(() => {
-    if (submissions.length > 0) {
-      localStorage.setItem('ganeshPoojaBookings', JSON.stringify(submissions))
+    const loadSubmissions = async () => {
+      try {
+        const allBookings = await databaseService.getAllBookings()
+        const submissionsFromDB = allBookings.map(booking => 
+          databaseService.convertBookingToSubmission(booking)
+        )
+        setSubmissions(submissionsFromDB)
+      } catch (error) {
+        console.error('Error loading submissions from database:', error)
+        setSubmissions([])
+      }
     }
-  }, [submissions])
+
+    loadSubmissions()
+  }, [])
 
   const [eventCount, setEventCount] = useState(0)
 
@@ -272,8 +271,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
   }
 
   const handleSubmit = async () => {
-    if (!userName.trim()) {
-      showToastMessage('Please enter your name', 'error');
+    if (!userName.trim() || !mobileNumber.trim() || mobileNumber.length !== 10) {
+      showToastMessage('Please enter both name and valid 10-digit mobile number', 'error');
       return;
     }
 
@@ -283,25 +282,17 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
       building: selectedBuilding!,
       flat: selectedFlat!,
       userName: userName.trim(),
+      mobileNumber: mobileNumber.trim(),
       timestamp: new Date()
     };
 
     try {
-      // Send notification to all users
-      const response = await fetch('/api/notify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          aartiSchedule: selectedAarti!,
-          building: selectedBuilding!,
-          flat: selectedFlat!,
-          userName: userName.trim()
-        })
-      });
+      // Save booking to Supabase database
+      const bookingData = databaseService.convertSubmissionToBooking(submission)
+      const savedBooking = await databaseService.createBooking(bookingData)
 
-      if (response.ok) {
+      if (savedBooking) {
+        // Update local state
         setSubmissions(prev => [...prev, submission]);
         showToastMessage(`Pooja slot confirmed! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has booked ${selectedAarti!.time} Aarti on ${selectedAarti!.date}`);
         
@@ -312,26 +303,15 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
           setSelectedFlat('');
           setSelectedAarti(null);
           setUserName('');
+          setMobileNumber('');
           setIsSubmitted(false);
         }, 2000); // Wait 2 seconds for toast to be visible
       } else {
-        showToastMessage('Slot booked but notification failed to send', 'error');
+        showToastMessage('Failed to save booking to database', 'error');
       }
     } catch (error) {
-      console.error('Error sending notification:', error);
-      // Still save the submission even if notification fails
-      setSubmissions(prev => [...prev, submission]);
-      showToastMessage(`Pooja slot confirmed! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has booked ${selectedAarti!.time} Aarti on ${selectedAarti!.date}`);
-      
-      // Reset all states to return to landing page
-      setTimeout(() => {
-        setShowFlatSelection(false);
-        setSelectedBuilding('');
-        setSelectedFlat('');
-        setSelectedAarti(null);
-        setUserName('');
-        setIsSubmitted(false);
-      }, 2000);
+      console.error('Error saving booking:', error);
+      showToastMessage('Failed to save booking. Please try again.', 'error');
     }
   };
 
@@ -744,11 +724,32 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
               />
             </div>
 
+                          {/* Mobile Number Input */}
+                          <div>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2" style={{ fontFamily: 'Söhne, sans-serif' }}>
+                              Mobile Number *
+                            </label>
+                            <input
+                              type="tel"
+                              placeholder="Enter 10-digit mobile number"
+                              value={mobileNumber}
+                              onChange={(e) => setMobileNumber(e.target.value)}
+                              pattern="[0-9]{10}"
+                              maxLength={10}
+                              className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
+                              style={{ fontFamily: 'Söhne, sans-serif' }}
+                              required
+                            />
+                            <p className="text-xs text-gray-500 mt-1" style={{ fontFamily: 'Söhne, sans-serif' }}>
+                              10-digit mobile number for contact purposes
+                            </p>
+                          </div>
+
                           <button
                             onClick={handleSubmit}
-                            disabled={!userName.trim()}
+                            disabled={!userName.trim() || !mobileNumber.trim() || mobileNumber.length !== 10}
                             className={`w-full font-semibold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg text-sm sm:text-base ${
-                              userName.trim()
+                              userName.trim() && mobileNumber.length === 10
                                 ? 'bg-primary-500 hover:bg-primary-600 text-white'
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             }`}
@@ -1179,11 +1180,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
         )}
       </AnimatePresence>
 
-      {/* Real-time Notifications */}
-      <NotificationToast 
-        notifications={notifications}
-        onRemove={removeNotification}
-      />
+      
     </div>
   )
 }
