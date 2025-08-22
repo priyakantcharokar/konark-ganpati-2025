@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-orange-50 via-yellow-50 to-red-50 min-h-screen;
+  }
+}
+
+@layer components {
+  .festival-card {
+    @apply bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-l-4;
+  }
+  
+  .festival-card:hover {
+    @apply shadow-festival-gold;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-festival-gold via-festival-orange to-festival-red bg-clip-text text-transparent;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-primary-600 hover:to-primary-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-primary-600 border-2 border-primary-500 px-6 py-3 rounded-xl font-semibold hover:bg-primary-50 transform hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .backdrop-blur-custom {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
