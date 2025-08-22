@@ -1,0 +1,119 @@
+[
+  {
+    "id": "1",
+    "title": "Idol Making",
+    "date": "Saturday, 23rd August",
+    "time": "After 7 PM",
+    "description": "Creative idol making session where participants can showcase their artistic skills in creating beautiful Ganpati idols.",
+    "organizers": "Society Committee",
+    "category": "competition"
+  },
+  {
+    "id": "2",
+    "title": "Ganapati Sthapana",
+    "date": "Wednesday, 27th August",
+    "time": "Morning",
+    "description": "Sacred ceremony to install and consecrate the Ganpati idol with traditional rituals and prayers.",
+    "organizers": "Religious Committee",
+    "category": "ceremony"
+  },
+  {
+    "id": "3",
+    "title": "Karaoke & Modak Making Competition",
+    "date": "Wednesday, 27th August",
+    "time": "Evening (After 7 PM)",
+    "description": "Fun-filled evening with karaoke performances and traditional modak making competition.",
+    "organizers": "Sneha, Nitin",
+    "category": "competition"
+  },
+  {
+    "id": "4",
+    "title": "Group & Solo Performances",
+    "date": "Thursday, 28th August",
+    "time": "After 7 PM",
+    "description": "Cultural evening featuring group and solo performances including dance, music, and drama.",
+    "organizers": "Bhagyashree, Shraddha",
+    "category": "performance"
+  },
+  {
+    "id": "5",
+    "title": "Fancy Dress & Fashion Show",
+    "date": "Friday, 29th August",
+    "time": "After 7 PM",
+    "description": "Exciting fancy dress competition for kids and adults, followed by a glamorous fashion show.",
+    "organizers": "Bharati, Rohini",
+    "category": "competition"
+  },
+  {
+    "id": "6",
+    "title": "Couple Games & Team Building",
+    "date": "Saturday, 30th August",
+    "time": "After 7 PM",
+    "description": "Fun couple games, team building activities, and classic musical chair competition.",
+    "organizers": "Priya, Pooja",
+    "category": "game"
+  },
+  {
+    "id": "7",
+    "title": "Antakshari & Cooking Competition",
+    "date": "Sunday, 31st August",
+    "time": "After 7 PM",
+    "description": "Musical antakshari competition and cooking competition for both male and female participants.",
+    "organizers": "Society Committee",
+    "category": "competition"
+  },
+  {
+    "id": "8",
+    "title": "Tambola & Stalls",
+    "date": "Monday, 1st September",
+    "time": "After 7 PM",
+    "description": "Exciting tambola game with various stalls including in-house and outside vendors.",
+    "organizers": "Society Committee",
+    "category": "game"
+  },
+  {
+    "id": "9",
+    "title": "Sundarkand & 56 Bhog",
+    "date": "Tuesday, 2nd September",
+    "time": "After 7 PM",
+    "description": "Sacred recitation of Sundarkand and preparation of 56 different types of offerings.",
+    "organizers": "Deepika, Swati",
+    "category": "ceremony"
+  },
+  {
+    "id": "10",
+    "title": "Best Out of Waste & Recitation",
+    "date": "Wednesday, 3rd September",
+    "time": "After 7 PM",
+    "description": "Creative competition using waste materials and recitation competitions.",
+    "organizers": "Society Committee",
+    "category": "competition"
+  },
+  {
+    "id": "11",
+    "title": "Anandmela & Drawing Competition",
+    "date": "Thursday, 4th September",
+    "time": "After 7 PM",
+    "description": "Joyful celebration with drawing competition for all age groups.",
+    "organizers": "Society Committee",
+    "category": "competition"
+  },
+  {
+    "id": "12",
+    "title": "Prize Distribution & Mahaprasad",
+    "date": "Friday, 5th September",
+    "time": "After 7 PM",
+    "description": "Grand finale with prize distribution, mahaprasad, Atharvshirsh recitation, and Ganapati Naam Pathan.",
+    "organizers": "Society Committee",
+    "category": "ceremony"
+  },
+  {
+    "id": "13",
+    "title": "Ganapati Visarjan",
+    "date": "Saturday, 6th September",
+    "time": "Evening",
+    "description": "Emotional farewell ceremony to bid goodbye to Lord Ganapati with traditional visarjan rituals.",
+    "organizers": "Religious Committee",
+    "category": "ceremony"
+  }
+]
