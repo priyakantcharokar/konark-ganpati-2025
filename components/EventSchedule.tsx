@@ -105,11 +105,23 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
         })
         setBuildingInfo(buildingInfoData)
 
-        // Load events data
-        const eventsResponse = await fetch('/events.json')
+        // Load events data from coord.json
+        const eventsResponse = await fetch('/coord.json')
         if (!eventsResponse.ok) throw new Error('Failed to load events data')
-        const eventsData = await eventsResponse.json()
-        setEvents(eventsData)
+        const coordData = await eventsResponse.json()
+        
+        // Transform coord.json data to match Event interface
+        const transformedEvents: Event[] = coordData.events.map((event: any, index: number) => ({
+          id: `event-${index + 1}`,
+          title: event.event,
+          date: event.date,
+          time: "7:00 PM", // Default time as most events are after 7 PM
+          description: `Contact coordinator for more details about ${event.event}`,
+          organizers: event.contact,
+          category: "Festival Event"
+        }))
+        
+        setEvents(transformedEvents)
       } catch (error) {
         console.error('Error loading data:', error)
         setLoadError(error instanceof Error ? error.message : 'Failed to load data')
@@ -808,7 +820,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl sm:rounded-3xl shadow-xl border border-blue-200"
               >
                 {/* Header with Toggle Button */}
-                <div className="p-4 sm:p-6 lg:p-8 border-b border-blue-200 bg-gradient-to-r from-blue-100/50 to-indigo-100/50">
+                <div id="aarti-schedule" className="p-4 sm:p-6 lg:p-8 border-b border-blue-200 bg-gradient-to-r from-blue-100/50 to-indigo-100/50">
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
                     <div className="text-center flex-1">
                       <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-blue-800 mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
@@ -904,7 +916,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                     </h3>
           </div>
 
-                                  {/* Time Slots - Single Row Layout */}
+                                                                    {/* Time Slots - Single Row Layout */}
                                   <div className="p-3 sm:p-4">
                                     <div className="flex gap-2 sm:gap-3">
                                       {sessions.map((session, sessionIndex) => {
@@ -933,22 +945,22 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                             }`}
                                           >
                                             <div className="text-center">
-                                                                                                                                                                                  <div 
-                                              className={`text-xs sm:text-sm font-medium px-2 py-1 rounded-full mb-1 flex items-center justify-center ${
-                                                session.time === 'Morning' 
-                                                  ? isBooked 
-                                                    ? 'text-gray-500 bg-transparent' 
-                                                    : 'text-white bg-orange-500'
-                                                  : isBooked 
-                                                    ? 'text-gray-500 bg-transparent' 
-                                                    : 'text-white bg-black'
-                                              }`} 
-                                              title={`${session.time} Session - Click to select aarti timing`}
-                                              aria-label={`${session.time} Session - Click to select aarti timing`}
-                                            >
-                                              {session.time}
-                                            </div>
-
+                                              <div 
+                                                className={`text-xs sm:text-sm font-medium px-2 py-1 rounded-full mb-1 flex items-center justify-center ${
+                                                  session.time === 'Morning' 
+                                                    ? isBooked 
+                                                      ? 'text-gray-500 bg-transparent' 
+                                                      : 'text-white bg-orange-500'
+                                                    : isBooked 
+                                                      ? 'text-gray-500 bg-transparent' 
+                                                      : 'text-white bg-black'
+                                                }`} 
+                                                title={`${session.time} Session - Click to select aarti timing`}
+                                                aria-label={`${session.time} Session - Click to select aarti timing`}
+                                              >
+                                                {session.time}
+                                              </div>
+                                              
                                               {isBooked ? (
                                                 <div className="text-xs text-gray-500">
                                                   <div className="font-medium truncate">{booking?.userName}</div>
@@ -963,6 +975,13 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                           </motion.button>
                                         );
                                       })}
+        </div>
+
+                                    {/* Helper Message */}
+                                    <div className="text-center mt-2">
+                                      <p className="text-xs text-gray-500" style={{ fontFamily: 'Söhne, sans-serif' }}>
+                                        Click Morning or Evening slot to book your aarti
+                                      </p>
                                     </div>
                                   </div>
                                 </motion.div>
@@ -978,6 +997,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
 
               {/* Events Section - Green Theme */}
               <motion.div
+                id="festival-events"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
