@@ -29,6 +29,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
   const [selectedAarti, setSelectedAarti] = useState<{ date: string; time: string } | null>(null)
   const [userName, setUserName] = useState<string>('')
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
+  const [toastType, setToastType] = useState<'success' | 'error'>('success')
   const [submissions, setSubmissions] = useState<Array<{
     id: string
     aartiSchedule: { date: string; time: string }
@@ -62,16 +65,10 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
         // Load flats data
         const flatsResponse = await fetch('/flats.json')
         if (!flatsResponse.ok) throw new Error('Failed to load flats data')
-        const flatsData = await flatsResponse.json()
-        setFlatsData(flatsData)
-
-        // Load events data
-        const eventsResponse = await fetch('/events.json')
-        if (!eventsResponse.ok) throw new Error('Failed to load events data')
-        const eventsData = await eventsResponse.json()
-        setEvents(eventsData)
-
-        // Generate building info from flats data
+        const flatsRawData = await flatsResponse.json()
+        
+        // Group flats by building (A, B, C, D, E, F, G, H)
+        const flatsData: { [key: string]: string[] } = {}
         const buildingInfoData: { [key: string]: { name: string; floors: number; totalFlats: number; color: string } } = {}
         const colors = [
           "from-blue-500 to-blue-600",
@@ -84,17 +81,35 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
           "from-red-500 to-red-600"
         ]
         
+        // Extract flats array and group by building
+        const allFlats = flatsRawData.flats || flatsRawData
+        allFlats.forEach((flat: string) => {
+          const building = flat.charAt(0) // Extract building letter (A, B, C, D, E, F, G, H)
+          if (!flatsData[building]) {
+            flatsData[building] = []
+          }
+          flatsData[building].push(flat)
+        })
+        
+        setFlatsData(flatsData)
+        
+        // Generate building info
         Object.entries(flatsData).forEach(([building, flats], index) => {
-          const flatArray = flats as string[]
-          const maxFloor = Math.max(...flatArray.map(f => parseInt(f.slice(1, -2))))
+          const maxFloor = Math.max(...flats.map(f => parseInt(f.slice(1, -2))))
           buildingInfoData[building] = {
             name: `Building ${building}`,
             floors: maxFloor,
-            totalFlats: flatArray.length,
+            totalFlats: flats.length,
             color: colors[index % colors.length]
           }
         })
         setBuildingInfo(buildingInfoData)
+
+        // Load events data
+        const eventsResponse = await fetch('/events.json')
+        if (!eventsResponse.ok) throw new Error('Failed to load events data')
+        const eventsData = await eventsResponse.json()
+        setEvents(eventsData)
       } catch (error) {
         console.error('Error loading data:', error)
         setLoadError(error instanceof Error ? error.message : 'Failed to load data')
@@ -113,23 +128,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
 
   // Initialize submissions from localStorage only (no hardcoded data)
   useEffect(() => {
-    const savedSubmissions = localStorage.getItem('ganeshPoojaBookings')
-    if (savedSubmissions) {
-      try {
-        const existingSubmissions = JSON.parse(savedSubmissions)
-        // Convert timestamp strings back to Date objects
-        const parsedSubmissions = existingSubmissions.map((sub: any) => ({
-          ...sub,
-          timestamp: new Date(sub.timestamp)
-        }))
-        setSubmissions(parsedSubmissions)
-      } catch (error) {
-        console.error('Error parsing saved submissions:', error)
-        setSubmissions([])
-      }
-    } else {
-      setSubmissions([])
-    }
+    // Clear any existing bookings to start fresh
+    localStorage.removeItem('ganeshPoojaBookings')
+    setSubmissions([])
   }, [])
 
   // Save submissions to localStorage whenever they change
@@ -228,9 +229,20 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
     setIsSubmitted(false)
   }
 
+  const showToastMessage = (message: string, type: 'success' | 'error' = 'success') => {
+    setToastMessage(message)
+    setToastType(type)
+    setShowToast(true)
+    
+    // Auto-hide toast after 5 seconds
+    setTimeout(() => {
+      setShowToast(false)
+    }, 5000)
+  }
+
   const handleSubmit = () => {
     if (!userName.trim()) {
-      alert('Please enter your name');
+      showToastMessage('Please enter your name', 'error');
       return;
     }
 
@@ -244,16 +256,20 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
     };
 
     setSubmissions(prev => [...prev, submission]);
-    alert(`Pooja slot confirmed! ${userName} from Flat ${selectedFlat} has booked ${selectedAarti!.time} Aarti on ${selectedAarti!.date}`);
+    showToastMessage(`Pooja slot confirmed! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has booked ${selectedAarti!.time} Aarti on ${selectedAarti!.date}`);
     
     // Reset all states to return to landing page
-    setShowFlatSelection(false);
-    setSelectedBuilding('');
-    setSelectedFlat('');
-    setSelectedAarti(null);
-    setUserName('');
-    setIsSubmitted(false);
+    setTimeout(() => {
+      setShowFlatSelection(false);
+      setSelectedBuilding('');
+      setSelectedFlat('');
+      setSelectedAarti(null);
+      setUserName('');
+      setIsSubmitted(false);
+    }, 2000); // Wait 2 seconds for toast to be visible
   };
+
+
 
   // Selected Aarti Display Component
   const SelectedAartiDisplay = () => (
@@ -266,10 +282,10 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
       <div className="text-center mb-3 sm:mb-4">
         <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
           <span className="text-xl sm:text-2xl">🕉️</span>
-        </div>
+          </div>
         <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2" style={{ fontFamily: 'Charter, serif' }}>
           Selected Aarti Schedule
-        </h3>
+          </h3>
       </div>
       
       <div className="space-y-2 sm:space-y-3 text-center">
@@ -284,7 +300,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
         </div>
       </div>
     </motion.div>
-  )
+    )
 
   return (
     <div className="w-full">
@@ -334,8 +350,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
           {/* Mobile Navigation Header - Only show on mobile when navigating */}
           {(showFlatSelection || selectedBuilding || selectedFlat) && (
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
               className="lg:hidden bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm"
             >
               <div className="flex items-center justify-between p-3 sm:p-4">
@@ -381,7 +397,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
               >
                 <div className="text-2xl sm:text-3xl mb-2">🕉️</div>
                 <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-orange-800 bg-clip-text text-transparent mb-2">
-                  <span className="font-normal text-amber-700" style={{ fontFamily: 'Style Script, cursive', fontSize: 'clamp(20px, 4vw, 28px)' }}>Konark Exotica</span>
+                  <span className="font-normal text-amber-700" style={{ fontFamily: 'Style Script, cursive', fontSize: 'clamp(20px, 4vw, 90px)' }}>Konark Exotica</span>
                   <span className="block text-sm sm:text-base md:text-lg lg:text-xl mt-1" style={{ fontFamily: 'Style Script, cursive', fontSize: 'clamp(16px, 3.5vw, 20px)' }}>Ganesh Pooja 2025</span>
                 </h1>
               </motion.div>
@@ -446,7 +462,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                         <span className="hidden sm:inline">Back to Building Selection</span>
                         <span className="sm:hidden">Back</span>
                       </motion.button>
-                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4" style={{ fontFamily: 'Charter, serif' }}>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
                         Select Your Flat in Building {selectedBuilding}
                       </h2>
                       <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
@@ -480,8 +496,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                             <span className="font-medium text-blue-700" style={{ fontFamily: 'Söhne, sans-serif' }}>
                               Total: {flatsData[selectedBuilding as keyof typeof flatsData].length}
                             </span>
-                          </div>
-                        </div>
+          </div>
+        </div>
                       </motion.div>
 
                       <div className="flex flex-col-reverse gap-3 sm:gap-4">
@@ -618,67 +634,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 <div className="w-full lg:w-80 flex-shrink-0 order-1 lg:order-2">
                   <div className="sticky top-4 sm:top-8 space-y-4 sm:space-y-6">
                     {/* Building Overview - Show Booked Flats */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200"
-                    >
-                      <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 text-center" style={{ fontFamily: 'Charter, serif' }}>
-                        🏢 Building {selectedBuilding} Overview
-                      </h3>
-                      
-                      {/* Booked Flats List */}
-                      {(() => {
-                        const bookedFlats = submissions.filter(s => s.building === selectedBuilding)
-                        
-                        if (bookedFlats.length === 0) {
-                          return (
-                            <div className="text-center py-3 sm:py-4">
-                              <div className="text-green-600 text-3xl sm:text-4xl mb-2">✅</div>
-                              <p className="text-xs sm:text-sm text-gray-600" style={{ fontFamily: 'Söhne, sans-serif' }}>
-                                All flats are available!
-                              </p>
-                            </div>
-                          )
-                        }
-                        
-                        return (
-                          <div className="space-y-2 sm:space-y-3">
-                            <p className="text-xs text-gray-500 text-center mb-2 sm:mb-3" style={{ fontFamily: 'Söhne, sans-serif' }}>
-                              Already Booked Flats:
-                            </p>
-                            {bookedFlats.map((booking, index) => (
-                              <motion.div
-                                key={booking.id}
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                className="p-2 sm:p-3 bg-red-50 rounded-lg border border-red-200"
-                              >
-                                <div className="flex items-center justify-between mb-1 sm:mb-2">
-                                  <span className="font-semibold text-red-700 text-xs sm:text-sm" style={{ fontFamily: 'Charter, serif' }}>
-                                    {booking.flat}
-                                  </span>
-                                  <span className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full ${
-                                    booking.aartiSchedule.time === 'Morning' 
-                                      ? 'bg-blue-100 text-blue-700' 
-                                      : 'bg-yellow-100 text-yellow-700'
-                                  }`}>
-                                    {booking.aartiSchedule.time}
-                                  </span>
-                                </div>
-                                <div className="text-xs text-gray-600" style={{ fontFamily: 'Söhne, sans-serif' }}>
-                                  <div>Booked by: <span className="font-medium">{booking.userName}</span></div>
-                                  <div className="text-gray-500">{booking.aartiSchedule.date}</div>
-                                </div>
-                              </motion.div>
-                            ))}
-                          </div>
-                        )
-                      })()}
-                    </motion.div>
+        
 
-                    {/* Name Input and Submit Button */}
+                                        {/* Name Input and Submit Button */}
                     {selectedFlat && (
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -689,22 +647,37 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                           👤 Enter Your Details
                         </h3>
                         
+                        {/* Selected Flat Display - Prominent */}
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="mb-4 sm:mb-6 text-center p-3 sm:p-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl border border-blue-200 shadow-lg"
+                        >
+                          <div className="flex items-center justify-center gap-2 text-white">
+                            <Home className="w-5 h-5 sm:w-6 sm:h-6" />
+                            <span className="text-lg sm:text-xl font-bold">Selected: {selectedFlat}</span>
+                          </div>
+                          <div className="text-sm sm:text-base text-blue-100 mt-1">
+                            Building {selectedBuilding}
+                          </div>
+                        </motion.div>
+                        
                         <div className="space-y-3 sm:space-y-4">
                           <div>
                             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2" style={{ fontFamily: 'Söhne, sans-serif' }}>
                               Full Name *
                             </label>
-                            <input
-                              type="text"
+              <input
+                type="text"
                               placeholder="Enter your name"
                               value={userName}
                               onChange={(e) => setUserName(e.target.value)}
                               className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg sm:rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 text-sm sm:text-base"
                               style={{ fontFamily: 'Söhne, sans-serif' }}
                               required
-                            />
-                          </div>
-                          
+              />
+            </div>
+
                           <button
                             onClick={handleSubmit}
                             disabled={!userName.trim()}
@@ -748,16 +721,16 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                         <span className="hidden sm:inline">Back to Aarti Schedule</span>
                         <span className="sm:hidden">Back</span>
                       </motion.button>
-                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4" style={{ fontFamily: 'Charter, serif' }}>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
                         Select Your Building
                       </h2>
                       <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
                         Choose the building where your flat is located
                       </p>
-                    </div>
+            </div>
 
-                    {/* Buildings Grid - Simplified with just big letters */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 px-2 sm:px-0">
+                    {/* Buildings Grid - Show A, B, C, D, E, F, G, H */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 px-2 sm:px-0 p-6 sm:p-8 bg-gradient-to-br from-blue-50/50 via-indigo-50/30 to-purple-50/50 rounded-2xl sm:rounded-3xl border border-white/20 backdrop-blur-sm">
                       {Object.entries(buildingInfo).map(([building, info], index) => {
                         // Calculate availability for this building
                         const totalFlats = flatsData[building as keyof typeof flatsData].length
@@ -784,28 +757,27 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                               transition: { duration: 0.1 }
                             }}
                             onClick={() => handleBuildingSelect(building)}
-                            className="w-full aspect-square bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 ease-out flex flex-col items-center justify-center text-white font-bold hover:from-blue-600 hover:to-blue-700 relative overflow-hidden"
+                            className="w-full aspect-square bg-white/20 backdrop-blur-md border border-white/30 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 ease-out flex flex-col items-center justify-center text-white font-bold hover:bg-white/30 hover:border-white/50 relative overflow-hidden"
                           >
                             {/* Main Building Letter */}
-                            <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-1 sm:mb-2">{building}</span>
+                            <span className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl mb-1 sm:mb-2 font-bold drop-shadow-lg filter ${
+                              building === 'A' ? 'text-blue-600 drop-shadow-[0_0_20px_rgba(37,99,235,0.4)]' :
+                              building === 'B' ? 'text-green-600 drop-shadow-[0_0_20px_rgba(22,163,74,0.4)]' :
+                              building === 'C' ? 'text-purple-600 drop-shadow-[0_0_20px_rgba(147,51,234,0.4)]' :
+                              building === 'D' ? 'text-orange-600 drop-shadow-[0_0_20px_rgba(234,88,12,0.4)]' :
+                              building === 'E' ? 'text-pink-600 drop-shadow-[0_0_20px_rgba(219,39,119,0.4)]' :
+                              building === 'F' ? 'text-indigo-600 drop-shadow-[0_0_20px_rgba(79,70,229,0.4)]' :
+                              building === 'G' ? 'text-teal-600 drop-shadow-[0_0_20px_rgba(13,148,136,0.4)]' :
+                              building === 'H' ? 'text-red-600 drop-shadow-[0_0_20px_rgba(220,38,38,0.4)]' : 'text-gray-800'
+                            }`}>{building}</span>
                             
-                            {/* Availability Badge */}
-                            <div className="absolute bottom-1 sm:bottom-2 left-1 sm:left-2 right-1 sm:right-2">
-                              <div className={`text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-center font-medium ${
-                                availableFlats === 0 
-                                  ? 'bg-red-500 text-white' 
-                                  : availableFlats < totalFlats * 0.3 
-                                    ? 'bg-yellow-500 text-white'
-                                    : 'bg-green-500 text-white'
-                              }`}>
-                                {availableFlats}/{totalFlats} Available
-                              </div>
-                            </div>
+                                                        {/* Availability Badge */}
                             
+
                             {/* Booked Indicator */}
                             {bookedFlats > 0 && (
                               <div className="absolute top-1 sm:top-2 right-1 sm:right-2">
-                                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full flex items-center justify-center">
+                                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500/90 border border-red-600/50 rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm">
                                   <span className="text-white text-xs font-bold">{bookedFlats}</span>
                                 </div>
                               </div>
@@ -839,13 +811,13 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 <div className="p-4 sm:p-6 lg:p-8 border-b border-gray-100">
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
                     <div className="text-center flex-1">
-                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4" style={{ fontFamily: 'Charter, serif' }}>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
                         Daily Aarti Schedule
                       </h2>
                       <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
                         Select your preferred aarti session to proceed with flat booking
-                      </p>
-                    </div>
+            </p>
+          </div>
                     
                     <motion.button
                       onClick={() => setShowAartiSchedule(!showAartiSchedule)}
@@ -863,7 +835,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                       )}
                     </motion.button>
                   </div>
-                </div>
+        </div>
 
                 {/* Collapsible Content */}
                 <AnimatePresence>
@@ -908,7 +880,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                               ).filter(Boolean);
 
                               return (
-                                <motion.div
+          <motion.div
                                   key={date}
                                   initial={{ opacity: 0, y: 8, scale: 0.95 }}
                                   animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -996,9 +968,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                             });
                           })()}
                         </div>
-                      </div>
-                    </motion.div>
-                  )}
+            </div>
+          </motion.div>
+        )}
                 </AnimatePresence>
               </motion.div>
 
@@ -1019,7 +991,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                     <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
                       <span className="text-2xl sm:text-3xl">🎉</span>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-orange-800 bg-clip-text text-transparent mb-3 sm:mb-4" style={{ fontFamily: 'Charter, serif' }}>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-orange-800 bg-clip-text text-transparent mb-3 sm:mb-4" style={{ fontFamily: 'Style Script, cursive' }}>
                       Festival Events
                     </h2>
                     <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed px-4" style={{ fontFamily: 'Söhne, sans-serif' }}>
@@ -1050,11 +1022,11 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 </div>
               </motion.div>
 
-              {/* Footer Info */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
+        {/* Footer Info */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
                 className="mt-8 sm:mt-12 bg-gradient-to-br from-white to-gray-50 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 text-center border border-gray-100"
               >
                 <motion.div
@@ -1065,29 +1037,73 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-md">
                     <span className="text-xl sm:text-2xl">ℹ️</span>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6" style={{ fontFamily: 'Charter, serif' }}>
-                    Important Information
-                  </h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6" style={{ fontFamily: 'Style Script, cursive' }}>
+            Important Information
+          </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-gray-600" style={{ fontFamily: 'Söhne, sans-serif' }}>
                     <div className="bg-white/60 backdrop-blur-sm p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200">
                       <span className="font-semibold text-blue-600 block mb-1.5 sm:mb-2 text-xs sm:text-sm">⏰ Timing</span>
                       <p className="text-gray-700 text-xs sm:text-sm">Most events after 7 PM for maximum participation</p>
-                    </div>
+            </div>
                     <div className="bg-white/60 backdrop-blur-sm p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200">
                       <span className="font-semibold text-green-600 block mb-1.5 sm:mb-2 text-xs sm:text-sm">📅 Duration</span>
                       <p className="text-gray-700 text-xs sm:text-sm">August 23 - September 6, 2025</p>
-                    </div>
+            </div>
                     <div className="bg-white/60 backdrop-blur-sm p-3 sm:p-4 rounded-lg sm:rounded-xl border border-gray-200 sm:col-span-2 lg:col-span-1">
                       <span className="font-semibold text-purple-600 block mb-1.5 sm:mb-2 text-xs sm:text-sm">📝 Note</span>
                       <p className="text-gray-700 text-xs sm:text-sm">This is a tentative plan and may change if required</p>
-                    </div>
-                  </div>
-                </motion.div>
+            </div>
+          </div>
+        </motion.div>
               </motion.div>
             </>
           )}
         </>
       )}
+
+      {/* Toast Notification - Bottom Right */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, x: 100, y: 20 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            exit={{ opacity: 0, x: 100, y: 20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className={`fixed bottom-4 right-4 z-50 max-w-sm w-full sm:max-w-md lg:max-w-lg ${
+              toastType === 'success' 
+                ? 'bg-gradient-to-r from-green-500 to-green-600 border border-green-400' 
+                : 'bg-gradient-to-r from-red-500 to-red-600 border border-red-400'
+            } text-white rounded-xl shadow-2xl backdrop-blur-sm`}
+          >
+            <div className="p-4 sm:p-5">
+              <div className="flex items-start gap-3">
+                <div className={`flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center ${
+                  toastType === 'success' ? 'bg-green-400/30' : 'bg-red-400/30'
+                }`}>
+                  {toastType === 'success' ? (
+                    <span className="text-green-100 text-lg">✅</span>
+                  ) : (
+                    <span className="text-red-100 text-lg">⚠️</span>
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm sm:text-base font-medium leading-relaxed ${
+                    toastType === 'success' ? 'text-green-50' : 'text-red-50'
+                  }`}>
+                    {toastMessage}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowToast(false)}
+                  className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white/30 transition-colors duration-200 flex items-center justify-center"
+                >
+                  <X className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
