@@ -252,10 +252,10 @@ export default function ParticipationOverview() {
             transition={{ duration: 0.6 }}
             className="text-center mb-8"
           >
-            <h1 className="text-4xl font-bold text-gray-800 mb-3 font-jaf-bernino">
+            <h1 className="text-4xl font-bold text-white mb-3 font-jaf-bernino">
               Participation Overview
             </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto font-medium">
+            <p className="text-lg text-gray-200 max-w-2xl mx-auto font-medium digital-text">
               Track all aarti bookings and event nominations across the Ganesh Pooja celebrations
             </p>
           </motion.div>

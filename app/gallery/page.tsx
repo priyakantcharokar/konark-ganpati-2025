@@ -146,7 +146,7 @@ export default function Gallery() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4 font-style-script">
             Festival Gallery<br/>(Memories)
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto font-charter">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto digital-text">
             Relive the beautiful moments and cherished memories from our Ganesh Pooja Festival
           </p>
         </motion.div>
@@ -312,7 +312,7 @@ export default function Gallery() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-center text-gray-600"
           >
-            <p className="font-charter">
+            <p className="digital-text">
               Click on any memory category above to view the photo carousel
             </p>
           </motion.div>
@@ -325,7 +325,7 @@ export default function Gallery() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-8 text-center"
         >
-          <p className="text-sm text-gray-500 font-charter">
+          <p className="text-sm text-gray-500 digital-text">
             Beautiful memories captured during our Ganesh Pooja Festival celebrations
           </p>
         </motion.div>
