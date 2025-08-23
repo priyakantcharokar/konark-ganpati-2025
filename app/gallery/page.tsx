@@ -198,41 +198,7 @@ export default function Gallery() {
           </div>
         </motion.div>
 
-        {/* Gallery Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                <span className="text-white text-xl">📸</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 font-sohne">
-                Auto-Play Carousel
-              </h3>
-            </div>
-            <p className="text-gray-600 font-charter">
-              Images automatically change every 3 seconds. Use the play/pause button to control the slideshow, or manually navigate using the arrows and thumbnails below.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
-                <span className="text-white text-xl">🎯</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 font-sohne">
-                Interactive Controls
-              </h3>
-            </div>
-            <p className="text-gray-600 font-charter">
-              Navigate through the gallery using the arrow buttons, click on thumbnails for quick access, or let the carousel run automatically to enjoy a slideshow experience.
-            </p>
-          </div>
-        </motion.div>
+        
 
         {/* Image Credits */}
         <motion.div
