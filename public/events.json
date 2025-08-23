@@ -115,5 +115,14 @@
     "description": "Emotional farewell ceremony to bid goodbye to Lord Ganapati with traditional visarjan rituals.",
     "organizers": "Religious Committee",
     "category": "ceremony"
+  },
+  {
+    "id": "14",
+    "title": "Ganpati Utsav Hosting",
+    "date": "Throughout Festival",
+    "time": "All Day",
+    "description": "Special hosting and coordination team for the entire Ganapati Utsav festival, ensuring smooth execution of all events.",
+    "organizers": "Society Committee",
+    "category": "coordination"
   }
 ]

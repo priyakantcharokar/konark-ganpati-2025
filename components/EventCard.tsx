@@ -55,6 +55,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
     if (title.includes('idol') && title.includes('making')) return '/events/IdolMaking.jpeg'
     if (title.includes('modak') && title.includes('mohostav')) return '/events/ModakCompetition.jpeg'
     if (title.includes('singing')) return '/events/Singing.jpeg'
+    if (title.includes('ganapati') && title.includes('utsav') && title.includes('hosting')) return '/events/GanapatiUtsavHosting.jpeg'
     
     // Default fallback
     return null
@@ -74,7 +75,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
     if (title.includes('rangoli') || title.includes('drawing') || title.includes('recitation')) return '🎨'
     
     // Anchoring and hosting
-    if (title.includes('anchoring')) return '🎤'
+    if (title.includes('anchoring') || (title.includes('ganapati') && title.includes('utsav') && title.includes('hosting'))) return '🎤'
     
     // Food and cooking
     if (title.includes('modak') || title.includes('cooking') || title.includes('food')) return '🍽️'
@@ -114,6 +115,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
     if (title.includes('karaoke') || title.includes('performance') || title.includes('fashion') || 
         title.includes('fancy dress') || title.includes('antakshari')) {
       return 'border-pink-200 bg-gradient-to-br from-pink-50 to-rose-50'
+    }
+    
+    // Coordination and hosting
+    if (title.includes('ganapati') && title.includes('utsav') && title.includes('hosting')) {
+      return 'border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50'
     }
     
     // Games and sports
