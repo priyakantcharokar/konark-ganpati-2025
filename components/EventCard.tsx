@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Clock, Users, MapPin, X } from 'lucide-react'
-import Link from 'next/link'
 import EventNominationFlow from './EventNominationFlow'
 import EventNominations from './EventNominations'
 
@@ -38,9 +37,8 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
   const [showNominations, setShowNominations] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
 
-  const generateEventSlug = (eventTitle: string) => {
-    return eventTitle.toLowerCase().replace(/[^a-z0-9]/g, '-')
-  }
+  // Check if this is a Bhog event
+  const isBhogEvent = event.title.includes('छप्पन भोग') || event.title.includes('56') || event.title.includes('Bhog')
 
   // Function to find matching event flyer image
   const getEventFlyerImage = (eventTitle: string) => {
@@ -150,27 +148,25 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
         scale: 1.02,
         transition: { duration: 0.3, ease: "easeOut" }
       }}
-      className={`${getEventColor(event.title)} p-3 sm:p-4 rounded-xl border shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer`}
+      className={`${getEventColor(event.title)} p-3 sm:p-4 rounded-xl border shadow-sm hover:shadow-lg transition-all duration-300`}
     >
       {/* Header with Icon and Title */}
       <div className="flex items-center gap-3 mb-4">
         <div className="flex-shrink-0">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 border border-white/50">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg transition-all duration-300 border border-white/50">
             <span className="text-lg sm:text-xl">{getEventIcon(event.title)}</span>
           </div>
         </div>
         <div className="flex-1 min-w-0">
-          <Link href={`/events/${generateEventSlug(event.title)}`}>
-            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 group-hover:text-gray-900 transition-all duration-300 leading-tight font-jaf-bernino bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent group-hover:from-gray-900 group-hover:to-gray-800">
-              {event.title}
-            </h3>
-          </Link>
+          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 leading-tight font-jaf-bernino bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent">
+            {event.title}
+          </h3>
         </div>
       </div>
 
       {/* Description */}
       {event.description && (
-        <p className="text-gray-600 mb-3 leading-relaxed text-xs sm:text-sm group-hover:text-gray-700 transition-colors duration-200 font-charter">
+        <p className="text-gray-600 mb-3 leading-relaxed text-xs sm:text-sm transition-colors duration-200 font-charter">
           {event.description}
         </p>
       )}
@@ -225,30 +221,41 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
 
       {/* Action Buttons */}
       <div className="flex gap-2 mt-3">
-        {/* Show all buttons for regular events */}
-        {!event.title.includes('Aarti And Prasad Seva') && !event.title.includes('Ganapati Sthapana') && (
+        {/* Show all buttons for regular events, but hide for Tambola events */}
+        {!event.title.includes('Aarti And Prasad Seva') && 
+         !event.title.includes('Ganapati Sthapana') && 
+         !event.title.toLowerCase().includes('tambola') && (
           <>
             <button
-              onClick={() => setShowNominations(true)}
+              onClick={() => {
+                if (isBhogEvent) {
+                  // For Bhog events, navigate to Bhog List with source info
+                  window.location.href = `/bhog-list?source=events&event=${encodeURIComponent(event.title)}`
+                } else {
+                  setShowNominations(true)
+                }
+              }}
               className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 text-xs"
             >
-              Nominations
+              {isBhogEvent ? 'Bhog List' : 'Nominations'}
             </button>
             <button
               onClick={() => setShowNominationForm(true)}
               className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-xs"
             >
-              Nominate
+              {isBhogEvent ? 'Offer Bhog' : 'Nominate'}
             </button>
           </>
         )}
         
-        {/* Always show Details button if event flyer image exists */}
-        {eventFlyerImage && (
+        {/* Always show Details button if event flyer image exists, or if it's a Tambola event */}
+        {(eventFlyerImage || event.title.toLowerCase().includes('tambola')) && (
           <button
             onClick={() => setShowDetails(true)}
             className={`bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs ${
-              event.title.includes('Aarti And Prasad Seva') ? 'flex-1' : 'flex-1'
+              event.title.includes('Aarti And Prasad Seva') || 
+              event.title.includes('Ganapati Sthapana') || 
+              event.title.toLowerCase().includes('tambola') ? 'w-full' : 'flex-1'
             }`}
           >
             Details
@@ -278,7 +285,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
 
       {/* Event Details Modal */}
       <AnimatePresence>
-        {showDetails && eventFlyerImage && (
+        {showDetails && (eventFlyerImage || event.title.toLowerCase().includes('tambola')) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -301,7 +308,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-800 font-sohne">
-                  Event Flyer
+                  {eventFlyerImage ? 'Event Flyer' : 'Event Details'}
                 </h3>
                 <button
                   onClick={() => setShowDetails(false)}
@@ -311,18 +318,48 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
                 </button>
               </div>
               
-              {/* Image Container */}
+              {/* Content */}
               <div className="p-4">
-                <div className="relative">
-                  <img
-                    src={eventFlyerImage}
-                    alt={`${event.title} Event Flyer`}
-                    className="w-full h-auto rounded-lg shadow-lg object-cover"
-                    style={{ maxHeight: '70vh' }}
-                  />
-                </div>
+                {eventFlyerImage ? (
+                  // Show flyer image if available
+                  <div className="relative">
+                    <img
+                      src={eventFlyerImage}
+                      alt={`${event.title} Event Flyer`}
+                      className="w-full h-auto rounded-lg shadow-lg object-cover"
+                      style={{ maxHeight: '70vh' }}
+                    />
+                  </div>
+                ) : (
+                  // Show event details for events without flyers (like Tambola)
+                  <div className="text-center space-y-4">
+                    <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                      <span className="text-3xl">{getEventIcon(event.title)}</span>
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-800 mb-2 font-jaf-bernino">
+                      {event.title}
+                    </h4>
+                    <div className="space-y-3 text-gray-600">
+                      <div className="flex items-center justify-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        <span className="font-medium">{event.date}</span>
+                      </div>
+                      {event.time && (
+                        <div className="flex items-center justify-center gap-2">
+                          <Clock className="w-4 h-4" />
+                          <span className="font-medium">{event.time}</span>
+                        </div>
+                      )}
+                      {event.description && (
+                        <div className="text-sm leading-relaxed max-w-sm mx-auto">
+                          {event.description}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
                 
-                {/* Event Info */}
+                {/* Event Info Footer */}
                 <div className="mt-4 text-center">
                   <h4 className="text-xl font-bold text-gray-800 mb-2 font-jaf-bernino">
                     {event.title}

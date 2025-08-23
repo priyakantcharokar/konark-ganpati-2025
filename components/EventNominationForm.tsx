@@ -28,9 +28,13 @@ const EventNominationForm: React.FC<EventNominationFormProps> = ({
   const [selectedFlat, setSelectedFlat] = useState<string>('')
   const [userName, setUserName] = useState<string>('')
   const [mobileNumber, setMobileNumber] = useState<string>('')
+  const [bhogName, setBhogName] = useState<string>('')
   const [flatsData, setFlatsData] = useState<Flat[]>([])
   const [buildingInfo, setBuildingInfo] = useState<{ [key: string]: Flat[] }>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Check if this is a Bhog event
+  const isBhogEvent = eventTitle.includes('छप्पन भोग') || eventTitle.includes('56') || eventTitle.includes('Bhog')
 
   // Load flats data
   useEffect(() => {
@@ -86,27 +90,52 @@ const EventNominationForm: React.FC<EventNominationFormProps> = ({
       return
     }
 
+    // For Bhog events, bhog name is required
+    if (isBhogEvent && !bhogName.trim()) {
+      alert('Please enter the Bhog name')
+      return
+    }
+
     setIsSubmitting(true)
     
     try {
-      const nomination = await databaseService.createEventNomination({
-        event_title: eventTitle,
-        event_date: eventDate,
-        user_name: userName.trim(),
-        mobile_number: mobileNumber,
-        building: selectedBuilding,
-        flat: selectedFlat
-      })
+      if (isBhogEvent) {
+        // Handle Bhog nomination
+        const bhogNomination = await databaseService.createBhogNomination({
+          user_name: userName.trim(),
+          mobile_number: mobileNumber,
+          building: selectedBuilding,
+          flat: selectedFlat,
+          bhog_name: bhogName.trim()
+        })
 
-      if (nomination) {
-        onSuccess()
-        onClose()
+        if (bhogNomination) {
+          onSuccess()
+          onClose()
+        } else {
+          alert('Failed to submit bhog nomination. Please try again.')
+        }
       } else {
-        alert('Failed to submit nomination. Please try again.')
+        // Handle regular Event nomination
+        const nomination = await databaseService.createEventNomination({
+          event_title: eventTitle,
+          event_date: eventDate,
+          user_name: userName.trim(),
+          mobile_number: mobileNumber,
+          building: selectedBuilding,
+          flat: selectedFlat
+        })
+
+        if (nomination) {
+          onSuccess()
+          onClose()
+        } else {
+          alert('Failed to submit nomination. Please try again.')
+        }
       }
     } catch (error) {
-      console.error('Error submitting nomination:', error)
-      alert('Failed to submit nomination. Please try again.')
+      console.error('Error submitting:', error)
+      alert('Failed to submit. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -221,7 +250,7 @@ const EventNominationForm: React.FC<EventNominationFormProps> = ({
                     ← Back
                   </button>
                   <h3 className="text-lg font-semibold text-gray-800 font-sohne">
-                    Enter Your Details
+                    {isBhogEvent ? 'Enter Bhog Details' : 'Enter Your Details'}
                   </h3>
                 </div>
 
@@ -279,12 +308,30 @@ const EventNominationForm: React.FC<EventNominationFormProps> = ({
                   )}
                 </div>
 
+                {/* Bhog Name Input - Only for Bhog events */}
+                {isBhogEvent && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 font-sohne">
+                      Bhog Name *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter the name of the Bhog you want to offer"
+                      value={bhogName}
+                      onChange={(e) => setBhogName(e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      style={{ fontFamily: 'Söhne, sans-serif' }}
+                      required
+                    />
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  disabled={isSubmitting || !userName.trim() || userName.length < 2 || !/^\d{10}$/.test(mobileNumber)}
+                  disabled={isSubmitting || !userName.trim() || userName.length < 2 || !/^\d{10}$/.test(mobileNumber) || (isBhogEvent && !bhogName.trim())}
                   className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit Nomination'}
+                  {isSubmitting ? 'Submitting...' : (isBhogEvent ? 'Offer Bhog' : 'Submit Nomination')}
                 </button>
               </motion.form>
             )}

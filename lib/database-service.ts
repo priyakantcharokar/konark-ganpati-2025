@@ -54,6 +54,26 @@ export interface CreateEventNomination {
   flat: string
 }
 
+// Bhog Types
+export interface BhogNomination {
+  id: string
+  user_name: string
+  mobile_number?: string | null
+  building: string
+  flat: string
+  bhog_name: string
+  created_at: string
+  updated_at: string
+}
+
+export interface CreateBhogNomination {
+  user_name: string
+  mobile_number?: string | null
+  building: string
+  flat: string
+  bhog_name: string
+}
+
 // Database Service Class
 export class DatabaseService {
   
@@ -300,6 +320,57 @@ export class DatabaseService {
       return true
     } catch (error) {
       console.error('Error deleting event nomination:', error)
+      return false
+    }
+  }
+
+  // Bhog Nomination Methods
+  
+  // Get all bhog nominations
+  async getAllBhogNominations(): Promise<BhogNomination[]> {
+    try {
+      const { data, error } = await supabase
+        .from('fiftysixbhog')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data || []
+    } catch (error) {
+      console.error('Error fetching bhog nominations:', error)
+      return []
+    }
+  }
+
+  // Create a new bhog nomination
+  async createBhogNomination(nomination: CreateBhogNomination): Promise<BhogNomination | null> {
+    try {
+      const { data, error } = await supabase
+        .from('fiftysixbhog')
+        .insert([nomination])
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error creating bhog nomination:', error)
+      return null
+    }
+  }
+
+  // Delete a bhog nomination (for admin purposes)
+  async deleteBhogNomination(nominationId: string): Promise<boolean> {
+    try {
+      const { error } = await supabase
+        .from('fiftysixbhog')
+        .delete()
+        .eq('id', nominationId)
+
+      if (error) throw error
+      return true
+    } catch (error) {
+      console.error('Error deleting bhog nomination:', error)
       return false
     }
   }

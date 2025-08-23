@@ -18,7 +18,16 @@ const EventNominations: React.FC<EventNominationsProps> = ({
   const [nominations, setNominations] = useState<EventNomination[]>([])
   const [loading, setLoading] = useState(true)
 
+  // Check if this is a Bhog event
+  const isBhogEvent = eventTitle.includes('छप्पन भोग') || eventTitle.includes('56') || eventTitle.includes('Bhog')
+
   useEffect(() => {
+    // If it's a Bhog event, redirect to Bhog List page
+    if (isBhogEvent) {
+      window.location.href = `/bhog-list?source=events&event=${encodeURIComponent(eventTitle)}`
+      return
+    }
+
     const loadNominations = async () => {
       try {
         const data = await databaseService.getEventNominations(eventTitle)
@@ -31,7 +40,12 @@ const EventNominations: React.FC<EventNominationsProps> = ({
     }
 
     loadNominations()
-  }, [eventTitle])
+  }, [eventTitle, isBhogEvent])
+
+  // If it's a Bhog event, don't render the modal
+  if (isBhogEvent) {
+    return null
+  }
 
   return (
     <div 

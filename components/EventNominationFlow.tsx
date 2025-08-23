@@ -27,8 +27,12 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
   const [selectedFlat, setSelectedFlat] = useState<string>('')
   const [userName, setUserName] = useState<string>('')
   const [mobileNumber, setMobileNumber] = useState<string>('')
+  const [bhogName, setBhogName] = useState<string>('')
   const [buildingInfo, setBuildingInfo] = useState<{ [key: string]: Flat[] }>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Check if this is a Bhog event
+  const isBhogEvent = eventData.title.includes('छप्पन भोग') || eventData.title.includes('56') || eventData.title.includes('Bhog')
 
   const buildings = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
@@ -89,28 +93,53 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
       alert('Please enter a valid name (at least 2 characters)')
       return
     }
+
+    // For Bhog events, bhog name is required
+    if (isBhogEvent && !bhogName.trim()) {
+      alert('Please enter the Bhog name')
+      return
+    }
     
     // Mobile number is optional, no validation required
 
     setIsSubmitting(true)
     
     try {
-      // Handle Event nomination
-      const nomination = await databaseService.createEventNomination({
-        event_title: eventData.title,
-        event_date: eventData.date,
-        user_name: userName.trim(),
-        mobile_number: mobileNumber.trim() || null,
-        building: selectedBuilding,
-        flat: selectedFlat
-      })
+      if (isBhogEvent) {
+        // Handle Bhog nomination
+        const bhogNomination = await databaseService.createBhogNomination({
+          user_name: userName.trim(),
+          mobile_number: mobileNumber.trim() || null,
+          building: selectedBuilding,
+          flat: selectedFlat,
+          bhog_name: bhogName.trim()
+        })
 
-      if (nomination) {
-        onSuccess(`Nomination submitted successfully! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has nominated for ${eventData.title}`)
-        // Redirect to landing page after success
-        window.location.href = '/'
+        if (bhogNomination) {
+          onSuccess(`Bhog offered successfully! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has offered ${bhogName}`)
+          // Redirect to landing page after success
+          window.location.href = '/'
+        } else {
+          alert('Failed to submit bhog nomination. Please try again.')
+        }
       } else {
-        alert('Failed to submit nomination. Please try again.')
+        // Handle regular Event nomination
+        const nomination = await databaseService.createEventNomination({
+          event_title: eventData.title,
+          event_date: eventData.date,
+          user_name: userName.trim(),
+          mobile_number: mobileNumber.trim() || null,
+          building: selectedBuilding,
+          flat: selectedFlat
+        })
+
+        if (nomination) {
+          onSuccess(`Nomination submitted successfully! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has nominated for ${eventData.title}`)
+          // Redirect to landing page after success
+          window.location.href = '/'
+        } else {
+          alert('Failed to submit nomination. Please try again.')
+        }
       }
     } catch (error) {
       console.error('Error submitting:', error)
@@ -127,9 +156,9 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
       case 'flat':
         return `Building ${selectedBuilding} - Select Your Flat`
       case 'details':
-        return 'Enter Your Details'
+        return isBhogEvent ? 'Enter Bhog Details' : 'Enter Your Details'
       default:
-        return 'Nominate for Event'
+        return isBhogEvent ? 'Offer Bhog' : 'Nominate for Event'
     }
   }
 
@@ -390,13 +419,31 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
                   )}
                 </div>
 
+                {/* Bhog Name Input - Only for Bhog events */}
+                {isBhogEvent && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 font-sohne">
+                      Bhog Name *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter the name of the Bhog you want to offer"
+                      value={bhogName}
+                      onChange={(e) => setBhogName(e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                      style={{ fontFamily: 'Söhne, sans-serif' }}
+                      required
+                    />
+                  </div>
+                )}
+
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={isSubmitting || !userName.trim() || userName.length < 2}
+                  disabled={isSubmitting || !userName.trim() || userName.length < 2 || (isBhogEvent && !bhogName.trim())}
                   className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit Nomination'}
+                  {isSubmitting ? 'Submitting...' : (isBhogEvent ? 'Offer Bhog' : 'Submit Nomination')}
                 </button>
               </motion.form>
             )}

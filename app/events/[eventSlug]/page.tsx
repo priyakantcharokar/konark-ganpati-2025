@@ -7,7 +7,7 @@ import { Calendar, Clock, Users, MapPin, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import EventNominationForm from '../../../components/EventNominationForm'
 import EventNominations from '../../../components/EventNominations'
-import { databaseService, EventNomination } from '../../../lib/database-service'
+import { databaseService, EventNomination, BhogNomination } from '../../../lib/database-service'
 
 interface Event {
   date: string
@@ -21,9 +21,13 @@ const EventPage = () => {
   
   const [event, setEvent] = useState<Event | null>(null)
   const [nominations, setNominations] = useState<EventNomination[]>([])
+  const [bhogNominations, setBhogNominations] = useState<BhogNomination[]>([])
   const [loading, setLoading] = useState(true)
   const [showNominationForm, setShowNominationForm] = useState(false)
   const [showNominations, setShowNominations] = useState(false)
+
+  // Check if this is a Bhog event
+  const isBhogEvent = event?.event.includes('छप्पन भोग') || event?.event.includes('56') || event?.event.includes('Bhog')
 
   useEffect(() => {
     const loadEventData = async () => {
@@ -38,9 +42,19 @@ const EventPage = () => {
         
         if (foundEvent) {
           setEvent(foundEvent)
-          // Load nominations for this event
-          const eventNominations = await databaseService.getEventNominations(foundEvent.event)
-          setNominations(eventNominations)
+          
+          // Check if it's a Bhog event
+          const isBhog = foundEvent.event.includes('छप्पन भोग') || foundEvent.event.includes('56') || foundEvent.event.includes('Bhog')
+          
+          if (isBhog) {
+            // Load Bhog nominations for Bhog events
+            const bhogData = await databaseService.getAllBhogNominations()
+            setBhogNominations(bhogData)
+          } else {
+            // Load regular event nominations for non-Bhog events
+            const eventNominations = await databaseService.getEventNominations(foundEvent.event)
+            setNominations(eventNominations)
+          }
         }
       } catch (error) {
         console.error('Error loading event data:', error)
@@ -56,8 +70,13 @@ const EventPage = () => {
 
   const handleNominationSuccess = async () => {
     if (event) {
-      const updatedNominations = await databaseService.getEventNominations(event.event)
-      setNominations(updatedNominations)
+      if (isBhogEvent) {
+        const updatedBhogNominations = await databaseService.getAllBhogNominations()
+        setBhogNominations(updatedBhogNominations)
+      } else {
+        const updatedNominations = await databaseService.getEventNominations(event.event)
+        setNominations(updatedNominations)
+      }
     }
   }
 
@@ -211,78 +230,160 @@ const EventPage = () => {
               {/* Action Buttons */}
               <div className="flex gap-4">
                 <button
-                  onClick={() => setShowNominations(true)}
+                  onClick={() => {
+                    if (isBhogEvent) {
+                      window.location.href = `/bhog-list?source=event-detail&event=${encodeURIComponent(event.event)}`
+                    } else {
+                      setShowNominations(true)
+                    }
+                  }}
                   className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105"
                 >
-                  View Nominations ({nominations.length})
+                  {isBhogEvent ? `View Bhog List (${bhogNominations.length})` : `View Nominations (${nominations.length})`}
                 </button>
                 <button
                   onClick={() => setShowNominationForm(true)}
                   className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
                 >
-                  Nominate Now
+                  {isBhogEvent ? 'Offer Bhog' : 'Nominate Now'}
                 </button>
               </div>
             </motion.div>
           </div>
 
-          {/* Nominations Preview */}
+          {/* Right Side Content */}
           <div className="lg:col-span-1">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-white rounded-2xl border border-gray-200 shadow-lg p-6"
-            >
-              <h3 className="text-xl font-bold text-gray-800 mb-4 font-jaf-bernino">
-                Recent Nominations
-              </h3>
-              
-              {nominations.length === 0 ? (
-                <div className="text-center py-8">
-                  <div className="text-gray-400 mb-4">
-                    <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
+            {isBhogEvent ? (
+              // Bhog Data Table for Bhog events
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="bg-white rounded-2xl border border-gray-200 shadow-lg p-6"
+              >
+                <h3 className="text-xl font-bold text-gray-800 mb-4 font-jaf-bernino">
+                  Bhog Offerings
+                </h3>
+                
+                {bhogNominations.length === 0 ? (
+                  <div className="text-center py-8">
+                    <div className="text-gray-400 mb-4">
+                      <span className="text-4xl">🕉️</span>
+                    </div>
+                    <p className="text-gray-500 font-charter">
+                      No Bhog offerings yet
+                    </p>
                   </div>
-                  <p className="text-gray-500 font-charter">
-                    No nominations yet
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {nominations.slice(0, 5).map((nomination, index) => (
-                    <div
-                      key={nomination.id}
-                      className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
-                          {index + 1}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-gray-800 text-sm font-sohne truncate">
-                            {nomination.user_name}
-                          </h4>
-                          <p className="text-xs text-gray-600 font-charter">
-                            {nomination.building} - {nomination.flat}
-                          </p>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="text-sm text-gray-600 mb-3 font-sohne">
+                      Total: {bhogNominations.length} offerings
+                    </div>
+                    
+                    {/* Bhog Data Table */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-xs">
+                        <thead>
+                          <tr className="border-b border-gray-200">
+                            <th className="text-left py-2 px-1 font-semibold text-gray-700">S.No</th>
+                            <th className="text-left py-2 px-1 font-semibold text-gray-700">Name</th>
+                            <th className="text-left py-2 px-1 font-semibold text-gray-700">Flat</th>
+                            <th className="text-left py-2 px-1 font-semibold text-gray-700">Bhog</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {bhogNominations.slice(0, 8).map((bhog, index) => (
+                            <tr
+                              key={bhog.id}
+                              className="border-b border-gray-100 hover:bg-green-50 transition-colors duration-200"
+                            >
+                              <td className="py-2 px-1 font-mono text-gray-600">
+                                {index + 1}
+                              </td>
+                              <td className="py-2 px-1 font-semibold text-gray-800 truncate max-w-[80px]">
+                                {bhog.user_name}
+                              </td>
+                              <td className="py-2 px-1 font-mono text-green-600 tracking-wider">
+                                {bhog.flat}
+                              </td>
+                              <td className="py-2 px-1 text-gray-700 truncate max-w-[80px]">
+                                {bhog.bhog_name}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                    {bhogNominations.length > 8 && (
+                      <button
+                        onClick={() => window.location.href = '/bhog-list'}
+                        className="w-full text-green-600 hover:text-green-800 text-sm font-medium py-2 transition-colors font-sohne"
+                      >
+                        View All {bhogNominations.length} Bhog Offerings →
+                      </button>
+                    )}
+                  </div>
+                )}
+              </motion.div>
+            ) : (
+              // Regular Nominations Preview for non-Bhog events
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="bg-white rounded-2xl border border-gray-200 shadow-lg p-6"
+              >
+                <h3 className="text-xl font-bold text-gray-800 mb-4 font-jaf-bernino">
+                  Recent Nominations
+                </h3>
+                
+                {nominations.length === 0 ? (
+                  <div className="text-center py-8">
+                    <div className="text-gray-400 mb-4">
+                      <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <p className="text-gray-500 font-charter">
+                      No nominations yet
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {nominations.slice(0, 5).map((nomination, index) => (
+                      <div
+                        key={nomination.id}
+                        className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                            {index + 1}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-gray-800 text-sm font-sohne truncate">
+                              {nomination.user_name}
+                            </h4>
+                            <p className="text-xs text-gray-600 font-charter">
+                              {nomination.building} - {nomination.flat}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  
-                  {nominations.length > 5 && (
-                    <button
-                      onClick={() => setShowNominations(true)}
-                      className="w-full text-blue-600 hover:text-blue-800 text-sm font-medium py-2 transition-colors font-sohne"
-                    >
-                      View All {nominations.length} Nominations →
-                    </button>
-                  )}
-                </div>
-              )}
-            </motion.div>
+                    ))}
+                    
+                    {nominations.length > 5 && (
+                      <button
+                        onClick={() => setShowNominations(true)}
+                        className="w-full text-blue-600 hover:text-blue-800 text-sm font-medium py-2 transition-colors font-sohne"
+                      >
+                        View All {nominations.length} Nominations →
+                      </button>
+                    )}
+                  </div>
+                )}
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
@@ -297,7 +398,7 @@ const EventPage = () => {
         />
       )}
 
-      {showNominations && (
+      {showNominations && !isBhogEvent && (
         <EventNominations
           eventTitle={event.event}
           eventDate={event.date}

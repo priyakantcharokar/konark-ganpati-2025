@@ -62,6 +62,12 @@ export default function RootLayout({
                   Participation Overview
                 </a>
                 <a 
+                  href="/bhog-list"
+                  className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular hover:scale-105 transform"
+                >
+                  Bhog List
+                </a>
+                <a 
                   href="/gallery"
                   className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular hover:scale-105 transform"
                 >
@@ -90,6 +96,13 @@ export default function RootLayout({
                     className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular text-xs"
                   >
                     Overview
+                  </a>
+                  <span className="text-gray-400">•</span>
+                  <a 
+                    href="/bhog-list"
+                    className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular text-xs"
+                  >
+                    Bhog List
                   </a>
                   <span className="text-gray-400">•</span>
                   <a 
