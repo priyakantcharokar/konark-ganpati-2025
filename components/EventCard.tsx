@@ -223,22 +223,31 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
 
       {/* Action Buttons */}
       <div className="flex gap-2 mt-3">
-        <button
-          onClick={() => setShowNominations(true)}
-          className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 text-xs"
-        >
-          Nominations
-        </button>
-        <button
-          onClick={() => setShowNominationForm(true)}
-          className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-xs"
-        >
-          Nominate
-        </button>
+        {/* Show all buttons for regular events */}
+        {!event.title.includes('Aarti And Prasad Seva') && (
+          <>
+            <button
+              onClick={() => setShowNominations(true)}
+              className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 text-xs"
+            >
+              Nominations
+            </button>
+            <button
+              onClick={() => setShowNominationForm(true)}
+              className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-xs"
+            >
+              Nominate
+            </button>
+          </>
+        )}
+        
+        {/* Always show Details button if event flyer image exists */}
         {eventFlyerImage && (
           <button
             onClick={() => setShowDetails(true)}
-            className="flex-1 bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs"
+            className={`bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs ${
+              event.title.includes('Aarti And Prasad Seva') ? 'flex-1' : 'flex-1'
+            }`}
           >
             Details
           </button>
