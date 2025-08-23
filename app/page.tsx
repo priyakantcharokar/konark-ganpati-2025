@@ -68,36 +68,36 @@ export default function Home() {
           
           {/* Mobile Breadcrumb Navigation */}
           <div className="md:hidden pb-3 border-t border-gray-100 mt-3">
-            <div className="flex items-center space-x-2 text-sm">
+            <div className="flex flex-col space-y-2 text-sm">
               <span className="text-gray-500 flex items-center font-circular">
                 <span className="text-xs mr-1">📍</span>
                 Navigate:
               </span>
-              <div className="flex items-center space-x-1">
+              <div className="flex flex-wrap items-center gap-2">
                 <a 
                   href="#aarti-schedule" 
-                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular"
+                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular text-xs"
                 >
                   Aarti Schedule
                 </a>
-                <span className="text-gray-400 mx-1">•</span>
+                <span className="text-gray-400">•</span>
                 <a 
                   href="#festival-events" 
-                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular"
+                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular text-xs"
                 >
                   Festival Events
                 </a>
-                <span className="text-gray-400 mx-1">•</span>
+                <span className="text-gray-400">•</span>
                 <a 
                   href="/participation-overview"
-                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular"
+                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular text-xs"
                 >
                   Overview
                 </a>
-                <span className="text-gray-400 mx-1">•</span>
+                <span className="text-gray-400">•</span>
                 <a 
                   href="/gallery"
-                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular"
+                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular text-xs"
                 >
                   Gallery
                 </a>
