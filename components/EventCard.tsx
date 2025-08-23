@@ -56,6 +56,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
     if (title.includes('modak') && title.includes('mohostav')) return '/events/ModakCompetition.jpeg'
     if (title.includes('singing')) return '/events/Singing.jpeg'
     if (title.includes('ganapati') && title.includes('utsav') && title.includes('hosting')) return '/events/GanapatiUtsavHosting.jpeg'
+    if (title.includes('satyanarayan') && title.includes('pooja')) return '/events/Satyanarayan pooja.png'
     
     // Default fallback
     return null
