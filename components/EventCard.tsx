@@ -153,15 +153,15 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
       className={`${getEventColor(event.title)} p-3 sm:p-4 rounded-xl border shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer`}
     >
       {/* Header with Icon and Title */}
-              <div className="flex items-start gap-2 mb-3">
-          <div className="flex-shrink-0">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/80 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
-              <span className="text-base sm:text-lg">{getEventIcon(event.title)}</span>
-            </div>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="flex-shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 border border-white/50">
+            <span className="text-lg sm:text-xl">{getEventIcon(event.title)}</span>
           </div>
+        </div>
         <div className="flex-1 min-w-0">
           <Link href={`/events/${generateEventSlug(event.title)}`}>
-            <h3 className="text-base sm:text-lg md:text-xl font-medium text-gray-700 group-hover:text-gray-800 transition-colors duration-200 mb-2 leading-tight font-charter">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 group-hover:text-gray-900 transition-all duration-300 leading-tight font-jaf-bernino bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent group-hover:from-gray-900 group-hover:to-gray-800">
               {event.title}
             </h3>
           </Link>
