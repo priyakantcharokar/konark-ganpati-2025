@@ -90,10 +90,7 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
       return
     }
     
-    if (!/^\d{10}$/.test(mobileNumber)) {
-      alert('Please enter a valid 10-digit mobile number')
-      return
-    }
+    // Mobile number is optional, no validation required
 
     setIsSubmitting(true)
     
@@ -103,7 +100,7 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
         event_title: eventData.title,
         event_date: eventData.date,
         user_name: userName.trim(),
-        mobile_number: mobileNumber.trim(),
+        mobile_number: mobileNumber.trim() || undefined,
         building: selectedBuilding,
         flat: selectedFlat
       })
@@ -371,11 +368,11 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
                 {/* Mobile Number Input */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2 font-sohne">
-                    Mobile Number *
+                    Mobile Number (Optional)
                   </label>
                   <input
                     type="tel"
-                    placeholder="Enter 10-digit mobile number"
+                    placeholder="Enter 10-digit mobile number (optional)"
                     value={mobileNumber}
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, '');
@@ -385,7 +382,6 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
                     maxLength={10}
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
                     style={{ fontFamily: 'Söhne, sans-serif' }}
-                    required
                   />
                   {mobileNumber && mobileNumber.length > 0 && !/^\d{10}$/.test(mobileNumber) && (
                     <p className="text-xs text-red-500 mt-1">
@@ -397,7 +393,7 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={isSubmitting || !userName.trim() || userName.length < 2 || !/^\d{10}$/.test(mobileNumber)}
+                  disabled={isSubmitting || !userName.trim() || userName.length < 2}
                   className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Nomination'}

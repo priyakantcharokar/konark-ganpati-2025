@@ -95,10 +95,7 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
       return
     }
     
-    if (!/^\d{10}$/.test(mobileNumber)) {
-      alert('Please enter a valid 10-digit mobile number')
-      return
-    }
+    // Mobile number is optional, no validation required
 
     setIsSubmitting(true)
     
@@ -110,7 +107,7 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
         building: selectedBuilding,
         flat: selectedFlat,
         userName: userName.trim(),
-        mobileNumber: mobileNumber.trim(),
+        mobileNumber: mobileNumber.trim() || undefined,
         timestamp: new Date()
       }
 
@@ -424,11 +421,11 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
                 {/* Mobile Number Input */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2 font-sohne">
-                    Mobile Number *
+                    Mobile Number (Optional)
                   </label>
                   <input
                     type="tel"
-                    placeholder="Enter 10-digit mobile number"
+                    placeholder="Enter 10-digit mobile number (optional)"
                     value={mobileNumber}
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, '');
@@ -438,7 +435,6 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
                     maxLength={10}
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     style={{ fontFamily: 'Söhne, sans-serif' }}
-                    required
                   />
                   {mobileNumber && mobileNumber.length > 0 && !/^\d{10}$/.test(mobileNumber) && (
                     <p className="text-xs text-red-500 mt-1">
@@ -450,7 +446,7 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={isSubmitting || !userName.trim() || userName.length < 2 || !/^\d{10}$/.test(mobileNumber)}
+                  disabled={isSubmitting || !userName.trim() || userName.length < 2}
                   className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-orange-700 hover:to-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
                 >
                   {isSubmitting ? 'Submitting...' : 'Book Aarti'}

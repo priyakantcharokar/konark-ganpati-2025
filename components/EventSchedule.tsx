@@ -39,7 +39,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
     building: string
     flat: string
     userName: string
-    mobileNumber: string
+    mobileNumber?: string
     timestamp: Date
   }>>([])
 

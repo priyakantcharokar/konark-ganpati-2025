@@ -11,7 +11,7 @@ interface AartiBooking {
   building: string
   flat: string
   userName: string
-  mobileNumber: string
+  mobileNumber?: string
   timestamp: Date
 }
 
@@ -22,7 +22,7 @@ interface EventNomination {
   building: string
   flat: string
   userName: string
-  mobileNumber: string
+  mobileNumber?: string
   timestamp: Date
 }
 
@@ -31,7 +31,7 @@ interface DatabaseEventNomination {
   event_title: string
   event_date: string
   user_name: string
-  mobile_number: string
+  mobile_number?: string
   building: string
   flat: string
   created_at: string
@@ -81,7 +81,7 @@ export default function ParticipationOverview() {
         building: nomination.building,
         flat: nomination.flat,
         userName: nomination.user_name,
-        mobileNumber: nomination.mobile_number,
+        mobileNumber: nomination.mobile_number || '',
         timestamp: new Date(nomination.created_at)
       }))
       
