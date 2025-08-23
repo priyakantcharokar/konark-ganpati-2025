@@ -235,12 +235,12 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
                   Select Your Building
                 </h3>
                 
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                   {buildings.map((building) => (
                     <button
                       key={building}
                       onClick={() => handleBuildingSelect(building)}
-                      className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 text-white text-2xl font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
+                      className="w-full aspect-square bg-gradient-to-br from-green-500 to-emerald-600 text-white text-xl sm:text-2xl font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center"
                     >
                       {building}
                     </button>
@@ -284,14 +284,14 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
                   </h3>
                 </div>
                 
-                <div className="grid grid-cols-6 gap-3 max-h-80 overflow-y-auto">
+                <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 sm:gap-3 max-h-80 overflow-y-auto">
                   {buildingInfo[selectedBuilding]?.map((flat) => (
                     <button
                       key={flat.id}
                       onClick={() => handleFlatSelect(flat.number)}
-                      className="w-16 h-16 rounded-lg border-2 border-gray-200 hover:border-green-300 hover:bg-green-50 transition-all duration-200 flex items-center justify-center"
+                      className="w-full aspect-square rounded-lg border-2 border-gray-200 hover:border-green-300 hover:bg-green-50 transition-all duration-200 flex items-center justify-center"
                     >
-                      <span className="font-bold text-lg">
+                      <span className="font-bold text-sm sm:text-lg">
                         {flat.number}
                       </span>
                     </button>

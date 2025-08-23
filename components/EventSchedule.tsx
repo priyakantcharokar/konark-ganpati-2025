@@ -507,7 +507,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                               <div className="text-center">
                                 <div className={`text-2xl font-bold mb-1 ${
                                   isMorningBooked ? 'text-gray-500' : 'text-orange-600'
-                                }`}>7 AM onwards</div>
+                                }`}>9 AM</div>
                               </div>
 
                               {/* Booking Status */}
@@ -563,7 +563,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                               <div className="text-center">
                                 <div className={`text-2xl font-bold mb-1 ${
                                   isEveningBooked ? 'text-gray-500' : 'text-gray-600'
-                                }`}>7 PM onwards</div>
+                                }`}>7 PM</div>
                               </div>
 
                               {/* Booking Status */}
