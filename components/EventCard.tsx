@@ -49,11 +49,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
     // Map event titles to image names
     if (title.includes('anchoring')) return '/events/Anchoring.jpeg'
     if (title.includes('arti') && title.includes('prasad') && title.includes('seva')) return '/events/Arti prasad seva.jpeg'
-    if (title.includes('best') && title.includes('waste')) return '/events/BestOutOF Waste.jpeg'
+    if (title.includes('waste') && title.includes('wow')) return '/events/BestOutOF Waste.jpeg'
     if (title.includes('duo') && title.includes('dynamics')) return '/events/Duo Dynamics.jpeg'
-    if (title.includes('group') && title.includes('singing')) return '/events/GroupSingning.jpeg'
+    if (title.includes('group') && title.includes('performances')) return '/events/GroupSingning.jpeg'
     if (title.includes('idol') && title.includes('making')) return '/events/IdolMaking.jpeg'
-    if (title.includes('modak') && title.includes('competition')) return '/events/ModakCompetition.jpeg'
+    if (title.includes('modak') && title.includes('mohostav')) return '/events/ModakCompetition.jpeg'
     if (title.includes('singing')) return '/events/Singing.jpeg'
     
     // Default fallback
@@ -274,11 +274,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
             
             {/* Modal Content */}
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
+              initial={{ scale: 0.8, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0, y: 20 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden"
+              className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden z-[10000]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
