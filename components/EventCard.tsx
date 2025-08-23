@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Calendar, Clock, Users, MapPin } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Calendar, Clock, Users, MapPin, X } from 'lucide-react'
 import Link from 'next/link'
 import EventNominationFlow from './EventNominationFlow'
 import EventNominations from './EventNominations'
@@ -36,9 +36,28 @@ interface EventCardProps {
 const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
   const [showNominationForm, setShowNominationForm] = useState(false)
   const [showNominations, setShowNominations] = useState(false)
+  const [showDetails, setShowDetails] = useState(false)
 
   const generateEventSlug = (eventTitle: string) => {
     return eventTitle.toLowerCase().replace(/[^a-z0-9]/g, '-')
+  }
+
+  // Function to find matching event flyer image
+  const getEventFlyerImage = (eventTitle: string) => {
+    const title = eventTitle.toLowerCase()
+    
+    // Map event titles to image names
+    if (title.includes('anchoring')) return '/events/Anchoring.jpeg'
+    if (title.includes('arti') && title.includes('prasad') && title.includes('seva')) return '/events/Arti prasad seva.jpeg'
+    if (title.includes('best') && title.includes('waste')) return '/events/BestOutOF Waste.jpeg'
+    if (title.includes('duo') && title.includes('dynamics')) return '/events/Duo Dynamics.jpeg'
+    if (title.includes('group') && title.includes('singing')) return '/events/GroupSingning.jpeg'
+    if (title.includes('idol') && title.includes('making')) return '/events/IdolMaking.jpeg'
+    if (title.includes('modak') && title.includes('competition')) return '/events/ModakCompetition.jpeg'
+    if (title.includes('singing')) return '/events/Singing.jpeg'
+    
+    // Default fallback
+    return null
   }
 
   const getEventIcon = (eventTitle: string) => {
@@ -110,6 +129,8 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
     // Default
     return 'border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50'
   }
+
+  const eventFlyerImage = getEventFlyerImage(event.title)
 
   return (
     <motion.div
@@ -208,6 +229,14 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
         >
           Nominate
         </button>
+        {eventFlyerImage && (
+          <button
+            onClick={() => setShowDetails(true)}
+            className="flex-1 bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs"
+          >
+            Details
+          </button>
+        )}
       </div>
 
       {/* Modals */}
@@ -229,6 +258,67 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
           onClose={() => setShowNominations(false)}
         />
       )}
+
+      {/* Event Details Modal */}
+      <AnimatePresence>
+        {showDetails && eventFlyerImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            onClick={() => setShowDetails(false)}
+          >
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
+            
+            {/* Modal Content */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-800 font-sohne">
+                  Event Flyer
+                </h3>
+                <button
+                  onClick={() => setShowDetails(false)}
+                  className="w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 hover:scale-110"
+                >
+                  <X className="w-4 h-4" strokeWidth={2.5} />
+                </button>
+              </div>
+              
+              {/* Image Container */}
+              <div className="p-4">
+                <div className="relative">
+                  <img
+                    src={eventFlyerImage}
+                    alt={`${event.title} Event Flyer`}
+                    className="w-full h-auto rounded-lg shadow-lg object-cover"
+                    style={{ maxHeight: '70vh' }}
+                  />
+                </div>
+                
+                {/* Event Info */}
+                <div className="mt-4 text-center">
+                  <h4 className="text-xl font-bold text-gray-800 mb-2 font-jaf-bernino">
+                    {event.title}
+                  </h4>
+                  <p className="text-gray-600 font-charter">
+                    {event.date} {event.time && `• ${event.time}`}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }
