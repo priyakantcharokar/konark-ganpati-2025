@@ -217,12 +217,16 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
         {/* Mobile Navigation */}
         <div className="lg:hidden bg-gray-50 px-4 py-3 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <button
-              onClick={handleBack}
-              className="text-blue-600 hover:text-blue-800 transition-colors text-sm font-medium"
-            >
-              ← {getMobileBackText()}
-            </button>
+            {step !== 'building' ? (
+              <button
+                onClick={handleBack}
+                className="text-blue-600 hover:text-blue-800 transition-colors text-sm font-medium"
+              >
+                ← {getMobileBackText()}
+              </button>
+            ) : (
+              <div className="w-16"></div>
+            )}
             <h3 className="text-sm font-semibold text-gray-800 font-sohne">
               {getMobileTitle()}
             </h3>
