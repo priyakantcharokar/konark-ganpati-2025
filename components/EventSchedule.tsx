@@ -25,7 +25,7 @@ interface EventScheduleProps {
 }
 
 const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'aarti' | 'festival'>('aarti') // Default to aarti tab
+  const [activeTab, setActiveTab] = useState<'aarti' | 'festival' | 'past'>('aarti') // Default to aarti tab
   const [showScrollToTop, setShowScrollToTop] = useState(false)
   const [showReusableBooking, setShowReusableBooking] = useState(false)
   const [selectedAarti, setSelectedAarti] = useState<{ date: string; time: string } | null>(null)
@@ -202,6 +202,39 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
     setTimeout(() => setShowToast(false), 5000)
   }
 
+  // Helper function to parse date strings like "23rd August" to Date objects
+  const parseEventDate = (dateStr: string): Date => {
+    // Handle special cases
+    if (dateStr === 'Daily' || dateStr === 'Throughout Festival') {
+      return new Date('2099-12-31') // Far future date to keep them in current events
+    }
+    
+    // Handle date ranges like "30th and 31st August"
+    if (dateStr.includes(' and ')) {
+      const parts = dateStr.split(' and ')
+      const firstDate = parts[0] // Take the first date
+      return parseEventDate(firstDate)
+    }
+    
+    // Handle dates like "23rd August", "27th August", etc.
+    const match = dateStr.match(/(\d+)(?:st|nd|rd|th)\s+(\w+)/)
+    if (match) {
+      const day = parseInt(match[1])
+      const month = match[2]
+      const monthMap: { [key: string]: number } = {
+        'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
+        'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+      }
+      
+      if (monthMap[month] !== undefined) {
+        // Assume year 2025 for the festival
+        return new Date(2025, monthMap[month], day)
+      }
+    }
+    
+    // Fallback: return a far future date if parsing fails
+    return new Date('2099-12-31')
+  }
 
 
   if (isLoading) {
@@ -248,12 +281,12 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
         {/* Tab Headers */}
         <div className="flex justify-center mb-6">
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-lg border border-gray-200">
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2 justify-center">
               {/* Aarti Tab */}
               <button
                 onClick={() => setActiveTab('aarti')}
                 data-tab="aarti"
-                className={`px-6 py-3 rounded-xl font-bold text-lg transition-all duration-300 ${
+                className={`px-4 sm:px-6 py-3 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 ${
                   activeTab === 'aarti'
                     ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg transform scale-105'
                     : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
@@ -265,13 +298,25 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
               {/* Festival Events Tab */}
               <button
                 onClick={() => setActiveTab('festival')}
-                className={`px-6 py-3 rounded-xl font-bold text-lg transition-all duration-300 ${
+                className={`px-4 sm:px-6 py-3 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 ${
                   activeTab === 'festival'
                     ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-lg transform scale-105'
                     : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
                 }`}
               >
                 🎉 Festival Events
+              </button>
+              
+              {/* Past Events Tab */}
+              <button
+                onClick={() => setActiveTab('past')}
+                className={`px-4 sm:px-6 py-3 rounded-xl font-bold text-base sm:text-lg transition-all duration-300 ${
+                  activeTab === 'past'
+                    ? 'bg-gradient-to-r from-gray-500 to-slate-600 text-white shadow-lg transform scale-105'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+                }`}
+              >
+                📸 Past Events
               </button>
             </div>
           </div>
@@ -544,24 +589,44 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
               {/* Events Organized by Date */}
               <div className="space-y-8 max-w-7xl mx-auto">
                 
-                {/* Group events by date */}
+                {/* Group events by date (show only current/future events, filter out past events) */}
                 {(() => {
-                  // Group events by date
-                  const eventsByDate = events.reduce((acc, event) => {
+                  const currentDate = new Date()
+                  
+                  // Group events by date (show only current/future events, filter out past events)
+                  const currentEvents = events.filter(event => {
+                    const eventDate = parseEventDate(event.date)
+                    return eventDate >= currentDate
+                  })
+                  
+                  const eventsByDate = currentEvents.reduce((acc, event) => {
                     const date = event.date
                     if (!acc[date]) {
                       acc[date] = []
                     }
                     acc[date].push(event)
                     return acc
-                  }, {} as { [key: string]: typeof events })
+                  }, {} as { [key: string]: typeof currentEvents })
 
-                  // Sort dates chronologically
+                  // Sort dates chronologically using parsed dates
                   const sortedDates = Object.keys(eventsByDate).sort((a, b) => {
-                    const dateA = new Date(a)
-                    const dateB = new Date(b)
+                    const dateA = parseEventDate(a)
+                    const dateB = parseEventDate(b)
                     return dateA.getTime() - dateB.getTime()
                   })
+
+                  if (currentEvents.length === 0) {
+                    return (
+                      <div className="text-center py-12">
+                        <div className="text-gray-500 text-lg">
+                          No upcoming events at the moment.
+                        </div>
+                        <div className="text-gray-400 text-sm mt-2">
+                          Check the Past Events tab to see completed events.
+                        </div>
+                      </div>
+                    )
+                  }
 
                   return sortedDates.map((date, dateIndex) => (
                     <motion.div
@@ -624,6 +689,143 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                     </div>
                   </div>
                 </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Past Events Tab Content */}
+          {activeTab === 'past' && (
+            <motion.div
+              key="past"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="bg-gradient-to-br from-gray-50 via-slate-50 to-zinc-50 rounded-2xl p-6 border border-gray-200"
+            >
+              <div className="text-center mb-8">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-700 mb-3 font-style-script">
+                  Past Events
+                </h2>
+                <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4 font-charter">
+                  Relive the memories of completed events. Click Photos to view event galleries!
+                </p>
+              </div>
+
+              {/* Past Events Organized by Date */}
+              <div className="space-y-8 max-w-7xl mx-auto">
+                
+                {/* Group past events by date */}
+                {(() => {
+                  // For testing purposes, we can set a specific date to see past events
+                  // In production, this would be the actual current date
+                  const currentDate = new Date(2025, 7, 25) // August 25, 2025 for testing
+                  
+                  // Filter events that have passed
+                  const pastEvents = events.filter(event => {
+                    const eventDate = parseEventDate(event.date)
+                    return eventDate < currentDate
+                  })
+
+                  // Group past events by date
+                  const pastEventsByDate = pastEvents.reduce((acc, event) => {
+                    const date = event.date
+                    if (!acc[date]) {
+                      acc[date] = []
+                    }
+                    acc[date].push(event)
+                    return acc
+                  }, {} as { [key: string]: typeof events })
+
+                  // Sort dates chronologically (most recent first)
+                  const sortedDates = Object.keys(pastEventsByDate).sort((a, b) => {
+                    const dateA = parseEventDate(a)
+                    const dateB = parseEventDate(b)
+                    return dateB.getTime() - dateA.getTime() // Reverse order for past events
+                  })
+
+                  if (pastEvents.length === 0) {
+                    return (
+                      <div className="text-center py-12">
+                        <div className="text-gray-500 text-lg">
+                          No past events yet.
+                        </div>
+                        <div className="text-gray-400 text-sm mt-2">
+                          All events are currently upcoming or ongoing.
+                        </div>
+                      </div>
+                    )
+                  }
+
+                  return sortedDates.map((date, dateIndex) => (
+                    <motion.div
+                      key={date}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: dateIndex * 0.1 }}
+                      className="space-y-4"
+                    >
+                      {/* Date Header */}
+                      <div className="text-center">
+                        <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full border border-gray-200 shadow-lg">
+                          <span className="text-2xl">📅</span>
+                          <h3 className="text-lg font-bold text-gray-700 font-sohne">
+                            {date}
+                          </h3>
+                          <span className="text-sm text-gray-500 font-medium">
+                            {pastEventsByDate[date].length} event{pastEventsByDate[date].length !== 1 ? 's' : ''}
+                          </span>
+                        </div>
+                        <div className="w-32 h-0.5 bg-gradient-to-r from-gray-400 to-slate-500 rounded-full mx-auto mt-3"></div>
+                      </div>
+                      
+                      {/* Past Events for this date */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {pastEventsByDate[date].map((event, eventIndex) => (
+                          <motion.div
+                            key={event.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: dateIndex * 0.1 + eventIndex * 0.05 }}
+                            className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300"
+                          >
+                            {/* Event Title */}
+                            <div className="text-center mb-4">
+                              <h4 className="text-lg font-bold text-gray-800 mb-2 font-sohne">
+                                {event.title}
+                              </h4>
+                              <div className="w-16 h-1 bg-gradient-to-r from-gray-400 to-slate-500 rounded-full mx-auto"></div>
+                            </div>
+                            
+                            {/* Event Details */}
+                            <div className="space-y-3 mb-6">
+                              <div className="flex items-center gap-2 text-gray-600">
+                                <span className="text-lg">📅</span>
+                                <span className="font-medium">{event.date}</span>
+                              </div>
+                              {event.organizers && (
+                                <div className="flex items-center gap-2 text-gray-600">
+                                  <span className="text-lg">👥</span>
+                                  <span className="font-medium">Contact: {event.organizers}</span>
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* Photos Button */}
+                            <div className="text-center">
+                              <button
+                                onClick={() => window.location.href = '/gallery'}
+                                className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+                              >
+                                📸 View Photos
+                              </button>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  ))
+                })()}
               </div>
             </motion.div>
           )}
