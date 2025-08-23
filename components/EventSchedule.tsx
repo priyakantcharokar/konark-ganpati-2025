@@ -25,7 +25,7 @@ interface EventScheduleProps {
 }
 
 const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLogout }) => {
-  const [activeTab, setActiveTab] = useState<'aarti' | 'events'>('aarti') // Default to aarti tab
+  const [activeTab, setActiveTab] = useState<'aarti' | 'festival'>('aarti') // Default to aarti tab
   const [showScrollToTop, setShowScrollToTop] = useState(false)
   const [showReusableBooking, setShowReusableBooking] = useState(false)
   const [selectedAarti, setSelectedAarti] = useState<{ date: string; time: string } | null>(null)
@@ -252,6 +252,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
               {/* Aarti Tab */}
               <button
                 onClick={() => setActiveTab('aarti')}
+                data-tab="aarti"
                 className={`px-6 py-3 rounded-xl font-bold text-lg transition-all duration-300 ${
                   activeTab === 'aarti'
                     ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg transform scale-105'
@@ -261,11 +262,11 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 🙏 Daily Aarti Schedule
               </button>
               
-              {/* Events Tab */}
+              {/* Festival Events Tab */}
               <button
-                onClick={() => setActiveTab('events')}
+                onClick={() => setActiveTab('festival')}
                 className={`px-6 py-3 rounded-xl font-bold text-lg transition-all duration-300 ${
-                  activeTab === 'events'
+                  activeTab === 'festival'
                     ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-lg transform scale-105'
                     : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
                 }`}
@@ -287,6 +288,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
               className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-6 border border-blue-200"
+              data-aarti-section
             >
               
 
@@ -520,44 +522,108 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
             </motion.div>
           )}
 
-          {/* Events Tab Content */}
-          {activeTab === 'events' && (
+          {/* Festival Events Tab Content */}
+          {activeTab === 'festival' && (
             <motion.div
-              key="events"
-              initial={{ opacity: 0, x: 20 }}
+              key="festival"
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
+              exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
               className="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 rounded-2xl p-6 border border-orange-200"
             >
-              <div className="text-center mb-6">
+              <div className="text-center mb-8">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-amber-800 mb-3 font-style-script">
                   Festival Events
                 </h2>
                 <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4 font-charter">
-                  Explore all the exciting events and competitions planned for the festival
+                  Plan your participation day by day. Events are organized by date for easy planning!
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-6xl mx-auto px-4">
-                {events.map((event, index) => (
-                  <motion.div
-                    key={event.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ 
-                      duration: 0.6, 
-                      delay: index * 0.1,
-                      ease: "easeOut"
-                    }}
-                    whileHover={{ 
-                      y: -4,
-                      transition: { duration: 0.4, ease: "easeOut" }
-                    }}
-                  >
-                    <EventCard key={event.id} event={event} index={index} />
-                  </motion.div>
-                ))}
+              {/* Events Organized by Date */}
+              <div className="space-y-8 max-w-7xl mx-auto">
+                
+                {/* Group events by date */}
+                {(() => {
+                  // Group events by date
+                  const eventsByDate = events.reduce((acc, event) => {
+                    const date = event.date
+                    if (!acc[date]) {
+                      acc[date] = []
+                    }
+                    acc[date].push(event)
+                    return acc
+                  }, {} as { [key: string]: typeof events })
+
+                  // Sort dates chronologically
+                  const sortedDates = Object.keys(eventsByDate).sort((a, b) => {
+                    const dateA = new Date(a)
+                    const dateB = new Date(b)
+                    return dateA.getTime() - dateB.getTime()
+                  })
+
+                  return sortedDates.map((date, dateIndex) => (
+                    <motion.div
+                      key={date}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: dateIndex * 0.1 }}
+                      className="space-y-4"
+                    >
+                      {/* Date Header */}
+                      <div className="text-center">
+                        <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full border border-amber-200 shadow-lg">
+                          <span className="text-2xl">📅</span>
+                          <h3 className="text-lg font-bold text-amber-800 font-sohne">
+                            {date}
+                          </h3>
+                          <span className="text-sm text-amber-600 font-medium">
+                            {eventsByDate[date].length} event{eventsByDate[date].length !== 1 ? 's' : ''}
+                          </span>
+                        </div>
+                        <div className="w-32 h-0.5 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full mx-auto mt-3"></div>
+                      </div>
+                      
+                      {/* Events for this date */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {eventsByDate[date].map((event, eventIndex) => (
+                          <motion.div
+                            key={event.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: dateIndex * 0.1 + eventIndex * 0.05 }}
+                          >
+                            <EventCard key={event.id} event={event} index={eventIndex} />
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  ))
+                })()}
+
+                {/* Quick Action Guide */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-amber-200 shadow-lg">
+                  <div className="text-center">
+                    <h4 className="text-lg font-bold text-amber-800 mb-3 font-sohne">
+                      💡 How to Participate
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                        <span>Click <strong>Details</strong> to learn more</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                        <span>Click <strong>Nominate</strong> to participate</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                        <span>Click <strong>Nominations</strong> to see others</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           )}

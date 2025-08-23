@@ -248,15 +248,47 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
           </>
         )}
         
+        {/* Special Book Aarti button for Aarti And Prasad Seva */}
+        {event.title.includes('Aarti And Prasad Seva') && (
+          <button
+            onClick={() => {
+              // Navigate to the Daily Aarti Schedule tab
+              const aartiTab = document.querySelector('[data-tab="aarti"]') as HTMLElement
+              if (aartiTab) {
+                aartiTab.click()
+                // Scroll to the aarti section
+                setTimeout(() => {
+                  const aartiSection = document.querySelector('[data-aarti-section]')
+                  if (aartiSection) {
+                    aartiSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                  }
+                }, 100)
+              }
+            }}
+            className="w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs"
+          >
+            🙏 Book Aarti
+          </button>
+        )}
+        
         {/* Always show Details button if event flyer image exists, or if it's a Tambola event */}
-        {(eventFlyerImage || event.title.toLowerCase().includes('tambola')) && (
+        {eventFlyerImage && !event.title.includes('Aarti And Prasad Seva') && (
           <button
             onClick={() => setShowDetails(true)}
             className={`bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs ${
-              event.title.includes('Aarti And Prasad Seva') || 
               event.title.includes('Ganapati Sthapana') || 
               event.title.toLowerCase().includes('tambola') ? 'w-full' : 'flex-1'
             }`}
+          >
+            Details
+          </button>
+        )}
+        
+        {/* Details button for Tambola events (without flyer) */}
+        {!eventFlyerImage && event.title.toLowerCase().includes('tambola') && (
+          <button
+            onClick={() => setShowDetails(true)}
+            className="w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs"
           >
             Details
           </button>
