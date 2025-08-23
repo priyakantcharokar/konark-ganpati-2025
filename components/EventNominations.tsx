@@ -102,32 +102,21 @@ const EventNominations: React.FC<EventNominationsProps> = ({
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 hover:shadow-md transition-all duration-200"
+                    className={`rounded-xl p-4 hover:shadow-md transition-all duration-200 ${
+                      index % 2 === 0 
+                        ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200' 
+                        : 'bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200'
+                    }`}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                            {index + 1}
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-gray-800 font-sohne">
-                              {nomination.user_name}
-                            </h4>
-                            <p className="text-sm text-gray-600 font-charter">
-                              {nomination.building} - {nomination.flat}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
-                          <span className="flex items-center gap-1 font-circular">
-                            📱 {nomination.mobile_number}
-                          </span>
-                          <span className="flex items-center gap-1 font-circular">
-                            📅 {new Date(nomination.created_at).toLocaleDateString()}
-                          </span>
-                        </div>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 text-white rounded-full flex items-center justify-center text-sm font-bold ${
+                        index % 2 === 0 ? 'bg-blue-600' : 'bg-purple-600'
+                      }`}>
+                        {index + 1}
                       </div>
+                      <h4 className="font-semibold text-gray-800 font-sohne text-lg">
+                        {nomination.user_name}
+                      </h4>
                     </div>
                   </motion.div>
                 ))}
