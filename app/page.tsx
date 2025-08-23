@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import EventSchedule from '../components/EventSchedule'
+import { motion } from 'framer-motion'
+import Link from 'next/link'
+import EventSchedule from '@/components/EventSchedule'
 
 // Counting Animation Component
 function CountUp({ end, duration = 4000 }: { end: number; duration?: number }) {
@@ -45,108 +46,141 @@ export default function Home() {
   const [userData] = useState({ flatNumber: 'Guest', phone: 'Visitor' })
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-red-50">
+    <div className="min-h-screen">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-transparent">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16 sm:h-20">
+            {/* Logo */}
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl sm:text-3xl">🕉️</span>
+              <span className="text-xl sm:text-2xl font-bold text-white font-style-script">
+                Konark Exotica
+              </span>
+            </div>
+
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#aarti" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
+                Daily Aarti
+              </a>
+              <a href="#events" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
+                Festival Events
+              </a>
+              <Link href="/gallery" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
+                Gallery
+              </Link>
+              <Link href="/participation-overview" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
+                Participation
+              </Link>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button 
+                onClick={() => {
+                  // Simple mobile navigation - you can enhance this with a dropdown if needed
+                  window.location.href = '/'
+                }}
+                className="text-white hover:text-yellow-300 transition-colors duration-200"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </nav>
+      </header>
       {/* Hero Section */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="py-16 px-4 sm:px-6 lg:px-8"
-      >
-        <div className="max-w-6xl mx-auto text-center">
-          {/* Main Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-6xl sm:text-8xl lg:text-[130px] font-bold text-amber-800 font-style-script mb-4 leading-none"
-          >
-            Konark Exotica
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-red-600 font-jaf-bernino mb-6"
-          >
-            Ganesh Pooja <span className="font-mono tracking-wider">2025</span>
-          </motion.h2>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto mb-12 leading-relaxed font-medium"
-          >
-            Experience the divine celebration with our complete festival schedule. From traditional ceremonies to exciting competitions, discover all the events planned for this auspicious occasion.
-          </motion.p>
-
-          {/* Information Cards */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="memories/GaneshaMusical.png"
+            alt="Ganesha Musical Background"
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/50 sm:bg-black/40"></div>
+        </div>
+        
+        {/* Content */}
+        <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.0 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+            transition={{ duration: 0.8 }}
+            className="mb-6 sm:mb-8"
           >
-            {/* Events Card */}
-            <motion.div
-              whileHover={{ y: -5, scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-              className="bg-white rounded-2xl p-6 shadow-lg border border-orange-100 hover:shadow-xl transition-all duration-300"
-            >
-              <div className="w-3 h-3 bg-orange-500 rounded-full mx-auto mb-4"></div>
-              <div className="text-4xl font-bold text-gray-800 mb-2 font-jaf-bernino">
-                <CountUp end={24} />
-              </div>
-              <div className="text-gray-600 font-medium">Events</div>
-            </motion.div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[130px] font-bold mb-3 sm:mb-4 font-style-script leading-tight">
+              Konark Exotica
+            </h1>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 sm:mb-6 font-charter">
+              Ganesh Pooja 2025
+            </h2>
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto font-charter leading-relaxed px-2 sm:px-0">
+              Experience the divine celebration of Lord Ganesha with cultural events, 
+              spiritual ceremonies, and community festivities
+            </p>
+          </motion.div>
 
-            {/* Duration Card */}
-            <motion.div
-              whileHover={{ y: -5, scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-              className="bg-white rounded-2xl p-6 shadow-lg border border-red-100 hover:shadow-xl transition-all duration-300"
-            >
-              <div className="w-3 h-3 bg-red-500 rounded-full mx-auto mb-4"></div>
-              <div className="text-2xl font-bold text-gray-800 mb-2 font-mono tracking-wider">Aug <span className="font-mono tracking-wider">23</span> - Sep <span className="font-mono tracking-wider">6</span></div>
-              <div className="text-gray-600 font-medium">Festival Duration</div>
-            </motion.div>
-
-            {/* Timing Card */}
-            <motion.div
-              whileHover={{ y: -5, scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-              className="bg-white rounded-2xl p-6 shadow-lg border border-yellow-100 hover:shadow-xl transition-all duration-300"
-            >
-              <div className="w-3 h-3 bg-yellow-500 rounded-full mx-auto mb-4"></div>
-              <div className="text-4xl font-bold text-gray-800 mb-2 font-mono tracking-wider"><span className="font-mono tracking-wider">7</span> PM</div>
-              <div className="text-gray-600 font-medium">Most Events</div>
-            </motion.div>
+          {/* Info Cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-4xl mx-auto"
+          >
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-white/30">
+              <div className="text-2xl sm:text-3xl mb-2">🎉</div>
+              <div className="text-base sm:text-lg md:text-xl font-bold mb-1">24 Events</div>
+              <div className="text-xs sm:text-sm md:text-base text-gray-200">Cultural & Spiritual</div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-white/30">
+              <div className="text-2xl sm:text-3xl mb-2">📅</div>
+              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 font-mono tracking-wider">Aug 23 - Sep 6</div>
+              <div className="text-xs sm:text-sm md:text-base text-gray-200">Festival Duration</div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-white/30">
+              <div className="text-2xl sm:text-3xl mb-2">⏰</div>
+              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 font-mono tracking-wider">7 PM</div>
+              <div className="text-xs sm:text-sm md:text-base text-gray-200">Daily Aarti</div>
+            </div>
           </motion.div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Daily Aarti Schedule Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.2 }}
-        className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8"
-      >
-       
-      </motion.div>
+      <section id="aarti" className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-orange-50 via-yellow-50 to-red-50">
+        <div className="max-w-6xl mx-auto text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-800 font-jaf-bernino mb-4"
+          >
+            🙏 Daily Aarti Schedule
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg text-gray-600 max-w-3xl mx-auto font-charter"
+          >
+            Join us for daily morning and evening aarti ceremonies. Book your preferred time slot and building.
+          </motion.p>
+        </div>
+      </section>
 
-      {/* Main Content - Event Schedule */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 sm:px-6 lg:px-8 pt-4 pb-8 sm:pb-12 lg:pb-16">
+      {/* Event Schedule Component */}
+      <section id="events" className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
         <EventSchedule 
-          userPhone={userData.phone}
-          userFlat={userData.flatNumber}
+          userPhone=""
+          userFlat=""
           onLogout={() => {}}
         />
-      </div>
+      </section>
 
       {/* Footer */}
       <motion.footer

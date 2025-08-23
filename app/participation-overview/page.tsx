@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Filter, Users, Calendar, Building, Clock, X } from 'lucide-react'
 import { databaseService } from '@/lib/database-service'
+import Link from 'next/link'
 
 interface AartiBooking {
   id: string
@@ -203,148 +204,175 @@ export default function ParticipationOverview() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-8"
-      >
-        <h1 className="text-4xl font-bold text-gray-800 mb-3 font-jaf-bernino">
-          Participation Overview
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto font-medium">
-          Track all aarti bookings and event nominations across the Ganesh Pooja celebrations
-        </p>
-      </motion.div>
+      {/* Navigation Header */}
+      <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">🕉️</span>
+              <Link 
+                href="/" 
+                className="text-xl font-bold text-gray-800 font-style-script hover:text-orange-600 transition-colors duration-200 cursor-pointer"
+              >
+                Konark Exotica
+              </Link>
+              <span className="text-gray-400 mx-2">•</span>
+              <span className="text-lg font-semibold text-gray-700">Participation Overview</span>
+            </div>
+            
+            <Link 
+              href="/"
+              className="text-blue-600 hover:text-blue-700 transition-colors duration-200 font-medium"
+            >
+              ← Back to Home
+            </Link>
+          </div>
+        </nav>
+      </header>
 
-      {/* Search and Filters */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-6"
-      >
-        <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-          {/* Search */}
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search by name, building, or flat..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-            />
+      {/* Page Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-8"
+        >
+          <h1 className="text-4xl font-bold text-gray-800 mb-3 font-jaf-bernino">
+            Participation Overview
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto font-medium">
+            Track all aarti bookings and event nominations across the Ganesh Pooja celebrations
+          </p>
+        </motion.div>
+
+        {/* Search and Filters */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-6"
+        >
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+            {/* Search */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search by name, building, or flat..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              />
+            </div>
+
+            {/* Filter Toggle */}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 font-medium"
+            >
+              <Filter className="w-5 h-5" />
+              Filters
+            </button>
           </div>
 
-          {/* Filter Toggle */}
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200 font-medium"
-          >
-            <Filter className="w-5 h-5" />
-            Filters
-          </button>
-        </div>
+          {/* Expandable Filters */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="mt-6 pt-6 border-t border-gray-200"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Building</label>
+                    <select
+                      value={selectedBuilding}
+                      onChange={(e) => setSelectedBuilding(e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    >
+                      <option value="">All Buildings</option>
+                      {buildings.map(building => (
+                        <option key={building} value={building}>Building {building}</option>
+                      ))}
+                    </select>
+                  </div>
 
-        {/* Expandable Filters */}
-        <AnimatePresence>
-          {showFilters && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mt-6 pt-6 border-t border-gray-200"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Building</label>
-                  <select
-                    value={selectedBuilding}
-                    onChange={(e) => setSelectedBuilding(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  >
-                    <option value="">All Buildings</option>
-                    {buildings.map(building => (
-                      <option key={building} value={building}>Building {building}</option>
-                    ))}
-                  </select>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Event</label>
+                    <select
+                      value={selectedEvent}
+                      onChange={(e) => setSelectedEvent(e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    >
+                      <option value="">All Events</option>
+                      {eventNames.map(event => (
+                        <option key={event} value={event}>{event}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                    <select
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    >
+                      <option value="">All Dates</option>
+                      <option value="27th August">27th August</option>
+                      <option value="28th August">28th August</option>
+                      <option value="29th August">29th August</option>
+                      <option value="30th August">30th August</option>
+                      <option value="31st August">31st August</option>
+                      <option value="1st September">1st September</option>
+                      <option value="2nd September">2nd September</option>
+                      <option value="3rd September">3rd September</option>
+                      <option value="4th September">4th September</option>
+                      <option value="5th September">5th September</option>
+                      <option value="6th September">6th September</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">View</label>
+                    <select
+                      value={activeTab}
+                      onChange={(e) => setActiveTab(e.target.value as 'aarti' | 'events' | 'all')}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    >
+                      <option value="all">All Registrations</option>
+                      <option value="aarti">Aarti Bookings Only</option>
+                      <option value="events">Event Nominations Only</option>
+                    </select>
+                  </div>
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Event</label>
-                  <select
-                    value={selectedEvent}
-                    onChange={(e) => setSelectedEvent(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                
+                {/* Clear Filters Button */}
+                <div className="mt-6 flex justify-end">
+                  <button
+                    onClick={() => {
+                      setSearchTerm('')
+                      setSelectedBuilding('')
+                      setSelectedEvent('')
+                      setSelectedDate('')
+                      setActiveTab('all')
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors duration-200 font-medium"
                   >
-                    <option value="">All Events</option>
-                    {eventNames.map(event => (
-                      <option key={event} value={event}>{event}</option>
-                    ))}
-                  </select>
+                    <X className="w-4 h-4" />
+                    Clear All Filters
+                  </button>
                 </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                  <select
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  >
-                    <option value="">All Dates</option>
-                    <option value="27th August">27th August</option>
-                    <option value="28th August">28th August</option>
-                    <option value="29th August">29th August</option>
-                    <option value="30th August">30th August</option>
-                    <option value="31st August">31st August</option>
-                    <option value="1st September">1st September</option>
-                    <option value="2nd September">2nd September</option>
-                    <option value="3rd September">3rd September</option>
-                    <option value="4th September">4th September</option>
-                    <option value="5th September">5th September</option>
-                    <option value="6th September">6th September</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">View</label>
-                  <select
-                    value={activeTab}
-                    onChange={(e) => setActiveTab(e.target.value as 'aarti' | 'events' | 'all')}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                  >
-                    <option value="all">All Registrations</option>
-                    <option value="aarti">Aarti Bookings Only</option>
-                    <option value="events">Event Nominations Only</option>
-                  </select>
-                </div>
-              </div>
-              
-              {/* Clear Filters Button */}
-              <div className="mt-6 flex justify-end">
-                <button
-                  onClick={() => {
-                    setSearchTerm('')
-                    setSelectedBuilding('')
-                    setSelectedEvent('')
-                    setSelectedDate('')
-                    setActiveTab('all')
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors duration-200 font-medium"
-                >
-                  <X className="w-4 h-4" />
-                  Clear All Filters
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {/* Total Aarti Bookings */}
