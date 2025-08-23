@@ -270,7 +270,7 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
                     <button
                       key={building}
                       onClick={() => handleBuildingSelect(building)}
-                      className="w-full aspect-square bg-transparent border-2 border-gray-300 hover:border-blue-500 text-gray-800 hover:text-blue-600 text-2xl sm:text-4xl font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center hover:bg-blue-50"
+                      className="w-full aspect-square bg-white/30 backdrop-blur-sm border-2 border-gray-200 hover:border-blue-500 text-gray-800 hover:text-blue-600 text-4xl sm:text-6xl font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center justify-center hover:bg-blue-50/50 font-mono tracking-wider"
                     >
                       {building}
                     </button>
@@ -314,7 +314,7 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
                   </h3>
                 </div>
                 
-                <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 sm:gap-3 max-h-80 overflow-y-auto">
+                <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-1.5 sm:gap-2 max-h-64 overflow-y-auto">
                   {buildingInfo[selectedBuilding]?.map((flat) => {
                     const isBooked = isFlatBooked(flat.number)
                     const flatBooking = getFlatBooking(flat.number)
@@ -325,7 +325,7 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
                         onClick={() => !isBooked && handleFlatSelect(flat.number)}
                         disabled={isBooked}
                         className={`
-                          w-full aspect-square rounded-lg border-2 transition-all duration-200 flex items-center justify-center relative
+                          w-full aspect-square rounded-md border transition-all duration-200 flex items-center justify-center relative
                           ${isBooked 
                             ? 'border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed opacity-75'
                             : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
@@ -333,12 +333,12 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
                         `}
                       >
                         {isBooked && (
-                          <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                            <X className="w-3 h-3 text-white" />
+                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                            <X className="w-2 h-2 text-white" />
                           </div>
                         )}
                         
-                        <span className={`font-bold text-sm sm:text-lg ${isBooked ? 'text-gray-500' : ''}`}>
+                        <span className={`font-bold text-xs sm:text-sm font-mono tracking-wider ${isBooked ? 'text-gray-500' : ''}`}>
                           {flat.number}
                         </span>
                         

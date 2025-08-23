@@ -1,111 +1,143 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import EventSchedule from '../components/EventSchedule'
+
+// Counting Animation Component
+function CountUp({ end, duration = 4000 }: { end: number; duration?: number }) {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    let startTime: number
+    let animationFrame: number
+
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime
+      const progress = Math.min((currentTime - startTime) / duration, 1)
+      
+      setCount(Math.floor(progress * end))
+      
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate)
+      } else {
+        setCount(end)
+      }
+    }
+
+    animationFrame = requestAnimationFrame(animate)
+
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame)
+      }
+    }
+  }, [end, duration])
+
+  return (
+    <span className="font-mono tracking-wider text-green-600">
+      {count}
+    </span>
+  )
+}
 
 export default function Home() {
   const [userData] = useState({ flatNumber: 'Guest', phone: 'Visitor' })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-red-50">
-            {/* Navigation Bar */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <span className="text-2xl">🕉️</span>
-              <a 
-                href="/" 
-                className="text-xl font-bold text-gray-800 font-style-script hover:text-orange-600 transition-colors duration-200 cursor-pointer"
-              >
-                Konark Exotica
-              </a>
-            </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8">
-              <a 
-                href="#aarti-schedule" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('aarti-schedule')?.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                  });
-                }}
-                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular hover:scale-105 transform"
-              >
-                Daily Aarti Schedule
-              </a>
-              <a 
-                href="#festival-events" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('festival-events')?.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                  });
-                }}
-                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular hover:scale-105 transform"
-              >
-                Festival Events
-              </a>
-              <a 
-                href="/participation-overview"
-                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular hover:scale-105 transform"
-              >
-                Participation Overview
-              </a>
-              <a 
-                href="/gallery"
-                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular hover:scale-105 transform"
-              >
-                Gallery
-              </a>
-            </div>
-          </div>
-          
-          {/* Mobile Breadcrumb Navigation */}
-          <div className="md:hidden pb-3 border-t border-gray-100 mt-3">
-            <div className="flex flex-col space-y-2 text-sm">
-              <span className="text-gray-500 flex items-center font-circular">
-                <span className="text-xs mr-1">📍</span>
-                Navigate:
-              </span>
-              <div className="flex flex-wrap items-center gap-2">
-                <a 
-                  href="#aarti-schedule" 
-                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular text-xs"
-                >
-                  Aarti Schedule
-                </a>
-                <span className="text-gray-400">•</span>
-                <a 
-                  href="#festival-events" 
-                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular text-xs"
-                >
-                  Festival Events
-                </a>
-                <span className="text-gray-400">•</span>
-                <a 
-                  href="/participation-overview"
-                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular text-xs"
-                >
-                  Overview
-                </a>
-                <span className="text-gray-400">•</span>
-                <a 
-                  href="/gallery"
-                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular text-xs"
-                >
-                  Gallery
-                </a>
+      {/* Hero Section */}
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="py-16 px-4 sm:px-6 lg:px-8"
+      >
+        <div className="max-w-6xl mx-auto text-center">
+          {/* Main Title */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-6xl sm:text-8xl lg:text-[130px] font-bold text-amber-800 font-style-script mb-4 leading-none"
+          >
+            Konark Exotica
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-red-600 font-jaf-bernino mb-6"
+          >
+            Ganesh Pooja <span className="font-mono tracking-wider">2025</span>
+          </motion.h2>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="text-lg sm:text-xl text-gray-700 max-w-3xl mx-auto mb-12 leading-relaxed font-medium"
+          >
+            Experience the divine celebration with our complete festival schedule. From traditional ceremonies to exciting competitions, discover all the events planned for this auspicious occasion.
+          </motion.p>
+
+          {/* Information Cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.0 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+          >
+            {/* Events Card */}
+            <motion.div
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-2xl p-6 shadow-lg border border-orange-100 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="w-3 h-3 bg-orange-500 rounded-full mx-auto mb-4"></div>
+              <div className="text-4xl font-bold text-gray-800 mb-2 font-jaf-bernino">
+                <CountUp end={24} />
               </div>
-            </div>
-          </div>
+              <div className="text-gray-600 font-medium">Events</div>
+            </motion.div>
+
+            {/* Duration Card */}
+            <motion.div
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-2xl p-6 shadow-lg border border-red-100 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="w-3 h-3 bg-red-500 rounded-full mx-auto mb-4"></div>
+              <div className="text-2xl font-bold text-gray-800 mb-2 font-mono tracking-wider">Aug <span className="font-mono tracking-wider">23</span> - Sep <span className="font-mono tracking-wider">6</span></div>
+              <div className="text-gray-600 font-medium">Festival Duration</div>
+            </motion.div>
+
+            {/* Timing Card */}
+            <motion.div
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-2xl p-6 shadow-lg border border-yellow-100 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="w-3 h-3 bg-yellow-500 rounded-full mx-auto mb-4"></div>
+              <div className="text-4xl font-bold text-gray-800 mb-2 font-mono tracking-wider"><span className="font-mono tracking-wider">7</span> PM</div>
+              <div className="text-gray-600 font-medium">Most Events</div>
+            </motion.div>
+          </motion.div>
         </div>
-      </nav>
+      </motion.section>
+
+      {/* Daily Aarti Schedule Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.2 }}
+        className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8"
+      >
+       
+      </motion.div>
 
       {/* Main Content - Event Schedule */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 sm:px-6 lg:px-8 pt-4 pb-8 sm:pb-12 lg:pb-16">
