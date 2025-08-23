@@ -4,13 +4,18 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react'
 
-// Import all images from the memories folder (excluding video files)
+// Import all available images from the events and property folders
 const galleryImages = [
-  '/memories/IMG_20240917_112530.jpg',
-  '/memories/IMG_20240917_111030.jpg',
-  '/memories/IMG_0765.JPG',
-  '/memories/IMG_0763.JPG',
-  '/memories/IMG_0505.JPG'
+  '/images/events/Anchoring.jpeg',
+  '/images/events/Arti prasad seva.jpeg',
+  '/images/events/BestOutOF Waste.jpeg',
+  '/images/events/Duo Dynamics.jpeg',
+  '/images/events/GroupSingning.jpeg',
+  '/images/events/IdolMaking.jpeg',
+  '/images/events/ModakCompetition.jpeg',
+  '/images/events/Singing.jpeg',
+  '/images/konark.jpeg',
+  '/images/konarkexotica.avif'
 ]
 
 // Force static generation
@@ -91,10 +96,10 @@ export default function Gallery() {
           className="text-center mb-8"
         >
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4 font-style-script">
-            Festival Gallery<br/>(Memories)
+            Festival Gallery<br/>(Events & Property)
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto font-charter">
-            Relive the beautiful moments and cherished memories from our Ganesh Pooja Festival
+            Explore the vibrant events and beautiful property of our Ganesh Pooja Festival
           </p>
         </motion.div>
 
@@ -239,7 +244,7 @@ export default function Gallery() {
           className="mt-8 text-center"
         >
           <p className="text-sm text-gray-500 font-charter">
-            Beautiful memories captured during our Ganesh Pooja Festival celebrations
+            Showcasing our festival events and beautiful property
           </p>
         </motion.div>
       </div>
