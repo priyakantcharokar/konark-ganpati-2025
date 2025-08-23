@@ -51,6 +51,12 @@ export default function Home() {
               >
                 Festival Events
               </a>
+              <a 
+                href="/participation-overview"
+                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular hover:scale-105 transform"
+              >
+                Participation Overview
+              </a>
             </div>
           </div>
           
@@ -74,6 +80,13 @@ export default function Home() {
                   className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular"
                 >
                   Festival Events
+                </a>
+                <span className="text-gray-400 mx-1">•</span>
+                <a 
+                  href="/participation-overview"
+                  className="text-orange-600 hover:text-orange-700 transition-all duration-200 font-medium px-2 py-1 rounded-md hover:bg-orange-50 active:scale-95 font-circular"
+                >
+                  Overview
                 </a>
               </div>
             </div>
