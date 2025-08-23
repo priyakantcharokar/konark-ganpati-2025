@@ -494,7 +494,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                   }`}></div>
                                   <span className={`text-sm font-semibold ${
                                     isMorningBooked ? 'text-gray-600' : 'text-orange-700'
-                                  }`}>Morning</span>
+                                  }`}>
+                                    {date === 'Wednesday, 27th August' ? 'Sthapana' : 'Morning'}
+                                  </span>
                                 </div>
                                 {isMorningBooked && (
                                   <div className="bg-red-500 text-white rounded-full p-1.5">
@@ -507,7 +509,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                               <div className="text-center">
                                 <div className={`text-2xl font-bold mb-1 ${
                                   isMorningBooked ? 'text-gray-500' : 'text-orange-600'
-                                }`}>9 AM</div>
+                                }`}>
+                                  {date === 'Wednesday, 27th August' ? 'Sthapana Aarti' : '9 AM'}
+                                </div>
                               </div>
 
                               {/* Booking Status */}
@@ -550,7 +554,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                   }`}></div>
                                   <span className={`text-sm font-semibold ${
                                     isEveningBooked ? 'text-gray-600' : 'text-gray-700'
-                                  }`}>Evening</span>
+                                  }`}>
+                                    {date === 'Saturday, 6th September' ? 'Visarjan' : 'Evening'}
+                                  </span>
                                 </div>
                                 {isEveningBooked && (
                                   <div className="bg-red-500 text-white rounded-full p-1.5">
@@ -563,7 +569,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                               <div className="text-center">
                                 <div className={`text-2xl font-bold mb-1 ${
                                   isEveningBooked ? 'text-gray-500' : 'text-gray-600'
-                                }`}>7 PM</div>
+                                }`}>
+                                  {date === 'Saturday, 6th September' ? 'Visarjan Aarti' : '7 PM'}
+                                </div>
                               </div>
 
                               {/* Booking Status */}
