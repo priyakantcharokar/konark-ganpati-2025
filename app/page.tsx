@@ -244,27 +244,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Daily Aarti Schedule Header */}
-      <section id="aarti" className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-orange-50 via-yellow-50 to-red-50">
-        <div className="max-w-6xl mx-auto text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-800 font-jaf-bernino mb-4"
-          >
-            🙏 Daily Aarti Schedule
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg text-gray-600 max-w-3xl mx-auto font-charter"
-          >
-            Join us for daily morning and evening aarti ceremonies. Book your preferred time slot and building.
-          </motion.p>
-        </div>
-      </section>
+ 
 
       {/* Event Schedule Component */}
       <section id="events" className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
@@ -276,18 +256,14 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <motion.footer
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="bg-white border-t border-gray-200 py-6 sm:py-8 mt-8 sm:mt-12 lg:mt-16"
-      >
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-sm sm:text-base text-gray-600" style={{ fontFamily: 'Charter, serif' }}>
-            © 2025 Ganesh Pooja Festival. Made with ❤️ for our community.
-          </p>
-        </div>
-      </motion.footer>
+      <footer className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-8 text-center">
+        <p className="text-lg font-medium">
+          🎉 Celebrating Unity, Faith & Joy Together! 🎉
+        </p>
+        <p className="text-sm mt-2 opacity-90">
+          © 2025 Ganesh Pooja Festival. Crafted with ❤️ to bring our community closer through divine celebrations.
+        </p>
+      </footer>
     </div>
   )
 }

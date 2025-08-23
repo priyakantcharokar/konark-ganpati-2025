@@ -832,50 +832,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
         </AnimatePresence>
       </motion.div>
 
-      {/* Footer Info */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="mt-4 sm:mt-6 rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 text-center"
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-        >
-          {/* <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-            <span className="text-3xl sm:text-4xl">ℹ️</span>
-          </div> */}
-          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-8 font-jaf-bernino">
-            Important Information
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
-            <div className="bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
-                <span className="text-2xl">⏰</span>
-              </div>
-              <h4 className="text-xl sm:text-2xl font-bold text-blue-600 mb-4">Timing</h4>
-              <p className="text-base sm:text-lg text-gray-700 leading-relaxed">Most events after <span className="font-mono tracking-wider text-lg">7</span> PM for maximum participation</p>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl border border-green-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
-                <span className="text-2xl">📅</span>
-              </div>
-              <h4 className="text-xl sm:text-2xl font-bold text-green-600 mb-4">Duration</h4>
-              <p className="text-base sm:text-lg text-gray-700 leading-relaxed">Festival runs from August <span className="font-mono tracking-wider text-lg">23</span>rd to September <span className="font-mono tracking-wider text-lg">6</span>th</p>
-            </div>
-            <div className="bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl border border-purple-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-violet-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
-                <span className="text-2xl">🎯</span>
-              </div>
-              <h4 className="text-xl sm:text-2xl font-bold text-purple-600 mb-4">Participation</h4>
-              <p className="text-base sm:text-lg text-gray-700 leading-relaxed">Open to all residents and their families</p>
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
-
+     
       {/* Go to Top Button */}
       <AnimatePresence>
         {showScrollToTop && (
