@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Filter, Users, Calendar, Building, Home, Clock, X, Eye } from 'lucide-react'
+import { Search, Filter, Users, Calendar, Building, Clock, X } from 'lucide-react'
 import { databaseService } from '@/lib/database-service'
 
 interface AartiBooking {
@@ -168,17 +168,14 @@ export default function ParticipationOverview() {
     setActiveTab('all')
   }
 
-  const getTotalParticipants = () => {
-    const uniqueAartiParticipants = new Set(data.aartiBookings.map(b => `${b.building}-${b.flat}-${b.userName}`))
-    const uniqueEventParticipants = new Set(data.eventNominations.map(e => `${e.building}-${e.flat}-${e.userName}`))
-    return uniqueAartiParticipants.size + uniqueEventParticipants.size
+  // Helper function to get unique events
+  const getUniqueEvents = () => {
+    return new Set(data.eventNominations.map(e => e.eventTitle)).size
   }
 
-  const getUniqueFlats = () => {
-    const aartiFlats = data.aartiBookings.map(b => `${b.building}-${b.flat}`)
-    const eventFlats = data.eventNominations.map(e => `${e.building}-${e.flat}`)
-    const allFlats = [...aartiFlats, ...eventFlats]
-    return new Set(allFlats).size
+  // Helper function to get total registrations
+  const getTotalRegistrations = () => {
+    return data.aartiBookings.length + data.eventNominations.length
   }
 
   // Group event nominations by event title
@@ -348,76 +345,40 @@ export default function ParticipationOverview() {
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {/* Total Aarti Bookings */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="bg-white rounded-xl shadow-lg p-6 border border-gray-100"
+            transition={{ duration: 0.5 }}
+            className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-6 text-white shadow-lg"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                <Users className="w-6 h-6 text-white" />
-              </div>
+            <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Participants</p>
-                <p className="text-2xl font-bold text-gray-800 font-mono tracking-wider">{getTotalParticipants()}</p>
+                <p className="text-blue-100 text-sm font-medium">Total Aarti Bookings</p>
+                <p className="text-3xl font-bold font-mono mt-1">{data.aartiBookings.length}</p>
               </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-xl shadow-lg p-6 border border-gray-100"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
-                <Home className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Active Flats</p>
-                <p className="text-2xl font-bold text-gray-800 font-mono tracking-wider">{getUniqueFlats()}</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="bg-white rounded-xl shadow-lg p-6 border border-gray-100"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
                 <Calendar className="w-6 h-6 text-white" />
               </div>
-              <div>
-                <p className="text-sm text-gray-600">Total Registrations</p>
-                <p className="text-2xl font-bold text-gray-800 font-mono tracking-wider">
-                  {data.aartiBookings.length + data.eventNominations.length}
-                </p>
-              </div>
             </div>
           </motion.div>
 
+          {/* Total Event Nominations */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="bg-white rounded-xl shadow-lg p-6 border border-gray-100"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl p-6 text-white shadow-lg"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">🎯</span>
-              </div>
+            <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Unique Events</p>
-                <p className="text-2xl font-bold text-gray-800 font-mono tracking-wider">
-                  {new Set(data.eventNominations.map(e => e.eventTitle)).size}
-                </p>
+                <p className="text-emerald-100 text-sm font-medium">Total Event Nominations</p>
+                <p className="text-3xl font-bold font-mono mt-1">{data.eventNominations.length}</p>
+              </div>
+              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                <Users className="w-6 h-6 text-white" />
               </div>
             </div>
           </motion.div>
@@ -428,16 +389,16 @@ export default function ParticipationOverview() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+          className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-xl border border-gray-200 overflow-hidden"
         >
           {/* Tab Headers */}
-          <div className="flex border-b border-gray-200">
+          <div className="flex border-b border-gray-200 bg-gradient-to-r from-gray-50 to-white">
             <button
               onClick={() => setActiveTab('all')}
               className={`flex-1 px-6 py-4 text-center font-medium transition-colors duration-200 ${
                 activeTab === 'all' 
-                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' 
-                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50 shadow-sm' 
+                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
               }`}
             >
               All Registrations
@@ -446,8 +407,8 @@ export default function ParticipationOverview() {
               onClick={() => setActiveTab('aarti')}
               className={`flex-1 px-6 py-4 text-center font-medium transition-colors duration-200 ${
                 activeTab === 'aarti' 
-                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' 
-                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50 shadow-sm' 
+                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
               }`}
             >
               Aarti Bookings
@@ -456,8 +417,8 @@ export default function ParticipationOverview() {
               onClick={() => setActiveTab('events')}
               className={`flex-1 px-6 py-4 text-center font-medium transition-colors duration-200 ${
                 activeTab === 'events' 
-                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' 
-                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                  ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50 shadow-sm' 
+                  : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
               }`}
             >
               Event Nominations
@@ -495,12 +456,20 @@ export default function ParticipationOverview() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: index * 0.1 }}
-                        className="group bg-white rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                        className={`group rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${
+                          index % 2 === 0 
+                            ? 'bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200' 
+                            : 'bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200'
+                        }`}
                       >
                         {/* Header with Building/Flat and Aarti Type */}
                         <div className="flex items-start justify-between mb-6">
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center shadow-md">
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-md ${
+                              index % 2 === 0 
+                                ? 'bg-gradient-to-br from-blue-500 to-indigo-500' 
+                                : 'bg-gradient-to-br from-purple-500 to-pink-500'
+                            }`}>
                               <span className="text-white text-lg font-bold font-mono tracking-wider">{booking.building}</span>
                             </div>
                             <div>
@@ -520,25 +489,25 @@ export default function ParticipationOverview() {
                         {/* Content */}
                         <div className="space-y-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                              index % 2 === 0 
+                                ? 'bg-blue-100' 
+                                : 'bg-purple-100'
+                            }`}>
                               <Users className="w-4 h-4 text-gray-600" />
                             </div>
                             <p className="font-medium text-gray-800 text-lg font-jaf-bernino">{booking.userName}</p>
                           </div>
                           
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                              index % 2 === 0 
+                                ? 'bg-blue-100' 
+                                : 'bg-purple-100'
+                            }`}>
                               <Calendar className="w-4 h-4 text-gray-600" />
                             </div>
                             <p className="text-gray-600 text-lg font-medium">{booking.aartiSchedule.date}</p>
-                          </div>
-                        </div>
-
-                        {/* Hover Effect Indicator */}
-                        <div className="mt-6 pt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="flex items-center justify-center text-sm text-orange-600 font-medium">
-                            <Eye className="w-4 h-4 mr-2" />
-                            View Details
                           </div>
                         </div>
                       </motion.div>
@@ -577,7 +546,7 @@ export default function ParticipationOverview() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: eventIndex * 0.1 }}
-                        className="bg-white rounded-xl p-6 hover:shadow-lg transition-all duration-300"
+                        className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 hover:shadow-lg transition-all duration-300 border border-gray-200"
                       >
                         {/* Event Header */}
                         <div className="flex items-center justify-between mb-6">
@@ -607,23 +576,23 @@ export default function ParticipationOverview() {
                               initial={{ opacity: 0, scale: 0.9 }}
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{ duration: 0.3, delay: index * 0.05 }}
-                              className="group bg-gray-50 rounded-lg p-5 hover:shadow-md hover:bg-green-50/50 transition-all duration-200"
+                              className={`group rounded-lg p-5 hover:shadow-md transition-all duration-200 ${
+                                index % 2 === 0 
+                                  ? 'bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200' 
+                                  : 'bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200'
+                              }`}
                             >
                               <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center shadow-sm">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center shadow-sm ${
+                                  index % 2 === 0 
+                                    ? 'bg-gradient-to-br from-emerald-500 to-teal-500' 
+                                    : 'bg-gradient-to-br from-amber-500 to-orange-500'
+                                }`}>
                                   <span className="text-white text-base font-bold font-mono tracking-wider">{nomination.building}</span>
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <p className="font-semibold text-gray-800 text-base truncate font-jaf-bernino">{nomination.userName}</p>
                                   <p className="text-sm text-gray-600 font-medium">Flat {nomination.flat}</p>
-                                </div>
-                              </div>
-                              
-                              {/* Hover Effect */}
-                              <div className="mt-4 pt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                <div className="flex items-center justify-center text-sm text-green-600 font-medium">
-                                  <Eye className="w-4 h-4 mr-2" />
-                                  View Details
                                 </div>
                               </div>
                             </motion.div>
