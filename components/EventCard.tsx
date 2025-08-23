@@ -181,7 +181,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
           <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
             <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600" />
           </div>
-          <span className="font-normal text-sm sm:text-base md:text-lg text-gray-700 font-charter">{event.date}</span>
+          <span className="font-bold text-sm sm:text-base md:text-lg text-gray-800 font-charter">{event.date}</span>
         </div>
         
         {event.time && (
@@ -207,7 +207,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
                   
                   return (
                     <span key={index} className="block mb-2 last:mb-0">
-                                              <span className="font-normal text-gray-700 font-charter text-sm sm:text-base">{nameMatch}</span>
+                                              <span className="font-bold text-gray-800 font-charter text-sm sm:text-base">{nameMatch}</span>
                       {phoneMatch && (
                         <span className="text-gray-600 ml-2 text-sm font-circular flex items-center gap-1">
                           <WhatsAppIcon />
