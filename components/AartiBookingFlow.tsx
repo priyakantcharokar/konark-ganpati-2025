@@ -107,7 +107,7 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
         building: selectedBuilding,
         flat: selectedFlat,
         userName: userName.trim(),
-        mobileNumber: mobileNumber.trim() || undefined,
+        mobileNumber: mobileNumber.trim() || null,
         timestamp: new Date()
       }
 

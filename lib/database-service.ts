@@ -4,7 +4,7 @@ import { supabase } from './supabase'
 export interface Booking {
   id: string
   user_name: string
-  mobile_number?: string
+  mobile_number?: string | null
   aarti_date: string
   aarti_time: string
   building: string
@@ -28,7 +28,7 @@ export interface Submission {
   building: string
   flat: string
   userName: string
-  mobileNumber?: string
+  mobileNumber?: string | null
   timestamp: Date
 }
 
@@ -38,7 +38,7 @@ export interface EventNomination {
   event_title: string
   event_date: string
   user_name: string
-  mobile_number?: string
+  mobile_number?: string | null
   building: string
   flat: string
   created_at: string
@@ -49,7 +49,7 @@ export interface CreateEventNomination {
   event_title: string
   event_date: string
   user_name: string
-  mobile_number?: string
+  mobile_number?: string | null
   building: string
   flat: string
 }
@@ -228,7 +228,7 @@ export class DatabaseService {
   convertSubmissionToBooking(submission: Submission): Omit<Booking, 'id' | 'created_at' | 'updated_at'> {
     return {
       user_name: submission.userName,
-      mobile_number: submission.mobileNumber || undefined,
+      mobile_number: submission.mobileNumber || null,
       aarti_date: submission.aartiSchedule.date,
       aarti_time: submission.aartiSchedule.time,
       building: submission.building,

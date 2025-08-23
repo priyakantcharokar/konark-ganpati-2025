@@ -11,7 +11,7 @@ interface AartiBooking {
   building: string
   flat: string
   userName: string
-  mobileNumber?: string
+  mobileNumber?: string | null
   timestamp: Date
 }
 
@@ -22,7 +22,7 @@ interface EventNomination {
   building: string
   flat: string
   userName: string
-  mobileNumber?: string
+  mobileNumber?: string | null
   timestamp: Date
 }
 
@@ -31,7 +31,7 @@ interface DatabaseEventNomination {
   event_title: string
   event_date: string
   user_name: string
-  mobile_number?: string
+  mobile_number?: string | null
   building: string
   flat: string
   created_at: string

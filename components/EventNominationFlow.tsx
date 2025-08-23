@@ -100,7 +100,7 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
         event_title: eventData.title,
         event_date: eventData.date,
         user_name: userName.trim(),
-        mobile_number: mobileNumber.trim() || undefined,
+        mobile_number: mobileNumber.trim() || null,
         building: selectedBuilding,
         flat: selectedFlat
       })
