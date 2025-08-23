@@ -43,15 +43,15 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
         // Group flats by building
         const grouped: { [key: string]: Flat[] } = {}
         const allFlats = flatsRawData.flats || flatsRawData
-        allFlats.forEach((flat: any) => {
-          const building = flat.building
+        allFlats.forEach((flatNumber: string) => {
+          const building = flatNumber.charAt(0)
           if (!grouped[building]) {
             grouped[building] = []
           }
           grouped[building].push({
-            id: flat.id,
-            number: flat.number,
-            building: flat.building
+            id: flatNumber,
+            number: flatNumber,
+            building: building
           })
         })
         
@@ -110,6 +110,8 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
 
       if (nomination) {
         onSuccess(`Nomination submitted successfully! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has nominated for ${eventData.title}`)
+        // Redirect to landing page after success
+        window.location.href = '/'
       } else {
         alert('Failed to submit nomination. Please try again.')
       }
@@ -215,6 +217,20 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
                 exit={{ opacity: 0, x: -20 }}
                 className="space-y-6"
               >
+                {/* Selected Event Information Card */}
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                      <span className="text-white text-lg">🎉</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-green-800 text-sm">Selected Event</div>
+                      <div className="text-green-600 font-medium">{eventData.title}</div>
+                      <div className="text-green-600 text-sm">Date: {eventData.date}</div>
+                    </div>
+                  </div>
+                </div>
+
                 <h3 className="text-lg font-semibold text-gray-800 font-sohne mb-6">
                   Select Your Building
                 </h3>
@@ -242,6 +258,20 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
                 exit={{ opacity: 0, x: -20 }}
                 className="space-y-6"
               >
+                {/* Selected Building and Event Information Card */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                      <span className="text-white text-lg">🏢</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-semibold text-blue-800 text-sm">Selected Building</div>
+                      <div className="text-blue-600 font-medium">Building {selectedBuilding}</div>
+                      <div className="text-blue-600 text-sm">{eventData.title} - {eventData.date}</div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex items-center gap-3 mb-6">
                   <button
                     onClick={handleBack}

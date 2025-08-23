@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:3000": "./scripts/start-dev.sh",
+    "dev:3000:win": "./scripts/start-dev.bat",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

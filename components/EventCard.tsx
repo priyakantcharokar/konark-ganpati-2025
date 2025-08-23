@@ -121,15 +121,15 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
         scale: 1.02,
         transition: { duration: 0.3, ease: "easeOut" }
       }}
-      className={`${getEventColor(event.title)} p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer`}
+      className={`${getEventColor(event.title)} p-3 sm:p-4 rounded-xl border shadow-sm hover:shadow-lg transition-all duration-300 group cursor-pointer`}
     >
       {/* Header with Icon and Title */}
-      <div className="flex items-start gap-3 mb-4">
-        <div className="flex-shrink-0">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/80 backdrop-blur-sm rounded-lg sm:rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
-            <span className="text-lg sm:text-xl md:text-2xl">{getEventIcon(event.title)}</span>
+              <div className="flex items-start gap-2 mb-3">
+          <div className="flex-shrink-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/80 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
+              <span className="text-base sm:text-lg">{getEventIcon(event.title)}</span>
+            </div>
           </div>
-        </div>
         <div className="flex-1 min-w-0">
           <Link href={`/events/${generateEventSlug(event.title)}`}>
             <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200 mb-2 leading-tight font-jaf-bernino">
@@ -141,13 +141,13 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
 
       {/* Description */}
       {event.description && (
-        <p className="text-gray-600 mb-4 leading-relaxed text-xs sm:text-sm group-hover:text-gray-700 transition-colors duration-200 font-charter">
+        <p className="text-gray-600 mb-3 leading-relaxed text-xs sm:text-sm group-hover:text-gray-700 transition-colors duration-200 font-charter">
           {event.description}
         </p>
       )}
 
       {/* Event Details */}
-      <div className="space-y-3 mb-4">
+      <div className="space-y-2 mb-3">
         <div className="flex items-center gap-3 text-gray-700">
           <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
             <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600" />
@@ -195,16 +195,16 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-2 mt-4">
+      <div className="flex gap-2 mt-3">
         <button
           onClick={() => setShowNominations(true)}
-          className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-4 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 text-sm"
+          className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 text-xs"
         >
           Nominations
         </button>
         <button
           onClick={() => setShowNominationForm(true)}
-          className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-sm"
+          className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-xs"
         >
           Nominate
         </button>

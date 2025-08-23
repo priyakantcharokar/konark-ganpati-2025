@@ -15,17 +15,40 @@ export default function Home() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <span className="text-2xl">🕉️</span>
-              <span className="text-xl font-bold text-gray-800 font-style-script">
+              <a 
+                href="/" 
+                className="text-xl font-bold text-gray-800 font-style-script hover:text-orange-600 transition-colors duration-200 cursor-pointer"
+              >
                 Konark Exotica
-              </span>
+              </a>
             </div>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8">
-              <a href="#aarti-schedule" className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular">
+              <a 
+                href="#aarti-schedule" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('aarti-schedule')?.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }}
+                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular hover:scale-105 transform"
+              >
                 Daily Aarti Schedule
               </a>
-              <a href="#festival-events" className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular">
+              <a 
+                href="#festival-events" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('festival-events')?.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }}
+                className="text-gray-600 hover:text-orange-600 transition-colors duration-200 font-circular hover:scale-105 transform"
+              >
                 Festival Events
               </a>
             </div>
@@ -59,7 +82,7 @@ export default function Home() {
       </nav>
 
       {/* Main Content - Event Schedule */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 lg:pb-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 sm:px-6 lg:px-8 pt-4 pb-8 sm:pb-12 lg:pb-16">
         <EventSchedule 
           userPhone={userData.phone}
           userFlat={userData.flatNumber}

@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Clock, ChevronDown, ChevronUp, Building, Home, Check, ChevronRight, Users, Calendar, ChevronLeft, X } from 'lucide-react'
+import { Clock, ChevronDown, ChevronUp, Building, Home, Check, ChevronRight, Users, Calendar, ChevronLeft, X, ArrowUp } from 'lucide-react'
 import EventCard from './EventCard'
 import AartiBookingFlow from './AartiBookingFlow'
 
@@ -25,7 +25,9 @@ interface EventScheduleProps {
 }
 
 const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLogout }) => {
-  const [showAartiSchedule, setShowAartiSchedule] = useState(false)
+  const [showAartiSchedule, setShowAartiSchedule] = useState(false) // Default to collapsed
+  const [showFestivalEvents, setShowFestivalEvents] = useState(false) // Default to collapsed
+  const [showScrollToTop, setShowScrollToTop] = useState(false)
   const [showReusableBooking, setShowReusableBooking] = useState(false)
   const [selectedAarti, setSelectedAarti] = useState<{ date: string; time: string } | null>(null)
   const [showToast, setShowToast] = useState(false)
@@ -137,6 +139,23 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
 
     loadData()
   }, [])
+
+  // Scroll listener for go to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollToTop(window.scrollY > 300)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
 
   const loadSubmissions = async () => {
     try {
@@ -269,147 +288,380 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 Experience the divine celebration with our complete festival schedule. From traditional ceremonies to exciting competitions, discover all the events planned for this auspicious occasion.
               </motion.p>
 
-              {/* Compact Stats Row */}
+              {/* Big Animated Stats Row */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.7 }}
-                className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 text-xs sm:text-sm px-2"
+                className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 px-2"
               >
-                <div className="flex items-center gap-1 sm:gap-2 bg-white/80 backdrop-blur-sm px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-orange-200">
-                  <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-orange-500 rounded-full"></span>
-                  <span className="font-semibold text-orange-700 text-xs sm:text-sm" style={{ fontFamily: 'Charter, serif' }}>{eventCount}</span>
-                  <span className="text-gray-600 text-xs sm:text-sm" style={{ fontFamily: 'Söhne, sans-serif' }}>Events</span>
-                </div>
-                <div className="flex items-center gap-1 sm:gap-2 bg-white/80 backdrop-blur-sm px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-orange-200">
-                  <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-red-500 rounded-full"></span>
-                  <span className="font-semibold text-red-700 text-xs sm:text-sm" style={{ fontFamily: 'Charter, serif' }}>Aug 23 - Sep 6</span>
-                </div>
-                <div className="flex items-center gap-1 sm:gap-2 bg-white/80 backdrop-blur-sm px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-orange-200">
-                  <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-yellow-500 rounded-full"></span>
-                  <span className="font-semibold text-yellow-700 text-xs sm:text-sm" style={{ fontFamily: 'Charter, serif' }}>7 PM</span>
-                  <span className="text-gray-600 text-xs sm:text-sm" style={{ fontFamily: 'Söhne, sans-serif' }}>Most Events</span>
-                </div>
+                <motion.div 
+                  className="flex flex-col items-center bg-white/90 backdrop-blur-sm px-4 sm:px-6 py-3 sm:py-4 rounded-xl border-2 border-orange-200 shadow-lg"
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.8, type: "spring", bounce: 0.4 }}
+                    className="w-3 h-3 bg-orange-500 rounded-full mb-2"
+                  ></motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 1.0 }}
+                    className="text-3xl sm:text-4xl md:text-5xl font-bold text-orange-700 mb-1"
+                    style={{ fontFamily: 'Charter, serif' }}
+                  >
+                    {eventCount}
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 1.1 }}
+                    className="text-sm sm:text-base md:text-lg font-semibold text-gray-700"
+                    style={{ fontFamily: 'Söhne, sans-serif' }}
+                  >
+                    Events
+                  </motion.div>
+                </motion.div>
+
+                <motion.div 
+                  className="flex flex-col items-center bg-white/90 backdrop-blur-sm px-4 sm:px-6 py-3 sm:py-4 rounded-xl border-2 border-red-200 shadow-lg"
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.9, type: "spring", bounce: 0.4 }}
+                    className="w-3 h-3 bg-red-500 rounded-full mb-2"
+                  ></motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 1.2 }}
+                    className="text-lg sm:text-xl md:text-2xl font-bold text-red-700 mb-1"
+                    style={{ fontFamily: 'Charter, serif' }}
+                  >
+                    Aug 23 - Sep 6
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 1.3 }}
+                    className="text-sm sm:text-base font-semibold text-gray-700"
+                    style={{ fontFamily: 'Söhne, sans-serif' }}
+                  >
+                    Festival Duration
+                  </motion.div>
+                </motion.div>
+
+                <motion.div 
+                  className="flex flex-col items-center bg-white/90 backdrop-blur-sm px-4 sm:px-6 py-3 sm:py-4 rounded-xl border-2 border-yellow-200 shadow-lg"
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.5, delay: 1.0, type: "spring", bounce: 0.4 }}
+                    className="w-3 h-3 bg-yellow-500 rounded-full mb-2"
+                  ></motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 1.4 }}
+                    className="text-3xl sm:text-4xl md:text-5xl font-bold text-yellow-700 mb-1"
+                    style={{ fontFamily: 'Charter, serif' }}
+                  >
+                    7 PM
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 1.5 }}
+                    className="text-sm sm:text-base md:text-lg font-semibold text-gray-700"
+                    style={{ fontFamily: 'Söhne, sans-serif' }}
+                  >
+                    Most Events
+                  </motion.div>
+                </motion.div>
               </motion.div>
             </div>
           </motion.div>
 
           {/* Daily Aarti Schedule Section */}
           <motion.section
+            id="aarti-schedule"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
-            className="mb-8 sm:mb-12"
+            className="mb-8 sm:mb-12 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-6 border border-blue-200"
           >
+            {/* Collapsible Header */}
             <div className="text-center mb-6 sm:mb-8">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-800 mb-3 sm:mb-4 font-jaf-bernino">
-                Daily Aarti Schedule
-              </h2>
+              <button
+                onClick={() => setShowAartiSchedule(!showAartiSchedule)}
+                className="group flex items-center justify-center gap-3 mx-auto text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-800 mb-3 sm:mb-4 font-style-script hover:text-indigo-600 transition-colors duration-200"
+              >
+                <span>Daily Aarti Schedule</span>
+                                  <motion.div
+                    animate={{ rotate: showAartiSchedule ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-indigo-600 group-hover:text-indigo-700"
+                  >
+                    ▼
+                  </motion.div>
+              </button>
               <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4 font-charter">
                 Click Morning or Evening slot to book your aarti
               </p>
             </div>
 
-            <div className="grid gap-4 sm:gap-6 max-w-4xl mx-auto px-4">
-              {aartiSchedule.map((aarti, index) => {
-                const isBooked = isSlotBooked(aarti.date, aarti.time)
-                const booking = getSlotBooking(aarti.date, aarti.time)
-                
-                return (
-                  <motion.div
-                    key={`${aarti.date}-${aarti.time}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className={`relative cursor-pointer transition-all duration-300 transform hover:scale-105 ${
-                      isBooked 
-                        ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200' 
-                        : 'bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-200 hover:from-orange-100 hover:to-amber-100'
-                    } rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-xl`}
-                    onClick={() => !isBooked && handleAartiCardClick(aarti)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="text-center sm:text-left">
-                          <div className="text-lg sm:text-xl font-bold text-gray-800 mb-2 font-jaf-bernino">
-                            {aarti.date}
-                          </div>
-                          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center sm:justify-start">
-                            <div className={`px-4 py-2 rounded-lg font-semibold text-sm sm:text-base ${
-                              aarti.time === 'Morning' 
-                                ? 'bg-orange-500 text-white' 
-                                : 'bg-black text-white'
+            {/* Collapsible Content */}
+            <AnimatePresence>
+              {showAartiSchedule && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="overflow-hidden"
+                >
+                  <div className="grid gap-3 sm:gap-4 max-w-4xl mx-auto px-4">
+              {(() => {
+                // Group aarti slots by date
+                const groupedByDate = aartiSchedule.reduce((acc, aarti) => {
+                  if (!acc[aarti.date]) {
+                    acc[aarti.date] = [];
+                  }
+                  acc[aarti.date].push(aarti);
+                  return acc;
+                }, {} as { [key: string]: typeof aartiSchedule });
+
+                return Object.entries(groupedByDate).map(([date, slots], index) => {
+                  const morningSlot = slots.find(slot => slot.time === 'Morning');
+                  const eveningSlot = slots.find(slot => slot.time === 'Evening');
+                  
+                  const isMorningBooked = morningSlot ? isSlotBooked(morningSlot.date, morningSlot.time) : false;
+                  const isEveningBooked = eveningSlot ? isSlotBooked(eveningSlot.date, eveningSlot.time) : false;
+                  
+                  const morningBooking = morningSlot ? getSlotBooking(morningSlot.date, morningSlot.time) : null;
+                  const eveningBooking = eveningSlot ? getSlotBooking(eveningSlot.date, eveningSlot.time) : null;
+                  
+                  return (
+                    <motion.div
+                      key={date}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      className="relative bg-gradient-to-br from-white via-orange-50 to-amber-50 border border-orange-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-101"
+                    >
+                      {/* Date Header */}
+                      <div className="text-center mb-3">
+                        <div className="text-base sm:text-lg font-bold text-gray-800 mb-1 font-jaf-bernino">
+                          {date}
+                        </div>
+                        <div className="w-10 h-0.5 bg-gradient-to-r from-orange-400 to-amber-500 rounded-full mx-auto"></div>
+                      </div>
+
+                      {/* Time Slots */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {/* Morning Slot */}
+                        {morningSlot && (
+                          <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 + 0.2 }}
+                            className={`relative group transition-all duration-300 ${
+                              isMorningBooked 
+                                ? 'cursor-not-allowed opacity-75 pointer-events-none' 
+                                : 'cursor-pointer hover:scale-105'
+                            }`}
+                            onClick={() => !isMorningBooked && morningSlot && handleAartiCardClick(morningSlot)}
+                          >
+                            <div className={`relative p-3 rounded-lg border-2 transition-all duration-300 ${
+                              isMorningBooked 
+                                ? 'bg-gradient-to-r from-gray-200 to-slate-200 border-gray-400' 
+                                : 'bg-gradient-to-r from-orange-100 to-amber-100 border-orange-300 hover:border-orange-400 hover:shadow-md'
                             }`}>
-                              {aarti.time}
+                              {/* Time Badge */}
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-2">
+                                  <div className={`w-3 h-3 rounded-full ${
+                                    isMorningBooked ? 'bg-gray-500' : 'bg-orange-500'
+                                  }`}></div>
+                                  <span className={`text-sm font-semibold ${
+                                    isMorningBooked ? 'text-gray-600' : 'text-orange-700'
+                                  }`}>Morning</span>
+                                </div>
+                                {isMorningBooked && (
+                                  <div className="bg-red-500 text-white rounded-full p-1.5">
+                                    <span className="text-xs font-bold">BOOKED</span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Time Display */}
+                              <div className="text-center">
+                                <div className={`text-2xl font-bold mb-1 ${
+                                  isMorningBooked ? 'text-gray-500' : 'text-orange-600'
+                                }`}>7 AM onwards</div>
+                              </div>
+
+                              {/* Booking Status */}
+                              {isMorningBooked && morningBooking && (
+                                <div className="mt-3 p-3 bg-red-50 border-2 border-red-300 rounded-lg">
+                                  <div className="text-center">
+                                    <div className="text-red-800 font-bold text-sm mb-1">🚫 BOOKED</div>
+                                    <div className="text-red-700 font-bold text-base">{morningBooking.userName}</div>
+                                    <div className="text-red-600 font-semibold text-xs">Flat {morningBooking.flat} - Building {morningBooking.building}</div>
+                                  </div>
+                                </div>
+                              )}
                             </div>
-                          </div>
+                          </motion.div>
+                        )}
+
+                        {/* Evening Slot */}
+                        {eveningSlot && (
+                          <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 + 0.3 }}
+                            className={`relative group transition-all duration-300 ${
+                              isEveningBooked 
+                                ? 'cursor-not-allowed opacity-75 pointer-events-none' 
+                                : 'cursor-pointer hover:scale-105'
+                            }`}
+                            onClick={() => !isEveningBooked && eveningSlot && handleAartiCardClick(eveningSlot)}
+                          >
+                            <div className={`relative p-3 rounded-lg border-2 transition-all duration-300 ${
+                              isEveningBooked 
+                                ? 'bg-gradient-to-r from-gray-200 to-slate-200 border-gray-400' 
+                                : 'bg-gradient-to-r from-gray-100 to-slate-100 border-gray-300 hover:border-gray-400 hover:shadow-md'
+                            }`}>
+                              {/* Time Badge */}
+                              <div className="flex items-center justify-between mb-3">
+                                <div className="flex items-center gap-2">
+                                  <div className={`w-3 h-3 rounded-full ${
+                                    isEveningBooked ? 'bg-gray-500' : 'bg-gray-600'
+                                  }`}></div>
+                                  <span className={`text-sm font-semibold ${
+                                    isEveningBooked ? 'text-gray-600' : 'text-gray-700'
+                                  }`}>Evening</span>
+                                </div>
+                                {isEveningBooked && (
+                                  <div className="bg-red-500 text-white rounded-full p-1.5">
+                                    <span className="text-xs font-bold">BOOKED</span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Time Display */}
+                              <div className="text-center">
+                                <div className={`text-2xl font-bold mb-1 ${
+                                  isEveningBooked ? 'text-gray-500' : 'text-gray-600'
+                                }`}>7 PM onwards</div>
+                              </div>
+
+                              {/* Booking Status */}
+                              {isEveningBooked && eveningBooking && (
+                                <div className="mt-3 p-3 bg-red-50 border-2 border-red-300 rounded-lg">
+                                  <div className="text-center">
+                                    <div className="text-red-800 font-bold text-sm mb-1">🚫 BOOKED</div>
+                                    <div className="text-red-700 font-bold text-base">{eveningBooking.userName}</div>
+                                    <div className="text-red-600 font-semibold text-xs">Flat {eveningBooking.flat} - Building {eveningBooking.building}</div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </motion.div>
+                        )}
+                      </div>
+
+                      {/* Card Footer */}
+                      <div className="mt-4 text-center">
+                        <div className="text-xs text-gray-500 font-medium">
+                          {isMorningBooked && isEveningBooked ? 'Both slots booked' : 
+                           isMorningBooked || isEveningBooked ? 'One slot available' : 'Both slots available'}
                         </div>
                       </div>
-                      
-                      {isBooked && (
-                        <div className="flex-shrink-0 ml-4">
-                          <div className="bg-green-500 text-white rounded-full p-2 sm:p-3">
-                            <Check className="w-4 h-4 sm:w-5 sm:h-5" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Booking Info */}
-                    {isBooked && booking && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-4 p-3 bg-white/60 backdrop-blur-sm rounded-lg border border-green-200"
-                      >
-                        <div className="text-center text-sm text-green-800 font-medium">
-                          <div className="font-semibold">Booked by {booking.userName}</div>
-                          <div className="text-xs">Flat {booking.flat} - Building {booking.building}</div>
-                        </div>
-          </motion.div>
-        )}
-                  </motion.div>
-                )
-              })}
-            </div>
+                    </motion.div>
+                  );
+                });
+              })()}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.section>
 
           {/* Festival Events Section */}
           <motion.section
+            id="festival-events"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1 }}
-            className="mb-8 sm:mb-12"
+            className="mb-8 sm:mb-12 bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 rounded-2xl p-6 border border-orange-200"
           >
             <div className="text-center mb-6 sm:mb-8">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-800 mb-3 sm:mb-4 font-jaf-bernino">
-                Festival Events
-              </h2>
+              <button
+                onClick={() => setShowFestivalEvents(!showFestivalEvents)}
+                className="group flex items-center justify-center gap-3 mx-auto text-2xl sm:text-3xl md:text-4xl font-bold text-amber-800 mb-3 sm:mb-4 font-style-script hover:text-amber-600 transition-colors duration-200"
+              >
+                <span>Festival Events</span>
+                <motion.div
+                  animate={{ rotate: showFestivalEvents ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="text-amber-600 group-hover:text-amber-700"
+                >
+                  ▼
+                </motion.div>
+              </button>
               <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto px-4 font-charter">
-                Explore all the exciting events and competitions planned for the festival
+                {showFestivalEvents 
+                  ? "Explore all the exciting events and competitions planned for the festival"
+                  : "Click above to explore all the exciting events and competitions planned for the festival"
+                }
               </p>
             </div>
 
-            <div className="grid gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto px-4">
-              {events.map((event, index) => (
+            {/* Collapsible Content */}
+            <AnimatePresence>
+              {showFestivalEvents && (
                 <motion.div
-                  key={event.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ 
-                    duration: 0.6, 
-                    delay: index * 0.1,
-                    ease: "easeOut"
-                  }}
-                  whileHover={{ 
-                    y: -8,
-                    transition: { duration: 0.4, ease: "easeOut" }
-                  }}
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="overflow-hidden"
                 >
-                  <EventCard key={event.id} event={event} index={index} />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-6xl mx-auto px-4">
+                    {events.map((event, index) => (
+                      <motion.div
+                        key={event.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ 
+                          duration: 0.6, 
+                          delay: index * 0.1,
+                          ease: "easeOut"
+                        }}
+                        whileHover={{ 
+                          y: -4,
+                          transition: { duration: 0.4, ease: "easeOut" }
+                        }}
+                      >
+                        <EventCard key={event.id} event={event} index={index} />
+                      </motion.div>
+                    ))}
+                  </div>
                 </motion.div>
-              ))}
-            </div>
+              )}
+            </AnimatePresence>
           </motion.section>
 
         {/* Footer Info */}
@@ -448,6 +700,24 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
           </motion.div>
         </>
       )}
+
+      {/* Go to Top Button - Bottom Right */}
+      <AnimatePresence>
+        {showScrollToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            onClick={scrollToTop}
+            className={`fixed ${showToast ? 'bottom-20' : 'bottom-4'} right-4 z-40 w-12 h-12 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-full shadow-lg hover:shadow-xl hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-110 flex items-center justify-center`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* Toast Notification - Bottom Right */}
       <AnimatePresence>

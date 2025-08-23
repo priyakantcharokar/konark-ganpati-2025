@@ -44,15 +44,15 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
         // Group flats by building
         const grouped: { [key: string]: Flat[] } = {}
         const allFlats = flatsRawData.flats || flatsRawData
-        allFlats.forEach((flat: any) => {
-          const building = flat.building
+        allFlats.forEach((flatNumber: string) => {
+          const building = flatNumber.charAt(0)
           if (!grouped[building]) {
             grouped[building] = []
           }
           grouped[building].push({
-            id: flat.id,
-            number: flat.number,
-            building: flat.building
+            id: flatNumber,
+            number: flatNumber,
+            building: building
           })
         })
         
@@ -119,6 +119,8 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
 
       if (savedBooking) {
         onSuccess(`Pooja slot confirmed! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has booked ${selectedSlot.time} Aarti on ${selectedSlot.date}`)
+        // Redirect to landing page after success
+        window.location.href = '/'
       } else {
         alert('Failed to submit booking. Please try again.')
       }
@@ -240,6 +242,20 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
                 exit={{ opacity: 0, x: -20 }}
                 className="space-y-6"
               >
+                {/* Selected Slot Information Card */}
+                <div className="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                      <span className="text-white text-lg">🕉️</span>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-orange-800 text-sm">Selected Aarti Slot</div>
+                      <div className="text-orange-600 font-medium">{selectedSlot.date}</div>
+                      <div className="text-orange-600 text-sm">{selectedSlot.time} Aarti</div>
+                    </div>
+                  </div>
+                </div>
+
                 <h3 className="text-lg font-semibold text-gray-800 font-sohne mb-6">
                   Select Your Building
                 </h3>
@@ -267,6 +283,20 @@ const AartiBookingFlow: React.FC<AartiBookingFlowProps> = ({
                 exit={{ opacity: 0, x: -20 }}
                 className="space-y-6"
               >
+                {/* Selected Building and Slot Information Card */}
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                      <span className="text-white text-lg">🏢</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-semibold text-blue-800 text-sm">Selected Building</div>
+                      <div className="text-blue-600 font-medium">Building {selectedBuilding}</div>
+                      <div className="text-blue-600 text-sm">{selectedSlot.date} - {selectedSlot.time} Aarti</div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="flex items-center gap-3 mb-6">
                   <button
                     onClick={handleBack}
