@@ -57,6 +57,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
     if (title.includes('singing')) return '/events/Singing.jpeg'
     if (title.includes('ganapati') && title.includes('utsav') && title.includes('hosting')) return '/events/GanapatiUtsavHosting.jpeg'
     if (title.includes('satyanarayan') && title.includes('pooja')) return '/events/Satyanarayan pooja.png'
+    if (title.includes('ganapati') && title.includes('sthapana')) return '/events/Ganapati Sthapana.png'
     
     // Default fallback
     return null
@@ -225,7 +226,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
       {/* Action Buttons */}
       <div className="flex gap-2 mt-3">
         {/* Show all buttons for regular events */}
-        {!event.title.includes('Aarti And Prasad Seva') && (
+        {!event.title.includes('Aarti And Prasad Seva') && !event.title.includes('Ganapati Sthapana') && (
           <>
             <button
               onClick={() => setShowNominations(true)}
