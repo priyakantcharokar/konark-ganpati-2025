@@ -161,7 +161,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
           </div>
         <div className="flex-1 min-w-0">
           <Link href={`/events/${generateEventSlug(event.title)}`}>
-            <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 group-hover:text-gray-900 transition-colors duration-200 mb-2 leading-tight font-jaf-bernino">
+            <h3 className="text-base sm:text-lg md:text-xl font-medium text-gray-700 group-hover:text-gray-800 transition-colors duration-200 mb-2 leading-tight font-charter">
               {event.title}
             </h3>
           </Link>
@@ -181,7 +181,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
           <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
             <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600" />
           </div>
-          <span className="font-semibold text-sm sm:text-base md:text-lg text-gray-800 font-sohne">{event.date}</span>
+          <span className="font-normal text-sm sm:text-base md:text-lg text-gray-700 font-charter">{event.date}</span>
         </div>
         
         {event.time && (
@@ -189,7 +189,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
             <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
               <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600" />
             </div>
-            <span className="font-medium text-sm sm:text-base font-sohne">{event.time}</span>
+            <span className="font-normal text-sm sm:text-base font-charter">{event.time}</span>
           </div>
         )}
 
@@ -207,7 +207,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
                   
                   return (
                     <span key={index} className="block mb-2 last:mb-0">
-                      <span className="font-semibold text-gray-800 font-sohne text-sm sm:text-base">{nameMatch}</span>
+                                              <span className="font-normal text-gray-700 font-charter text-sm sm:text-base">{nameMatch}</span>
                       {phoneMatch && (
                         <span className="text-gray-600 ml-2 text-sm font-circular flex items-center gap-1">
                           <WhatsAppIcon />
@@ -230,13 +230,13 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
           <>
             <button
               onClick={() => setShowNominations(true)}
-              className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 text-xs"
+              className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 text-xs"
             >
               Nominations
             </button>
             <button
               onClick={() => setShowNominationForm(true)}
-              className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-xs"
+              className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-xs"
             >
               Nominate
             </button>
@@ -247,7 +247,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
         {eventFlyerImage && (
           <button
             onClick={() => setShowDetails(true)}
-            className={`bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs ${
+            className={`bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs ${
               event.title.includes('Aarti And Prasad Seva') ? 'flex-1' : 'flex-1'
             }`}
           >
