@@ -32,6 +32,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState('')
   const [toastType, setToastType] = useState<'success' | 'error'>('success')
+  const [selectedEventFilter, setSelectedEventFilter] = useState<string | null>(null)
   const [submissions, setSubmissions] = useState<Array<{
     id: string
     aartiSchedule: { date: string; time: string }
@@ -235,7 +236,6 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
     // Fallback: return a far future date if parsing fails
     return new Date('2099-12-31')
   }
-
 
   if (isLoading) {
     return (
@@ -586,6 +586,62 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 </p>
               </div>
 
+              {/* Quick Action Guide */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-amber-200 shadow-lg max-w-4xl mx-auto mb-8">
+                <div className="text-center">
+                  <h4 className="text-lg font-bold text-amber-800 mb-3 font-sohne">
+                    💡 How to Participate
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                      <span>Click <strong>Details</strong> to learn more</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                      <span>Click <strong>Nominate</strong> to participate</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                      <span>Click <strong>Nominations</strong> to see others</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Event Filter Dropdown */}
+              <div className="max-w-md mx-auto mb-8">
+                <div className="relative">
+                  <select
+                    value={selectedEventFilter || ''}
+                    onChange={(e) => setSelectedEventFilter(e.target.value || null)}
+                    className="w-full px-4 py-3 bg-white/90 backdrop-blur-sm border border-amber-300 rounded-lg shadow-lg text-amber-800 font-medium focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-200 digital-text"
+                  >
+                    <option value="">🎉 Show All Events</option>
+                    {events
+                      .filter(event => {
+                        const eventDate = parseEventDate(event.date)
+                        return eventDate >= new Date()
+                      })
+                      .map(event => (
+                        <option key={event.id} value={event.id}>
+                          📅 {event.title} - {event.date}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+                {selectedEventFilter && (
+                  <div className="mt-3 text-center">
+                    <button
+                      onClick={() => setSelectedEventFilter(null)}
+                      className="text-sm text-amber-600 hover:text-amber-800 font-medium underline transition-colors duration-200 digital-text"
+                    >
+                      ✨ Clear Filter - Show All Events
+                    </button>
+                  </div>
+                )}
+              </div>
+
               {/* Events Organized by Date */}
               <div className="space-y-8 max-w-7xl mx-auto">
                 
@@ -594,10 +650,15 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                   const currentDate = new Date()
                   
                   // Group events by date (show only current/future events, filter out past events)
-                  const currentEvents = events.filter(event => {
+                  let currentEvents = events.filter(event => {
                     const eventDate = parseEventDate(event.date)
                     return eventDate >= currentDate
                   })
+
+                  // Apply event filter if selected
+                  if (selectedEventFilter) {
+                    currentEvents = currentEvents.filter(event => event.id === selectedEventFilter)
+                  }
                   
                   const eventsByDate = currentEvents.reduce((acc, event) => {
                     const date = event.date
@@ -619,10 +680,10 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                     return (
                       <div className="text-center py-12">
                         <div className="text-gray-500 text-lg">
-                          No upcoming events at the moment.
+                          {selectedEventFilter ? 'No events found for the selected filter.' : 'No upcoming events at the moment.'}
                         </div>
                         <div className="text-gray-400 text-sm mt-2">
-                          Check the Past Events tab to see completed events.
+                          {selectedEventFilter ? 'Try selecting a different event or clear the filter.' : 'Check the Past Events tab to see completed events.'}
                         </div>
                       </div>
                     )
@@ -667,28 +728,6 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                   ))
                 })()}
 
-                {/* Quick Action Guide */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-amber-200 shadow-lg">
-                  <div className="text-center">
-                    <h4 className="text-lg font-bold text-amber-800 mb-3 font-sohne">
-                      💡 How to Participate
-                    </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
-                        <span>Click <strong>Details</strong> to learn more</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                        <span>Click <strong>Nominate</strong> to participate</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
-                        <span>Click <strong>Nominations</strong> to see others</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </motion.div>
           )}
