@@ -304,7 +304,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                     : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
                 }`}
               >
-                🎉 Participate in Events
+                🎉 Participate
               </button>
               
               {/* Past Events Tab */}

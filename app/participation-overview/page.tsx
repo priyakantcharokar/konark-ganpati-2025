@@ -204,18 +204,13 @@ export default function ParticipationOverview() {
 
   return (
     <div className="min-h-screen relative">
-      {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img
           src="./memories/GaneshaBlessings.png"
           alt="Ganesha Blessings Background"
           className="w-full h-full object-cover object-center"
         />
-        {/* Light transparent overlay for better content readability */}
-        <div className="absolute inset-0 bg-white/30"></div>
       </div>
-      
-      {/* Content */}
       <div className="relative z-10">
         {/* Navigation Header */}
         <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
