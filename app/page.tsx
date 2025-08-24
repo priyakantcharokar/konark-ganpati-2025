@@ -76,16 +76,16 @@ export default function Home() {
 
             {/* Navigation Links */}
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#aarti" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
-                Daily Aarti
+              <a href="#aarti" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium digital-text">
+                Book Aarti
               </a>
-              <a href="#events" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
-                Festival Events
+              <a href="#events" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium digital-text">
+                Participate
               </a>
-              <Link href="/gallery" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
+              <Link href="/gallery" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium digital-text">
                 Gallery
               </Link>
-              <Link href="/participation-overview" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium">
+              <Link href="/participation-overview" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium digital-text">
                 Participation
               </Link>
             </div>
@@ -125,14 +125,14 @@ export default function Home() {
                         className="absolute right-0 top-12 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50"
                       >
                         <div className="px-4 py-3 border-b border-gray-100">
-                          <span className="text-sm font-medium text-gray-500">Quick Navigation</span>
+                          <span className="text-sm font-medium text-gray-500 digital-text">Quick Navigation</span>
                         </div>
                         
                         <div className="py-2">
                           <a 
                             href="#aarti" 
                             onClick={() => setShowMobileMenu(false)}
-                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
+                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 digital-text"
                           >
                             <span className="text-lg mr-3">🙏</span>
                             <span className="font-medium">Daily Aarti</span>
@@ -141,7 +141,7 @@ export default function Home() {
                           <a 
                             href="#events" 
                             onClick={() => setShowMobileMenu(false)}
-                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
+                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 digital-text"
                           >
                             <span className="text-lg mr-3">🎉</span>
                             <span className="font-medium">Festival Events</span>
@@ -150,7 +150,7 @@ export default function Home() {
                           <Link 
                             href="/gallery"
                             onClick={() => setShowMobileMenu(false)}
-                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
+                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 digital-text"
                           >
                             <span className="text-lg mr-3">📸</span>
                             <span className="font-medium">Gallery</span>
@@ -159,7 +159,7 @@ export default function Home() {
                           <Link 
                             href="/participation-overview"
                             onClick={() => setShowMobileMenu(false)}
-                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
+                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 digital-text"
                           >
                             <span className="text-lg mr-3">📊</span>
                             <span className="font-medium">Participation</span>
@@ -170,7 +170,7 @@ export default function Home() {
                           <Link 
                             href="/"
                             onClick={() => setShowMobileMenu(false)}
-                            className="flex items-center text-blue-600 hover:text-blue-700 font-medium"
+                            className="flex items-center text-blue-600 hover:text-blue-700 font-medium digital-text"
                           >
                             <span className="mr-2">🏠</span>
                             Back to Home
@@ -209,10 +209,10 @@ export default function Home() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[130px] font-bold mb-3 sm:mb-4 font-style-script leading-tight">
               Konark Exotica
             </h1>
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 sm:mb-6 font-charter">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 sm:mb-6 digital-text">
               Ganesh Pooja 2025
             </h2>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto font-charter leading-relaxed px-2 sm:px-0">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 max-w-3xl mx-auto digital-text leading-relaxed px-2 sm:px-0">
               Experience the divine celebration of Lord Ganesha with cultural events, 
               spiritual ceremonies, and community festivities
             </p>
@@ -227,40 +227,113 @@ export default function Home() {
           >
             <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-white/30">
               <div className="text-2xl sm:text-3xl mb-2">🎉</div>
-              <div className="text-base sm:text-lg md:text-xl font-bold mb-1">24 Events</div>
-              <div className="text-xs sm:text-sm md:text-base text-gray-200">Cultural & Spiritual</div>
+              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 digital-numbers">24 Events</div>
+              <div className="text-xs sm:text-sm md:text-base text-gray-200 digital-text">Cultural & Spiritual</div>
             </div>
             <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-white/30">
               <div className="text-2xl sm:text-3xl mb-2">📅</div>
-              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 font-mono tracking-wider">Aug 23 - Sep 6</div>
-              <div className="text-xs sm:text-sm md:text-base text-gray-200">Festival Duration</div>
+              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 digital-numbers">Aug 23 - Sep 6</div>
+              <div className="text-xs sm:text-sm md:text-base text-gray-200 digital-text">Festival Duration</div>
             </div>
             <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-white/30">
               <div className="text-2xl sm:text-3xl mb-2">⏰</div>
-              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 font-mono tracking-wider">7 PM</div>
-              <div className="text-xs sm:text-sm md:text-base text-gray-200">Daily Aarti</div>
+              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 digital-numbers">7 PM</div>
+              <div className="text-xs sm:text-sm md:text-base text-gray-200 digital-text">Daily Aarti</div>
             </div>
           </motion.div>
         </div>
       </section>
 
- 
 
-      {/* Event Schedule Component */}
-      <section id="events" className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
-        <EventSchedule 
-          userPhone=""
-          userFlat=""
-          onLogout={() => {}}
-        />
-      </section>
+        {/* Event Schedule Component */}
+        <section id="events" className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+          <EventSchedule 
+            userPhone=""
+            userFlat=""
+            onLogout={() => {}}
+          />
+        </section>
+
+        {/* Gallery Section */}
+        <section id="gallery" className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+          <div className="max-w-6xl mx-auto text-center">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 font-jaf-bernino mb-4"
+            >
+              📸 Festival Gallery
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-lg text-gray-600 max-w-3xl mx-auto digital-text mb-8"
+            >
+              Relive the beautiful moments and cherished memories from our Ganesh Pooja Festival
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Link 
+                href="/gallery"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg digital-text"
+              >
+                View Gallery
+                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Participation Overview Section */}
+        <section id="overview" className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+          <div className="max-w-6xl mx-auto text-center">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 font-jaf-bernino mb-4"
+            >
+              📊 Participation Overview
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-lg text-gray-600 max-w-3xl mx-auto digital-text mb-8"
+            >
+              Track all your festival participations, aarti bookings, and event nominations in one place
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Link 
+                href="/participation-overview"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 shadow-lg digital-text"
+              >
+                View Overview
+                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </motion.div>
+          </div>
+        </section>
 
       {/* Footer */}
       <footer className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-8 text-center">
-        <p className="text-lg font-medium">
+        <p className="text-lg font-medium digital-text">
           🎉 Celebrating Unity, Faith & Joy Together! 🎉
         </p>
-        <p className="text-sm mt-2 opacity-90">
+        <p className="text-sm mt-2 opacity-90 digital-text">
           © 2025 Ganesh Pooja Festival. Crafted with ❤️ to bring our community closer through divine celebrations.
         </p>
       </footer>
