@@ -217,20 +217,20 @@ export default function ParticipationOverview() {
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center space-x-2">
-                <span className="text-2xl">🕉️</span>
+                <span className="text-xl sm:text-2xl">🕉️</span>
                 <Link 
                   href="/" 
-                  className="text-xl font-bold text-gray-800 font-style-script hover:text-orange-600 transition-colors duration-200 cursor-pointer"
+                  className="text-lg sm:text-xl font-bold text-gray-800 font-style-script hover:text-orange-600 transition-colors duration-200 cursor-pointer"
                 >
                   Konark Exotica
                 </Link>
-                <span className="text-gray-400 mx-2">•</span>
-                <span className="text-lg font-semibold text-gray-700">Participation Overview</span>
+                <span className="text-gray-400 mx-1 sm:mx-2">•</span>
+                <span className="text-sm sm:text-lg font-semibold text-gray-700">Participation Overview</span>
               </div>
               
               <Link 
                 href="/"
-                className="text-blue-600 hover:text-blue-700 transition-colors duration-200 font-medium"
+                className="text-sm sm:text-base text-blue-600 hover:text-blue-700 transition-colors duration-200 font-medium"
               >
                 ← Back to Home
               </Link>
@@ -247,10 +247,10 @@ export default function ParticipationOverview() {
             transition={{ duration: 0.6 }}
             className="text-center mb-8"
           >
-            <h1 className="text-4xl font-bold text-white mb-3 font-jaf-bernino">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 font-jaf-bernino">
               Participation Overview
             </h1>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto font-medium digital-text">
+            <p className="text-sm sm:text-base md:text-lg text-gray-200 max-w-2xl mx-auto font-medium digital-text">
               Track all aarti bookings and event nominations across the Ganesh Pooja celebrations
             </p>
           </motion.div>
@@ -364,7 +364,7 @@ export default function ParticipationOverview() {
                 
                 {filteredData.aartiBookings.length === 0 ? (
                   <div className="text-center py-8">
-                    <div className="text-white text-lg">No aarti bookings found.</div>
+                    <div className="text-gray-800 text-lg">No aarti bookings found.</div>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -416,7 +416,7 @@ export default function ParticipationOverview() {
                 
                 {filteredData.eventNominations.length === 0 ? (
                   <div className="text-center py-8">
-                    <div className="text-white text-lg">No event nominations found.</div>
+                    <div className="text-gray-800 text-lg">No event nominations found.</div>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -469,12 +469,12 @@ export default function ParticipationOverview() {
                 <div className="space-y-6">
                   {/* Aarti Bookings Section */}
                   <div>
-                    <h4 className="text-xl font-semibold text-white mb-4 font-sohne">
+                    <h4 className="text-xl font-semibold text-gray-800 mb-4 font-sohne">
                       🕉️ Aarti Bookings ({filteredData.aartiBookings.length})
                     </h4>
                     {filteredData.aartiBookings.length === 0 ? (
                       <div className="text-center py-6">
-                        <div className="text-white">No aarti bookings found.</div>
+                        <div className="text-gray-800">No aarti bookings found.</div>
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -511,12 +511,12 @@ export default function ParticipationOverview() {
 
                   {/* Event Nominations Section */}
                   <div>
-                    <h4 className="text-xl font-semibold text-white mb-4 font-sohne">
+                    <h4 className="text-xl font-semibold text-gray-800 mb-4 font-sohne">
                       🎉 Event Nominations ({filteredData.eventNominations.length})
                     </h4>
                     {filteredData.eventNominations.length === 0 ? (
                       <div className="text-center py-6">
-                        <div className="text-white">No event nominations found.</div>
+                        <div className="text-gray-800">No event nominations found.</div>
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
