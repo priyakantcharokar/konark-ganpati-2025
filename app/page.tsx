@@ -242,6 +242,30 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
+        
+        {/* Scroll Down Arrow */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+        >
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center text-white cursor-pointer"
+            onClick={() => document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            <div className="text-2xl sm:text-3xl mb-2">⬇️</div>
+            <motion.div
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="text-sm sm:text-base font-medium digital-text"
+            >
+              Scroll Down
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </section>
 
 

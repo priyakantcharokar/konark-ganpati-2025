@@ -86,7 +86,7 @@ export default function ParticipationOverview() {
   useEffect(() => {
     // Only apply filters if we have data
     if (data.aartiBookings && data.eventNominations) {
-      applyFilters()
+    applyFilters()
     }
   }, [searchTerm, selectedBuilding, selectedEvent, selectedDate, activeTab, data.aartiBookings, data.eventNominations])
 
@@ -302,30 +302,30 @@ export default function ParticipationOverview() {
         {/* Navigation Header */}
         <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center space-x-2">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
                 <span className="text-xl sm:text-2xl">🕉️</span>
                 <Link 
-                  href="/" 
+                href="/" 
                   className="text-base sm:text-2xl lg:text-3xl font-bold text-gray-800 font-style-script hover:text-orange-600 transition-colors duration-200 cursor-pointer"
-                >
-                  Konark Exotica
+              >
+                Konark Exotica
                 </Link>
                 
-              </div>
-              
-              <Link 
-                href="/"
-                className="text-sm sm:text-base text-blue-600 hover:text-blue-700 transition-colors duration-200 font-medium font-kievit"
-              >
-                ← Back to Home
-              </Link>
             </div>
+            
+              <Link 
+              href="/"
+                className="text-sm sm:text-base text-blue-600 hover:text-blue-700 transition-colors duration-200 font-medium font-kievit"
+            >
+              ← Back to Home
+              </Link>
+          </div>
           </nav>
         </header>
 
         {/* Page Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -388,29 +388,29 @@ export default function ParticipationOverview() {
                 >
                   🔄 Refresh Data
                 </button>
-              </div>
-              
+        </div>
+
               {activeTab !== 'all' && (
                 <div className="flex flex-col sm:flex-row gap-2">
-                  <input
-                    type="text"
+                <input
+                  type="text"
                     placeholder="Search by name..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                     className="px-3 py-1.5 bg-white/90 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent font-kievit shadow-lg shadow-black/10 text-sm"
-                  />
-                  <button
+                />
+              <button
                     onClick={loadData}
                     className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-kievit shadow-lg shadow-black/10 text-sm"
-                  >
+              >
                     🔄 Refresh
-                  </button>
-                  <button
-                    onClick={clearFilters}
+              </button>
+              <button
+                onClick={clearFilters}
                     className="px-3 py-1.5 bg-white/90 hover:bg-white text-gray-800 hover:text-gray-900 border border-gray-300 rounded-lg transition-all duration-200 shadow-lg shadow-black/10 hover:shadow-black/20 text-sm whitespace-nowrap font-kievit"
-                  >
+              >
                     Clear All Filters
-                  </button>
+              </button>
                 </div>
               )}
             </div>
@@ -530,16 +530,16 @@ export default function ParticipationOverview() {
                                       </Link>
                                     </div>
                                   )}
-                                </div>
-                                
+                  </div>
+
                                 {/* Evening Section */}
                                 <div className="space-y-2 lg:space-y-3">
                                   <div className="text-center">
                                     <h6 className="text-base lg:text-lg font-semibold text-purple-600 font-kievit">
                                       🌙 Evening Aarti
                                     </h6>
-                                  </div>
-                                  
+                  </div>
+
                                   {groupedByDateAndTime[date]['Evening'] ? (
                                     <div className="space-y-1 lg:space-y-2">
                                       {groupedByDateAndTime[date]['Evening'].map((booking, index) => (
@@ -574,7 +574,7 @@ export default function ParticipationOverview() {
 
             {/* Event Nominations Tab */}
             {activeTab === 'events' && (
-              <motion.div
+        <motion.div
                 key="events"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -616,12 +616,12 @@ export default function ParticipationOverview() {
                           </div>
                           
                           {/* Nominations Grid */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {nominations.map((nomination, index) => (
-                              <motion.div
+                      <motion.div
                                 key={nomination.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: index * 0.1 }}
                                 className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
                                   index % 4 === 0 ? 'border-l-8 border-l-purple-500' :
@@ -634,7 +634,7 @@ export default function ParticipationOverview() {
                                   <span className="text-gray-800 font-bold text-sm font-kievit">
                                     {nomination.userName}
                                   </span>
-                                </div>
+                            </div>
                               </motion.div>
                             ))}
                           </div>
@@ -660,9 +660,9 @@ export default function ParticipationOverview() {
                   📊 All Registrations
                 </h3>
                 
-                <div className="space-y-6">
+                  <div className="space-y-6">
                   {/* Aarti Bookings Section */}
-                  <div>
+                            <div>
                     <h4 className="text-xl font-semibold text-gray-800 mb-4 font-kievit">
                       🕉️ Aarti Bookings ({(() => {
                         // Count grouped bookings instead of raw bookings
@@ -680,7 +680,7 @@ export default function ParticipationOverview() {
                     {filteredData.aartiBookings.length === 0 ? (
                       <div className="text-center py-6">
                         <div className="text-gray-800">No aarti bookings found.</div>
-                      </div>
+                            </div>
                     ) : (
                       <div className="space-y-4">
                         {(() => {
@@ -858,16 +858,16 @@ export default function ParticipationOverview() {
                                       <span className="text-gray-800 font-bold text-sm font-kievit">
                                         {nomination.userName}
                                       </span>
-                                    </div>
-                                  </motion.div>
-                                ))}
+                        </div>
+                      </motion.div>
+                    ))}
                               </div>
                             </div>
                           ))
                         })()}
-                      </div>
-                    )}
                   </div>
+                )}
+              </div>
                 </div>
               </motion.div>
             )}

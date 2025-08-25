@@ -470,7 +470,10 @@ export default function EventDetailPage() {
                 ) : (
                   <div className="space-y-3">
                     {/* Column Headers */}
-                    <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center mb-3">
+                    <div className="grid grid-cols-4 gap-2 sm:gap-4 text-center mb-3">
+                      <div className="text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                        Sr. No.
+                      </div>
                       <div className="text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">
                         Flat
                       </div>
@@ -490,7 +493,10 @@ export default function EventDetailPage() {
                         transition={{ duration: 0.3, delay: index * 0.1 }}
                         className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-3 sm:p-4 border border-amber-200 hover:border-amber-300 transition-all duration-200 hover:shadow-md"
                       >
-                        <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+                        <div className="grid grid-cols-4 gap-2 sm:gap-4 text-center">
+                          <div className="font-semibold text-gray-800 digital-text text-sm sm:text-base">
+                            {index + 1}
+                          </div>
                           <div className="font-semibold text-gray-800 digital-text text-sm sm:text-base">
                             {nomination.flatNumber}
                           </div>
@@ -523,4 +529,4 @@ export default function EventDetailPage() {
       </AnimatePresence>
     </div>
   )
-}
+} 
