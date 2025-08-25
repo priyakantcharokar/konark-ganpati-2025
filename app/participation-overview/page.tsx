@@ -78,6 +78,19 @@ export default function ParticipationOverview() {
 
   useEffect(() => {
     loadData()
+    
+    // Refresh data when page becomes visible (useful for when returning from booking)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        loadData()
+      }
+    }
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
   }, [])
 
   useEffect(() => {
@@ -89,7 +102,10 @@ export default function ParticipationOverview() {
     try {
       // Load aarti bookings
       const aartiBookings = await databaseService.getAllBookings()
+      console.log('Raw aarti bookings from database:', aartiBookings)
+      
       const aartiData = aartiBookings.map(booking => databaseService.convertBookingToSubmission(booking))
+      console.log('Converted aarti data:', aartiData)
 
       // Load event nominations
       const eventNominations = await databaseService.getAllEventNominations()
@@ -351,6 +367,14 @@ export default function ParticipationOverview() {
                 >
                   🎉 Event Nominations
                 </button>
+                
+                {/* Refresh button for all tabs */}
+                <button
+                  onClick={loadData}
+                  className="px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-kievit shadow-lg shadow-black/10 text-sm ml-auto"
+                >
+                  🔄 Refresh Data
+                </button>
               </div>
               
               {activeTab !== 'all' && (
@@ -362,6 +386,12 @@ export default function ParticipationOverview() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="px-3 py-1.5 bg-white/90 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent font-kievit shadow-lg shadow-black/10 text-sm"
                   />
+                  <button
+                    onClick={loadData}
+                    className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-kievit shadow-lg shadow-black/10 text-sm"
+                  >
+                    🔄 Refresh
+                  </button>
                   <button
                     onClick={clearFilters}
                     className="px-3 py-1.5 bg-white/90 hover:bg-white text-gray-800 hover:text-gray-900 border border-gray-300 rounded-lg transition-all duration-200 shadow-lg shadow-black/10 hover:shadow-black/20 text-sm whitespace-nowrap font-kievit"
@@ -386,7 +416,18 @@ export default function ParticipationOverview() {
                 className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300"
               >
                 <h3 className="text-2xl font-bold text-gray-800 mb-6 font-kievit">
-                  🕉️ Aarti Bookings
+                  🕉️ Aarti Bookings ({(() => {
+                    // Count grouped bookings instead of raw bookings
+                    const groupedBookings: { [key: string]: AartiBooking[] } = {}
+                    filteredData.aartiBookings.forEach(booking => {
+                      const key = `${booking.aartiSchedule.date}-${booking.aartiSchedule.time}-${booking.userName}`
+                      if (!groupedBookings[key]) {
+                        groupedBookings[key] = []
+                      }
+                      groupedBookings[key].push(booking)
+                    })
+                    return Object.keys(groupedBookings).length
+                  })()})
                 </h3>
                 
                 {filteredData.aartiBookings.length === 0 ? (
@@ -395,36 +436,63 @@ export default function ParticipationOverview() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredData.aartiBookings.map((booking, index) => (
-                      <motion.div
-                        key={booking.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: index * 0.1 }}
-                        className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
-                          index % 4 === 0 ? 'border-l-8 border-l-blue-500' :
-                          index % 4 === 1 ? 'border-l-8 border-l-green-500' :
-                          index % 4 === 2 ? 'border-l-8 border-l-orange-500' :
-                          'border-l-8 border-l-purple-500'
-                        }`}
-                      >
-                        <div className="space-y-3">
-                          {/* First Line: Date - Time */}
-                          <div className="text-center">
-                            <span className="text-gray-800 font-bold text-sm font-kievit">
-                              {booking.aartiSchedule.date} - {booking.aartiSchedule.time}
-                            </span>
-                          </div>
-                          
-                          {/* Second Line: Name - Flat */}
-                          <div className="text-center">
-                            <span className="text-gray-700 font-semibold text-sm font-kievit">
-                              {booking.userName} - {booking.flat}
-                            </span>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
+                    {(() => {
+                      // Group aarti bookings by date, time, and user
+                      const groupedBookings: { [key: string]: AartiBooking[] } = {}
+                      filteredData.aartiBookings.forEach(booking => {
+                        const key = `${booking.aartiSchedule.date}-${booking.aartiSchedule.time}-${booking.userName}`
+                        if (!groupedBookings[key]) {
+                          groupedBookings[key] = []
+                        }
+                        groupedBookings[key].push(booking)
+                      })
+
+                      return Object.entries(groupedBookings).map(([key, bookings], index) => {
+                        const firstBooking = bookings[0]
+                        const allFlats = bookings.map(b => b.flat).join(', ')
+                        const allBuildings = bookings.map(b => b.building).filter((building, index, arr) => arr.indexOf(building) === index).join(', ')
+                        
+                        return (
+                          <motion.div
+                            key={key}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: index * 0.1 }}
+                            className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
+                              index % 4 === 0 ? 'border-l-8 border-l-blue-500' :
+                              index % 4 === 1 ? 'border-l-8 border-l-green-500' :
+                              index % 4 === 2 ? 'border-l-8 border-l-orange-500' :
+                              'border-l-8 border-l-purple-500'
+                            }`}
+                          >
+                            <div className="space-y-3">
+                              {/* First Line: Date - Time */}
+                              <div className="text-center">
+                                <span className="text-gray-800 font-bold text-sm font-kievit">
+                                  {firstBooking.aartiSchedule.date} - {firstBooking.aartiSchedule.time}
+                                </span>
+                              </div>
+                              
+                              {/* Second Line: Name - Flats */}
+                              <div className="text-center">
+                                <span className="text-gray-700 font-semibold text-sm font-kievit">
+                                  {firstBooking.userName} - {allFlats}
+                                </span>
+                              </div>
+                              
+                              {/* Third Line: Buildings (if multiple) */}
+                              {bookings.length > 1 && (
+                                <div className="text-center">
+                                  <span className="text-gray-600 text-xs font-kievit">
+                                    Buildings: {allBuildings}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </motion.div>
+                        )
+                      })
+                    })()}
                   </div>
                 )}
               </motion.div>
@@ -522,7 +590,18 @@ export default function ParticipationOverview() {
                   {/* Aarti Bookings Section */}
                   <div>
                     <h4 className="text-xl font-semibold text-gray-800 mb-4 font-kievit">
-                      🕉️ Aarti Bookings ({filteredData.aartiBookings.length})
+                      🕉️ Aarti Bookings ({(() => {
+                        // Count grouped bookings instead of raw bookings
+                        const groupedBookings: { [key: string]: AartiBooking[] } = {}
+                        filteredData.aartiBookings.forEach(booking => {
+                          const key = `${booking.aartiSchedule.date}-${booking.aartiSchedule.time}-${booking.userName}`
+                          if (!groupedBookings[key]) {
+                            groupedBookings[key] = []
+                          }
+                          groupedBookings[key].push(booking)
+                        })
+                        return Object.keys(groupedBookings).length
+                      })()})
                     </h4>
                     {filteredData.aartiBookings.length === 0 ? (
                       <div className="text-center py-6">
@@ -530,36 +609,63 @@ export default function ParticipationOverview() {
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {filteredData.aartiBookings.map((booking, index) => (
-                          <motion.div
-                            key={booking.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
-                              index % 4 === 0 ? 'border-l-8 border-l-blue-500' :
-                              index % 4 === 1 ? 'border-l-8 border-l-green-500' :
-                              index % 4 === 2 ? 'border-l-8 border-l-orange-500' :
-                              'border-l-8 border-l-purple-500'
-                            }`}
-                          >
-                            <div className="space-y-3">
-                              {/* First Line: Date - Time */}
-                              <div className="text-center">
-                                <span className="text-gray-800 font-bold text-sm font-kievit">
-                                  {booking.aartiSchedule.date} - {booking.aartiSchedule.time}
-                                </span>
-                              </div>
-                              
-                              {/* Second Line: Name - Flat */}
-                              <div className="text-center">
-                                <span className="text-gray-700 font-semibold text-sm font-kievit">
-                                  {booking.userName} - {booking.flat}
-                                </span>
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))}
+                        {(() => {
+                          // Group aarti bookings by date, time, and user
+                          const groupedBookings: { [key: string]: AartiBooking[] } = {}
+                          filteredData.aartiBookings.forEach(booking => {
+                            const key = `${booking.aartiSchedule.date}-${booking.aartiSchedule.time}-${booking.userName}`
+                            if (!groupedBookings[key]) {
+                              groupedBookings[key] = []
+                            }
+                            groupedBookings[key].push(booking)
+                          })
+
+                          return Object.entries(groupedBookings).map(([key, bookings], index) => {
+                            const firstBooking = bookings[0]
+                            const allFlats = bookings.map(b => b.flat).join(', ')
+                            const allBuildings = bookings.map(b => b.building).filter((building, index, arr) => arr.indexOf(building) === index).join(', ')
+                            
+                            return (
+                              <motion.div
+                                key={key}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
+                                  index % 4 === 0 ? 'border-l-8 border-l-blue-500' :
+                                  index % 4 === 1 ? 'border-l-8 border-l-green-500' :
+                                  index % 4 === 2 ? 'border-l-8 border-l-orange-500' :
+                                  'border-l-8 border-l-purple-500'
+                                }`}
+                              >
+                                <div className="space-y-3">
+                                  {/* First Line: Date - Time */}
+                                  <div className="text-center">
+                                    <span className="text-gray-800 font-bold text-sm font-kievit">
+                                      {firstBooking.aartiSchedule.date} - {firstBooking.aartiSchedule.time}
+                                    </span>
+                                  </div>
+                                  
+                                  {/* Second Line: Name - Flats */}
+                                  <div className="text-center">
+                                    <span className="text-gray-700 font-semibold text-sm font-kievit">
+                                      {firstBooking.userName} - {allFlats}
+                                    </span>
+                                  </div>
+                                  
+                                  {/* Third Line: Buildings (if multiple) */}
+                                  {bookings.length > 1 && (
+                                    <div className="text-center">
+                                      <span className="text-gray-600 text-xs font-kievit">
+                                        Buildings: {allBuildings}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </motion.div>
+                            )
+                          })
+                        })()}
                       </div>
                     )}
                   </div>

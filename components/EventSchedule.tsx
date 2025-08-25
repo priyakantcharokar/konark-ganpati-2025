@@ -174,11 +174,37 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
     )
   }
 
-  // Get booking details for a slot
-  const getSlotBooking = (date: string, time: string) => {
-    return submissions.find(submission => 
+  // Get all booking details for a slot (for grouping multiple flats)
+  const getSlotBookings = (date: string, time: string) => {
+    return submissions.filter(submission => 
       submission.aartiSchedule.date === date && submission.aartiSchedule.time === time
     )
+  }
+
+  // Get grouped booking info for display
+  const getGroupedSlotInfo = (date: string, time: string) => {
+    const bookings = getSlotBookings(date, time)
+    if (bookings.length === 0) return null
+    
+    // Group by user name
+    const groupedByUser: { [userName: string]: Array<{ userName: string; flat: string; building: string }> } = {}
+    bookings.forEach(booking => {
+      if (!groupedByUser[booking.userName]) {
+        groupedByUser[booking.userName] = []
+      }
+      groupedByUser[booking.userName].push({
+        userName: booking.userName,
+        flat: booking.flat,
+        building: booking.building
+      })
+    })
+    
+    // Convert to display format
+    return Object.entries(groupedByUser).map(([userName, userBookings]) => ({
+      userName,
+      flats: userBookings.map(b => b.flat).join(', '),
+      buildings: userBookings.map(b => b.building).filter((building, index, arr) => arr.indexOf(building) === index).join(', ')
+    }))
   }
 
   // Handle aarti card click
@@ -355,8 +381,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                     const isMorningBooked = morningSlot ? isSlotBooked(morningSlot.date, morningSlot.time) : false;
                     const isEveningBooked = eveningSlot ? isSlotBooked(eveningSlot.date, eveningSlot.time) : false;
                     
-                    const morningBooking = morningSlot ? getSlotBooking(morningSlot.date, morningSlot.time) : null;
-                    const eveningBooking = eveningSlot ? getSlotBooking(eveningSlot.date, eveningSlot.time) : null;
+                    const morningBooking = morningSlot ? getSlotBookings(morningSlot.date, morningSlot.time) : null;
+                    const eveningBooking = eveningSlot ? getSlotBookings(eveningSlot.date, eveningSlot.time) : null;
                     
                     return (
                       <motion.div
@@ -467,10 +493,24 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                     <div className="text-center px-4 py-3 w-full h-full flex flex-col justify-center items-center">
                                       <div className="text-center">
                                         <div className="text-xl font-bold text-white mb-3">Booked by</div>
-                                        <div className="flex items-center justify-center gap-3 text-white">
-                                          <span className="text-lg font-bold">{morningBooking.userName}</span>
-                                          <span className="text-lg font-bold text-white font-mono tracking-wider">{morningBooking.flat}</span>
-                                        </div>
+                                        {(() => {
+                                          const groupedInfo = getGroupedSlotInfo(morningSlot.date, morningSlot.time)
+                                          if (!groupedInfo) return null
+                                          
+                                          return groupedInfo.map((userInfo, index) => (
+                                            <div key={index} className="mb-2 last:mb-0">
+                                              <div className="flex items-center justify-center gap-2 text-white">
+                                                <span className="text-lg font-bold">{userInfo.userName}</span>
+                                                <span className="text-lg font-bold text-white font-mono tracking-wider">{userInfo.flats}</span>
+                                              </div>
+                                              {userInfo.buildings.split(', ').length > 1 && (
+                                                <div className="text-sm text-gray-300 mt-1">
+                                                  Buildings: {userInfo.buildings}
+                                                </div>
+                                              )}
+                                            </div>
+                                          ))
+                                        })()}
                                       </div>
                                     </div>
                                   </motion.div>
@@ -547,10 +587,24 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                     <div className="text-center px-4 py-3 w-full h-full flex flex-col justify-center items-center">
                                       <div className="text-center">
                                         <div className="text-xl font-bold text-white mb-3">Booked by</div>
-                                        <div className="flex items-center justify-center gap-3 text-white">
-                                          <span className="text-lg font-bold">{eveningBooking.userName}</span>
-                                          <span className="text-lg font-bold text-white font-mono tracking-wider">{eveningBooking.flat}</span>
-                                        </div>
+                                        {(() => {
+                                          const groupedInfo = getGroupedSlotInfo(eveningSlot.date, eveningSlot.time)
+                                          if (!groupedInfo) return null
+                                          
+                                          return groupedInfo.map((userInfo, index) => (
+                                            <div key={index} className="mb-2 last:mb-0">
+                                              <div className="flex items-center justify-center gap-2 text-white">
+                                                <span className="text-lg font-bold">{userInfo.userName}</span>
+                                                <span className="text-lg font-bold text-white font-mono tracking-wider">{userInfo.flats}</span>
+                                              </div>
+                                              {userInfo.buildings.split(', ').length > 1 && (
+                                                <div className="text-sm text-gray-300 mt-1">
+                                                  Buildings: {userInfo.buildings}
+                                                </div>
+                                              )}
+                                            </div>
+                                          ))
+                                        })()}
                                       </div>
                                     </div>
                                   </motion.div>
