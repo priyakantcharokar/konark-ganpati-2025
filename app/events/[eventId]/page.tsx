@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Calendar, Clock, Users, X } from 'lucide-react'
 import EventNominationFlow from '@/components/EventNominationFlow'
@@ -42,7 +42,6 @@ interface EventNomination {
 
 export default function EventDetailPage() {
   const params = useParams()
-  const router = useRouter()
   const eventId = params.eventId as string
   
   const [event, setEvent] = useState<Event | null>(null)
@@ -231,26 +230,8 @@ export default function EventDetailPage() {
   }
 
   const handleBackClick = () => {
-    // Check if there's navigation history
-    if (window.history.length > 1) {
-      // If there's history, try to go back
-      try {
-        router.back()
-        // Add a fallback in case router.back() fails
-        setTimeout(() => {
-          if (window.location.pathname === `/events/${eventId}`) {
-            // If still on the same page, redirect to landing
-            window.location.href = '/'
-          }
-        }, 100)
-      } catch (error) {
-        // If router.back() fails, go to landing page
-        window.location.href = '/'
-      }
-    } else {
-      // If no history (direct link), go to landing page
-      window.location.href = '/'
-    }
+    // Always go to landing page for consistency
+    window.location.href = '/'
   }
 
   if (isLoading) {
