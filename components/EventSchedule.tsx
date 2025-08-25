@@ -656,13 +656,28 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                   const dailyEvents = currentEvents.filter(event => 
                     event.date.toLowerCase().includes('daily') || 
                     event.date.toLowerCase().includes('every day') ||
-                    event.date.toLowerCase().includes('ongoing')
+                    event.title.toLowerCase().includes('ganpati utsav hosting') ||
+                    event.title.toLowerCase().includes('ganapati utsav hosting')
                   )
+
+                  // If we don't have enough daily events, add some additional ongoing activities
+                  if (dailyEvents.length < 4) {
+                    // Add some events that could be considered ongoing throughout the festival
+                    const additionalOngoingEvents = currentEvents.filter(event => 
+                      !dailyEvents.includes(event) && (
+                        event.title.toLowerCase().includes('seva') ||
+                        event.title.toLowerCase().includes('prasad') ||
+                        event.title.toLowerCase().includes('aarti') ||
+                        event.title.toLowerCase().includes('rangoli') ||
+                        event.title.toLowerCase().includes('anchoring')
+                      )
+                    ).slice(0, 4 - dailyEvents.length)
+                    
+                    dailyEvents.push(...additionalOngoingEvents)
+                  }
                   
                   const dateSpecificEvents = currentEvents.filter(event => 
-                    !event.date.toLowerCase().includes('daily') && 
-                    !event.date.toLowerCase().includes('every day') &&
-                    !event.date.toLowerCase().includes('ongoing')
+                    !dailyEvents.includes(event)
                   )
                   
                   // Group date-specific events by date
@@ -703,33 +718,33 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6 }}
-                          className="space-y-4"
+                          className="space-y-3"
                         >
                           {/* Daily Events Header */}
                           <div className="text-center">
-                            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg">
-                              <span className="text-2xl">🔄</span>
-                              <h3 className="text-lg font-bold font-sohne">
-                                Daily Events
+                            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full shadow-lg">
+                              <span className="text-xl">🔄</span>
+                              <h3 className="text-base font-bold font-sohne">
+                                Daily
                               </h3>
-                              <span className="text-sm font-medium opacity-90">
+                              <span className="text-xs font-medium opacity-90">
                                 {dailyEvents.length} event{dailyEvents.length !== 1 ? 's' : ''}
                               </span>
                             </div>
-                            <div className="w-32 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mx-auto mt-3"></div>
+                            <div className="w-24 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mx-auto mt-2"></div>
                           </div>
                           
-                          {/* Daily Events Grid - Smaller Cards */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                          {/* Daily Events Grid - Compact Cards */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                             {dailyEvents.map((event, eventIndex) => (
                               <motion.div
                                 key={event.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: eventIndex * 0.1 }}
-                                className="transform scale-90 origin-center"
+                                className="transform scale-85 origin-center"
                               >
-                                <EventCard key={event.id} event={event} index={eventIndex} />
+                                <EventCard key={event.id} event={event} index={eventIndex} compact={true} />
                               </motion.div>
                             ))}
                           </div>

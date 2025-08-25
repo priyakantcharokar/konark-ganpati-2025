@@ -27,9 +27,10 @@ interface EventCardProps {
     category: string
   }
   index: number
+  compact?: boolean
 }
 
-const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
+const EventCard: React.FC<EventCardProps> = ({ event, index, compact = false }) => {
   // Check if this is a Bhog event
   const isBhogEvent = event.title.includes('छप्पन भोग') || event.title.includes('56') || event.title.includes('Bhog')
 
@@ -118,54 +119,55 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
         scale: 1.02,
         transition: { duration: 0.3, ease: "easeOut" }
       }}
-      className={`${getEventColor(event.title)} p-3 sm:p-4 rounded-xl border shadow-sm hover:shadow-lg transition-all duration-300`}
+      className={`${getEventColor(event.title)} ${compact ? 'p-2' : 'p-3 sm:p-4'} rounded-xl border shadow-sm hover:shadow-lg transition-all duration-300`}
     >
       {/* Header with Icon and Title */}
-      <div className="flex items-center gap-3 mb-4">
+      <div className={`flex items-center gap-3 ${compact ? 'mb-2' : 'mb-4'}`}>
         <div className="flex-shrink-0">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg transition-all duration-300 border border-white/50">
-            <span className="text-lg sm:text-xl">{getEventIcon(event.title)}</span>
+          <div className={`${compact ? 'w-8 h-8' : 'w-10 h-10 sm:w-12 sm:h-12'} bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg transition-all duration-300 border border-white/50`}>
+            <span className={`${compact ? 'text-sm' : 'text-lg sm:text-xl'}`}>{getEventIcon(event.title)}</span>
           </div>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 leading-tight font-jaf-bernino bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent">
+          <h3 className={`${compact ? 'text-sm sm:text-base' : 'text-lg sm:text-xl md:text-2xl'} font-bold text-gray-800 leading-tight font-jaf-bernino bg-gradient-to-r from-gray-800 to-gray-700 bg-clip-text text-transparent`}>
             {event.title}
           </h3>
         </div>
       </div>
 
-      {/* Description */}
-      {event.description && (
+      {/* Description - Hidden in compact mode */}
+      {event.description && !compact && (
         <p className="text-gray-600 mb-3 leading-relaxed text-xs sm:text-sm transition-colors duration-200 font-charter">
           {event.description}
         </p>
       )}
 
-      {/* Event Details */}
-      <div className="space-y-2 mb-3">
+      {/* Event Details - Condensed in compact mode */}
+      <div className={`${compact ? 'space-y-1 mb-2' : 'space-y-2 mb-3'}`}>
         <div className="flex items-center gap-3 text-gray-700">
-          <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
-            <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600" />
+          <div className={`${compact ? 'w-5 h-5' : 'w-6 h-6 sm:w-7 sm:h-7'} bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm flex-shrink-0`}>
+            <Calendar className={`${compact ? 'w-2.5 h-2.5' : 'w-3 h-3 sm:w-3.5 sm:h-3.5'} text-gray-600`} />
           </div>
-          <span className="font-bold text-sm sm:text-base md:text-lg text-gray-800 font-charter">{event.date}</span>
+          <span className={`${compact ? 'text-xs' : 'text-sm sm:text-base md:text-lg'} font-bold text-gray-800 font-charter`}>{event.date}</span>
         </div>
         
         {event.time && (
           <div className="flex items-center gap-3 text-gray-700">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
-              <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600" />
+            <div className={`${compact ? 'w-5 h-5' : 'w-6 h-6 sm:w-7 sm:h-7'} bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm flex-shrink-0`}>
+              <Clock className={`${compact ? 'w-2.5 h-2.5' : 'w-3 h-3 sm:w-3.5 sm:h-3.5'} text-gray-600`} />
             </div>
-            <span className="font-normal text-sm sm:text-base font-charter">{event.time}</span>
+            <span className={`${compact ? 'text-xs' : 'text-sm sm:text-base'} font-charter`}>{event.time}</span>
           </div>
         )}
 
-        {event.organizers && (
+        {/* Organizers - Hidden in compact mode to save space */}
+        {event.organizers && !compact && (
           <div className="flex items-start gap-3 text-gray-700">
-            <div className="w-6 h-6 sm:w-7 sm:h-7 bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm flex-shrink-0 mt-0.5">
-              <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-600" />
+            <div className={`${compact ? 'w-5 h-5' : 'w-6 h-6 sm:w-7 sm:h-7'} bg-white/60 backdrop-blur-sm rounded-md sm:rounded-lg flex items-center justify-center shadow-sm flex-shrink-0 mt-0.5`}>
+              <Users className={`${compact ? 'w-2.5 h-2.5' : 'w-3 h-3 sm:w-3.5 sm:h-3.5'} text-gray-600`} />
             </div>
             <div className="flex-1">
-              <p className="font-medium text-sm sm:text-base text-gray-800 leading-relaxed font-kievit">
+              <p className={`${compact ? 'text-xs' : 'text-sm sm:text-base'} font-medium text-gray-800 leading-relaxed font-kievit`}>
                 {event.organizers.split(',').map((organizer, index) => {
                   const trimmed = organizer.trim()
                   const phoneMatch = trimmed.match(/(\d{10})/)
@@ -173,7 +175,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
                   
                   return (
                     <span key={index} className="block mb-2 last:mb-0">
-                                              <span className="font-bold text-gray-800 font-charter text-sm sm:text-base">{nameMatch}</span>
+                      <span className={`${compact ? 'text-xs' : 'text-sm sm:text-base'} font-bold text-gray-800 font-charter`}>{nameMatch}</span>
                       {phoneMatch && (
                         <span className="text-gray-600 ml-2 text-sm font-circular flex items-center gap-1">
                           <WhatsAppIcon />
@@ -190,7 +192,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-2 mt-3">
+      <div className={`flex gap-2 ${compact ? 'mt-2' : 'mt-3'}`}>
         {/* Show Nominate button for regular events, but hide for special events */}
         {!event.title.includes('Aarti And Prasad Seva') && 
          !event.title.includes('Ganapati Sthapana') && 
@@ -205,7 +207,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
                 window.location.href = `/events/${event.id}`
               }
             }}
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-xs"
+            className={`w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white ${compact ? 'py-1 px-2 text-xs' : 'py-1.5 px-3 text-xs'} rounded-lg font-normal hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105`}
           >
             {isBhogEvent ? 'Offer Bhog' : 'Nominate'}
           </button>
@@ -228,7 +230,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
                 }, 100)
               }
             }}
-            className="w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs"
+            className={`w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white ${compact ? 'py-1 px-2 text-xs' : 'py-1.5 px-3 text-xs'} rounded-lg font-normal hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105`}
           >
             🙏 Book Aarti
           </button>
