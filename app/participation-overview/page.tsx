@@ -297,17 +297,17 @@ export default function ParticipationOverview() {
               </div>
               
               {activeTab !== 'all' && (
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="text"
                     placeholder="Search by name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="px-4 py-2 bg-white/20 border border-white/40 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent digital-text shadow-lg shadow-white/10"
+                    className="px-3 py-1.5 bg-white/20 border border-white/40 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent digital-text shadow-lg shadow-white/10 text-sm"
                   />
                   <button
                     onClick={clearFilters}
-                    className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white border border-white/40 rounded-lg transition-all duration-200 shadow-lg shadow-white/10 hover:shadow-white/20"
+                    className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white border border-white/40 rounded-lg transition-all duration-200 shadow-lg shadow-white/10 hover:shadow-white/20 text-sm whitespace-nowrap"
                   >
                     Clear All Filters
                   </button>
@@ -380,24 +380,24 @@ export default function ParticipationOverview() {
                       >
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-sm font-medium">Date</span>
-                            <span className="text-white font-semibold digital-text">{booking.aartiSchedule.date}</span>
+                            <span className="text-white/90 text-xs font-medium">Date</span>
+                            <span className="text-white font-semibold digital-text text-xs truncate max-w-[60%]">{booking.aartiSchedule.date}</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-sm font-medium">Time</span>
-                            <span className="text-white font-semibold digital-text">{booking.aartiSchedule.time}</span>
+                            <span className="text-white/90 text-xs font-medium">Time</span>
+                            <span className="text-white font-semibold digital-text text-xs truncate max-w-[60%]">{booking.aartiSchedule.time}</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-sm font-medium">Name</span>
-                            <span className="text-white font-semibold">{booking.userName}</span>
+                            <span className="text-white/90 text-xs font-medium">Name</span>
+                            <span className="text-white font-semibold text-xs truncate max-w-[60%]">{booking.userName}</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-sm font-medium">Flat</span>
-                            <span className="text-white font-semibold digital-numbers">{booking.flat}</span>
+                            <span className="text-white/90 text-xs font-medium">Flat</span>
+                            <span className="text-white font-semibold digital-numbers text-xs truncate max-w-[60%]">{booking.flat}</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-sm font-medium">Building</span>
-                            <span className="text-white font-semibold">{booking.building}</span>
+                            <span className="text-white/90 text-xs font-medium">Building</span>
+                            <span className="text-white font-semibold text-xs truncate max-w-[60%]">{booking.building}</span>
                           </div>
                         </div>
                       </motion.div>
@@ -439,20 +439,20 @@ export default function ParticipationOverview() {
                       >
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-sm font-medium">Event</span>
-                            <span className="text-white font-semibold">{nomination.eventTitle}</span>
+                            <span className="text-white/90 text-xs font-medium">Event</span>
+                            <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.eventTitle}</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-sm font-medium">Name</span>
-                            <span className="text-white font-semibold">{nomination.userName}</span>
+                            <span className="text-white/90 text-xs font-medium">Name</span>
+                            <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.userName}</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-sm font-medium">Flat</span>
-                            <span className="text-white font-semibold digital-numbers">{nomination.flat}</span>
+                            <span className="text-white/90 text-xs font-medium">Flat</span>
+                            <span className="text-white font-semibold digital-numbers text-xs truncate max-w-[60%]">{nomination.flat}</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-sm font-medium">Building</span>
-                            <span className="text-white font-semibold">{nomination.building}</span>
+                            <span className="text-white/90 text-xs font-medium">Building</span>
+                            <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.building}</span>
                           </div>
                         </div>
                       </motion.div>
@@ -500,24 +500,24 @@ export default function ParticipationOverview() {
                           >
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-sm font-medium">Date</span>
-                                <span className="text-white font-semibold digital-text">{booking.aartiSchedule.date}</span>
+                                <span className="text-white/90 text-xs font-medium">Date</span>
+                                <span className="text-white font-semibold digital-text text-xs truncate max-w-[60%]">{booking.aartiSchedule.date}</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-sm font-medium">Time</span>
-                                <span className="text-white font-semibold digital-text">{booking.aartiSchedule.time}</span>
+                                <span className="text-white/90 text-xs font-medium">Time</span>
+                                <span className="text-white font-semibold digital-text text-xs truncate max-w-[60%]">{booking.aartiSchedule.time}</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-sm font-medium">Name</span>
-                                <span className="text-white font-semibold">{booking.userName}</span>
+                                <span className="text-white/90 text-xs font-medium">Name</span>
+                                <span className="text-white font-semibold text-xs truncate max-w-[60%]">{booking.userName}</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-sm font-medium">Flat</span>
-                                <span className="text-white font-semibold digital-numbers">{booking.flat}</span>
+                                <span className="text-white/90 text-xs font-medium">Flat</span>
+                                <span className="text-white font-semibold digital-numbers text-xs truncate max-w-[60%]">{booking.flat}</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-sm font-medium">Building</span>
-                                <span className="text-white font-semibold">{booking.building}</span>
+                                <span className="text-white/90 text-xs font-medium">Building</span>
+                                <span className="text-white font-semibold text-xs truncate max-w-[60%]">{booking.building}</span>
                               </div>
                             </div>
                           </motion.div>
@@ -549,20 +549,20 @@ export default function ParticipationOverview() {
                           >
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-sm font-medium">Event</span>
-                                <span className="text-white font-semibold">{nomination.eventTitle}</span>
+                                <span className="text-white/90 text-xs font-medium">Event</span>
+                                <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.eventTitle}</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-sm font-medium">Name</span>
-                                <span className="text-white font-semibold">{nomination.userName}</span>
+                                <span className="text-white/90 text-xs font-medium">Name</span>
+                                <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.userName}</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-sm font-medium">Flat</span>
-                                <span className="text-white font-semibold digital-numbers">{nomination.flat}</span>
+                                <span className="text-white/90 text-xs font-medium">Flat</span>
+                                <span className="text-white font-semibold digital-numbers text-xs truncate max-w-[60%]">{nomination.flat}</span>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-sm font-medium">Building</span>
-                                <span className="text-white font-semibold">{nomination.building}</span>
+                                <span className="text-white/90 text-xs font-medium">Building</span>
+                                <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.building}</span>
                               </div>
                             </div>
                           </motion.div>
