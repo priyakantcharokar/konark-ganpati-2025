@@ -158,6 +158,16 @@ export default function ParticipationOverview() {
       filtered.aartiBookings = []
     }
 
+    // Sort Aarti Bookings chronologically by date and time
+    filtered.aartiBookings.sort((a, b) => {
+      // Parse dates and times for comparison using helper function
+      const dateA = parseAartiDateTime(a.aartiSchedule.date, a.aartiSchedule.time)
+      const dateB = parseAartiDateTime(b.aartiSchedule.date, b.aartiSchedule.time)
+      
+      // Sort chronologically (earliest to latest)
+      return dateA.getTime() - dateB.getTime()
+    })
+
     setFilteredData(filtered)
   }
 
@@ -177,6 +187,53 @@ export default function ParticipationOverview() {
   // Helper function to get total registrations
   const getTotalRegistrations = () => {
     return data.aartiBookings.length + data.eventNominations.length
+  }
+
+  // Helper function to parse date strings for sorting
+  const parseAartiDateTime = (dateStr: string, timeStr: string) => {
+    // Handle different date formats
+    let date = new Date()
+    
+    // Parse date string (e.g., "Wednesday, 28th August", "Monday, 1st September")
+    if (dateStr.includes('August') || dateStr.includes('September')) {
+      // Extract day and month
+      const dayMatch = dateStr.match(/(\d+)(?:st|nd|rd|th)?\s+(August|September)/i)
+      if (dayMatch) {
+        const day = parseInt(dayMatch[1])
+        const month = dayMatch[2].toLowerCase()
+        
+        // Set month (August = 7, September = 8, 0-indexed)
+        if (month === 'august') {
+          date.setMonth(7)
+        } else if (month === 'september') {
+          date.setMonth(8)
+        }
+        
+        date.setDate(day)
+        date.setFullYear(2025) // Set to current year
+      }
+    }
+    
+    // Parse time string (e.g., "9:00 AM", "7:00 PM")
+    if (timeStr) {
+      const timeMatch = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i)
+      if (timeMatch) {
+        let hour = parseInt(timeMatch[1])
+        const minute = parseInt(timeMatch[2])
+        const period = timeMatch[3].toUpperCase()
+        
+        // Convert to 24-hour format for proper sorting
+        if (period === 'PM' && hour !== 12) {
+          hour += 12
+        } else if (period === 'AM' && hour === 12) {
+          hour = 0
+        }
+        
+        date.setHours(hour, minute, 0, 0)
+      }
+    }
+    
+    return date
   }
 
   // Group event nominations by event title
@@ -225,12 +282,12 @@ export default function ParticipationOverview() {
                   Konark Exotica
                 </Link>
                 <span className="text-gray-400 mx-1 sm:mx-2">•</span>
-                <span className="text-sm sm:text-lg font-semibold text-gray-700">Participation Overview</span>
+                <span className="text-sm sm:text-lg font-semibold text-gray-700 font-kievit">Participation Overview</span>
               </div>
               
               <Link 
                 href="/"
-                className="text-sm sm:text-base text-blue-600 hover:text-blue-700 transition-colors duration-200 font-medium"
+                className="text-sm sm:text-base text-blue-600 hover:text-blue-700 transition-colors duration-200 font-medium font-kievit"
               >
                 ← Back to Home
               </Link>
@@ -247,10 +304,10 @@ export default function ParticipationOverview() {
             transition={{ duration: 0.6 }}
             className="text-center mb-8"
           >
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 font-jaf-bernino">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 font-kievit">
               Participation Overview
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-gray-200 max-w-2xl mx-auto font-medium digital-text">
+            <p className="text-sm sm:text-base md:text-lg text-gray-200 max-w-2xl mx-auto font-medium font-kievit">
               Track all aarti bookings and event nominations across the Ganesh Pooja celebrations
             </p>
           </motion.div>
@@ -266,7 +323,7 @@ export default function ParticipationOverview() {
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setActiveTab('all')}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 font-kievit ${
                     activeTab === 'all'
                       ? 'bg-blue-500 text-white border-2 border-blue-600 shadow-lg shadow-blue-200'
                       : 'bg-white/90 text-gray-800 hover:bg-white hover:text-gray-900 border border-gray-300'
@@ -276,7 +333,7 @@ export default function ParticipationOverview() {
                 </button>
                 <button
                   onClick={() => setActiveTab('aarti')}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 font-kievit ${
                     activeTab === 'aarti'
                       ? 'bg-green-500 text-white border-2 border-green-600 shadow-lg shadow-green-200'
                       : 'bg-white/90 text-gray-800 hover:bg-white hover:text-gray-900 border border-gray-300'
@@ -286,7 +343,7 @@ export default function ParticipationOverview() {
                 </button>
                 <button
                   onClick={() => setActiveTab('events')}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 font-kievit ${
                     activeTab === 'events'
                       ? 'bg-purple-500 text-white border-2 border-purple-600 shadow-lg shadow-purple-200'
                       : 'bg-white/90 text-gray-800 hover:bg-white hover:text-gray-900 border border-gray-300'
@@ -303,11 +360,11 @@ export default function ParticipationOverview() {
                     placeholder="Search by name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="px-3 py-1.5 bg-white/90 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent digital-text shadow-lg shadow-black/10 text-sm"
+                    className="px-3 py-1.5 bg-white/90 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent font-kievit shadow-lg shadow-black/10 text-sm"
                   />
                   <button
                     onClick={clearFilters}
-                    className="px-3 py-1.5 bg-white/90 hover:bg-white text-gray-800 hover:text-gray-900 border border-gray-300 rounded-lg transition-all duration-200 shadow-lg shadow-black/10 hover:shadow-black/20 text-sm whitespace-nowrap"
+                    className="px-3 py-1.5 bg-white/90 hover:bg-white text-gray-800 hover:text-gray-900 border border-gray-300 rounded-lg transition-all duration-200 shadow-lg shadow-black/10 hover:shadow-black/20 text-sm whitespace-nowrap font-kievit"
                   >
                     Clear All Filters
                   </button>
@@ -328,13 +385,13 @@ export default function ParticipationOverview() {
                 transition={{ duration: 0.4 }}
                 className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300"
               >
-                <h3 className="text-2xl font-bold text-gray-800 mb-6 font-jaf-bernino">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 font-kievit">
                   🕉️ Aarti Bookings
                 </h3>
                 
                 {filteredData.aartiBookings.length === 0 ? (
                   <div className="text-center py-8">
-                    <div className="text-gray-800 text-lg">No aarti bookings found.</div>
+                    <div className="text-gray-800 text-lg font-kievit">No aarti bookings found.</div>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -354,14 +411,14 @@ export default function ParticipationOverview() {
                         <div className="space-y-3">
                           {/* First Line: Date - Time */}
                           <div className="text-center">
-                            <span className="text-gray-800 font-bold text-sm">
+                            <span className="text-gray-800 font-bold text-sm font-kievit">
                               {booking.aartiSchedule.date} - {booking.aartiSchedule.time}
                             </span>
                           </div>
                           
                           {/* Second Line: Name - Flat */}
                           <div className="text-center">
-                            <span className="text-gray-700 font-semibold text-sm">
+                            <span className="text-gray-700 font-semibold text-sm font-kievit">
                               {booking.userName} - {booking.flat}
                             </span>
                           </div>
@@ -383,13 +440,13 @@ export default function ParticipationOverview() {
                 transition={{ duration: 0.4 }}
                 className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300"
               >
-                <h3 className="text-2xl font-bold text-gray-800 mb-6 font-jaf-bernino">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 font-kievit">
                   🎉 Event Nominations
                 </h3>
                 
                 {filteredData.eventNominations.length === 0 ? (
                   <div className="text-center py-8">
-                    <div className="text-gray-800 text-lg">No event nominations found.</div>
+                    <div className="text-gray-800 text-lg font-kievit">No event nominations found.</div>
                   </div>
                 ) : (
                   <div className="space-y-8">
@@ -407,11 +464,11 @@ export default function ParticipationOverview() {
                         <div key={eventTitle} className="space-y-4">
                           {/* Category Header */}
                           <div className="text-center">
-                            <h4 className="text-xl font-semibold text-gray-800 mb-2 font-sohne">
+                            <h4 className="text-xl font-semibold text-gray-800 mb-2 font-kievit">
                               {eventTitle}
                             </h4>
                             <div className="w-24 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mx-auto"></div>
-                            <p className="text-sm text-gray-600 mt-2">
+                            <p className="text-sm text-gray-600 mt-2 font-kievit">
                               {nominations.length} participant{nominations.length !== 1 ? 's' : ''}
                             </p>
                           </div>
@@ -432,7 +489,7 @@ export default function ParticipationOverview() {
                                 }`}
                               >
                                 <div className="text-center">
-                                  <span className="text-gray-800 font-bold text-sm">
+                                  <span className="text-gray-800 font-bold text-sm font-kievit">
                                     {nomination.userName}
                                   </span>
                                 </div>
@@ -457,14 +514,14 @@ export default function ParticipationOverview() {
                 transition={{ duration: 0.4 }}
                 className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300"
               >
-                <h3 className="text-2xl font-bold text-gray-800 mb-6 font-jaf-bernino">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 font-kievit">
                   📊 All Registrations
                 </h3>
                 
                 <div className="space-y-6">
                   {/* Aarti Bookings Section */}
                   <div>
-                    <h4 className="text-xl font-semibold text-gray-800 mb-4 font-sohne">
+                    <h4 className="text-xl font-semibold text-gray-800 mb-4 font-kievit">
                       🕉️ Aarti Bookings ({filteredData.aartiBookings.length})
                     </h4>
                     {filteredData.aartiBookings.length === 0 ? (
@@ -489,14 +546,14 @@ export default function ParticipationOverview() {
                             <div className="space-y-3">
                               {/* First Line: Date - Time */}
                               <div className="text-center">
-                                <span className="text-gray-800 font-bold text-sm">
+                                <span className="text-gray-800 font-bold text-sm font-kievit">
                                   {booking.aartiSchedule.date} - {booking.aartiSchedule.time}
                                 </span>
                               </div>
                               
                               {/* Second Line: Name - Flat */}
                               <div className="text-center">
-                                <span className="text-gray-700 font-semibold text-sm">
+                                <span className="text-gray-700 font-semibold text-sm font-kievit">
                                   {booking.userName} - {booking.flat}
                                 </span>
                               </div>
@@ -509,7 +566,7 @@ export default function ParticipationOverview() {
 
                   {/* Event Nominations Section */}
                   <div>
-                    <h4 className="text-xl font-semibold text-gray-800 mb-4 font-sohne">
+                    <h4 className="text-xl font-semibold text-gray-800 mb-4 font-kievit">
                       🎉 Event Nominations ({filteredData.eventNominations.length})
                     </h4>
                     {filteredData.eventNominations.length === 0 ? (
@@ -532,11 +589,11 @@ export default function ParticipationOverview() {
                             <div key={eventTitle} className="space-y-4">
                               {/* Category Header */}
                               <div className="text-center">
-                                <h5 className="text-lg font-semibold text-gray-800 mb-2 font-sohne">
+                                <h5 className="text-lg font-semibold text-gray-800 mb-2 font-kievit">
                                   {eventTitle}
                                 </h5>
                                 <div className="w-20 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mx-auto"></div>
-                                <p className="text-xs text-gray-600 mt-2">
+                                <p className="text-xs text-gray-600 mt-2 font-kievit">
                                   {nominations.length} participant{nominations.length !== 1 ? 's' : ''}
                                 </p>
                               </div>
@@ -557,7 +614,7 @@ export default function ParticipationOverview() {
                                     }`}
                                   >
                                     <div className="text-center">
-                                      <span className="text-gray-800 font-bold text-sm">
+                                      <span className="text-gray-800 font-bold text-sm font-kievit">
                                         {nomination.userName}
                                       </span>
                                     </div>
