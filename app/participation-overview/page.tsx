@@ -392,37 +392,56 @@ export default function ParticipationOverview() {
                     <div className="text-gray-800 text-lg">No event nominations found.</div>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredData.eventNominations.map((nomination, index) => (
-                      <motion.div
-                        key={nomination.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: index * 0.1 }}
-                        className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
-                          index % 4 === 0 ? 'border-l-8 border-l-purple-500' :
-                          index % 4 === 1 ? 'border-l-8 border-l-cyan-500' :
-                          index % 4 === 2 ? 'border-l-8 border-l-emerald-500' :
-                          'border-l-8 border-l-yellow-500'
-                        }`}
-                      >
-                        <div className="space-y-3">
-                          {/* First Line: Event */}
+                  <div className="space-y-8">
+                    {(() => {
+                      // Group nominations by event title
+                      const groupedNominations: { [key: string]: EventNomination[] } = {}
+                      filteredData.eventNominations.forEach(nomination => {
+                        if (!groupedNominations[nomination.eventTitle]) {
+                          groupedNominations[nomination.eventTitle] = []
+                        }
+                        groupedNominations[nomination.eventTitle].push(nomination)
+                      })
+
+                      return Object.entries(groupedNominations).map(([eventTitle, nominations]) => (
+                        <div key={eventTitle} className="space-y-4">
+                          {/* Category Header */}
                           <div className="text-center">
-                            <span className="text-gray-800 font-bold text-sm">
-                              {nomination.eventTitle}
-                            </span>
+                            <h4 className="text-xl font-semibold text-gray-800 mb-2 font-sohne">
+                              {eventTitle}
+                            </h4>
+                            <div className="w-24 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mx-auto"></div>
+                            <p className="text-sm text-gray-600 mt-2">
+                              {nominations.length} participant{nominations.length !== 1 ? 's' : ''}
+                            </p>
                           </div>
                           
-                          {/* Second Line: Person Name */}
-                          <div className="text-center">
-                            <span className="text-gray-700 font-semibold text-sm">
-                              {nomination.userName}
-                            </span>
+                          {/* Nominations Grid */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {nominations.map((nomination, index) => (
+                              <motion.div
+                                key={nomination.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
+                                  index % 4 === 0 ? 'border-l-8 border-l-purple-500' :
+                                  index % 4 === 1 ? 'border-l-8 border-l-cyan-500' :
+                                  index % 4 === 2 ? 'border-l-8 border-l-emerald-500' :
+                                  'border-l-8 border-l-yellow-500'
+                                }`}
+                              >
+                                <div className="text-center">
+                                  <span className="text-gray-800 font-bold text-sm">
+                                    {nomination.userName}
+                                  </span>
+                                </div>
+                              </motion.div>
+                            ))}
                           </div>
                         </div>
-                      </motion.div>
-                    ))}
+                      ))
+                    })()}
                   </div>
                 )}
               </motion.div>
@@ -498,37 +517,56 @@ export default function ParticipationOverview() {
                         <div className="text-gray-800">No event nominations found.</div>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {filteredData.eventNominations.map((nomination, index) => (
-                          <motion.div
-                            key={nomination.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
-                              index % 4 === 0 ? 'border-l-8 border-l-purple-500' :
-                              index % 4 === 1 ? 'border-l-8 border-l-cyan-500' :
-                              index % 4 === 2 ? 'border-l-8 border-l-emerald-500' :
-                              'border-l-8 border-l-yellow-500'
-                            }`}
-                          >
-                            <div className="space-y-3">
-                              {/* First Line: Event */}
+                      <div className="space-y-6">
+                        {(() => {
+                          // Group nominations by event title
+                          const groupedNominations: { [key: string]: EventNomination[] } = {}
+                          filteredData.eventNominations.forEach(nomination => {
+                            if (!groupedNominations[nomination.eventTitle]) {
+                              groupedNominations[nomination.eventTitle] = []
+                            }
+                            groupedNominations[nomination.eventTitle].push(nomination)
+                          })
+
+                          return Object.entries(groupedNominations).map(([eventTitle, nominations]) => (
+                            <div key={eventTitle} className="space-y-4">
+                              {/* Category Header */}
                               <div className="text-center">
-                                <span className="text-gray-800 font-bold text-sm">
-                                  {nomination.eventTitle}
-                                </span>
+                                <h5 className="text-lg font-semibold text-gray-800 mb-2 font-sohne">
+                                  {eventTitle}
+                                </h5>
+                                <div className="w-20 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mx-auto"></div>
+                                <p className="text-xs text-gray-600 mt-2">
+                                  {nominations.length} participant{nominations.length !== 1 ? 's' : ''}
+                                </p>
                               </div>
                               
-                              {/* Second Line: Person Name */}
-                              <div className="text-center">
-                                <span className="text-gray-700 font-semibold text-sm">
-                                  {nomination.userName}
-                                </span>
+                              {/* Nominations Grid */}
+                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {nominations.map((nomination, index) => (
+                                  <motion.div
+                                    key={nomination.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                                    className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
+                                      index % 4 === 0 ? 'border-l-8 border-l-purple-500' :
+                                      index % 4 === 1 ? 'border-l-8 border-l-cyan-500' :
+                                      index % 4 === 2 ? 'border-l-8 border-l-emerald-500' :
+                                      'border-l-8 border-l-yellow-500'
+                                    }`}
+                                  >
+                                    <div className="text-center">
+                                      <span className="text-gray-800 font-bold text-sm">
+                                        {nomination.userName}
+                                      </span>
+                                    </div>
+                                  </motion.div>
+                                ))}
                               </div>
                             </div>
-                          </motion.div>
-                        ))}
+                          ))
+                        })()}
                       </div>
                     )}
                   </div>
