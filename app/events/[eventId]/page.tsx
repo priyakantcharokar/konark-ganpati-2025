@@ -414,7 +414,7 @@ export default function EventDetailPage() {
                     onClick={() => setShowNominationForm(true)}
                     className={`py-3 px-6 sm:px-8 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl ${
                       isBhogEvent 
-                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 shadow-green-400/50 hover:shadow-emerald-400/75 glow-pulse-green' 
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-700 text-white hover:from-blue-700 hover:to-purple-800 shadow-blue-500/50 hover:shadow-purple-500/75 heartbeat-glow' 
                         : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-blue-400/50 hover:shadow-purple-400/75 glow-pulse-blue'
                     }`}
                   >

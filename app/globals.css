@@ -41,6 +41,25 @@ html {
   }
 }
 
+@keyframes heartbeat-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 0 0 40px rgba(239, 68, 68, 0.4);
+    transform: scale(1);
+  }
+  25% {
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.8), 0 0 60px rgba(239, 68, 68, 0.6);
+    transform: scale(1.05);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(251, 191, 36, 0.7), 0 0 50px rgba(239, 68, 68, 0.5);
+    transform: scale(1.02);
+  }
+  75% {
+    box-shadow: 0 0 35px rgba(251, 191, 36, 0.9), 0 0 70px rgba(239, 68, 68, 0.7);
+    transform: scale(1.08);
+  }
+}
+
 .glow-pulse-green {
   animation: glow-pulse 2s ease-in-out infinite;
 }
@@ -49,10 +68,15 @@ html {
   animation: glow-pulse-blue 2s ease-in-out infinite;
 }
 
+.heartbeat-glow {
+  animation: heartbeat-glow 1.5s ease-in-out infinite;
+}
+
 /* Ensure animations work on mobile */
 @media (prefers-reduced-motion: no-preference) {
   .glow-pulse-green,
-  .glow-pulse-blue {
+  .glow-pulse-blue,
+  .heartbeat-glow {
     animation-play-state: running;
   }
 }
