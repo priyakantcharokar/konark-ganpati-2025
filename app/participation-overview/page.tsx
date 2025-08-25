@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Filter, Users, Calendar, Building, Clock, X } from 'lucide-react'
 import { databaseService } from '@/lib/database-service'
 import Link from 'next/link'
+import { isSupabaseConfigured } from '@/lib/supabase'
 
 interface AartiBooking {
   id: string
@@ -79,36 +80,35 @@ export default function ParticipationOverview() {
   useEffect(() => {
     loadData()
     
-    // Refresh data when page becomes visible (useful for when returning from booking)
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        loadData()
-      }
-    }
-    
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }
+    // Removed automatic refresh on visibility change - now only manual refresh via button
   }, [])
 
   useEffect(() => {
-    applyFilters()
-  }, [data, searchTerm, selectedBuilding, selectedEvent, selectedDate, activeTab])
+    // Only apply filters if we have data
+    if (data.aartiBookings && data.eventNominations) {
+      applyFilters()
+    }
+  }, [searchTerm, selectedBuilding, selectedEvent, selectedDate, activeTab, data.aartiBookings, data.eventNominations])
 
   const loadData = async () => {
     setIsLoading(true)
     try {
+      console.log('Starting to load data...')
+      
       // Load aarti bookings
       const aartiBookings = await databaseService.getAllBookings()
       console.log('Raw aarti bookings from database:', aartiBookings)
+      console.log('Number of aarti bookings:', aartiBookings.length)
       
       const aartiData = aartiBookings.map(booking => databaseService.convertBookingToSubmission(booking))
       console.log('Converted aarti data:', aartiData)
+      console.log('Number of converted aarti bookings:', aartiData.length)
 
       // Load event nominations
       const eventNominations = await databaseService.getAllEventNominations()
+      console.log('Raw event nominations from database:', eventNominations)
+      console.log('Number of event nominations:', eventNominations.length)
+      
       const eventData = eventNominations.map((nomination: DatabaseEventNomination) => ({
         id: nomination.id,
         eventTitle: nomination.event_title,
@@ -120,18 +120,30 @@ export default function ParticipationOverview() {
         timestamp: new Date(nomination.created_at)
       }))
       
+      console.log('Final data being set:', {
+        aartiBookings: aartiData,
+        eventNominations: eventData
+      })
+      
       setData({
         aartiBookings: aartiData,
         eventNominations: eventData
       })
     } catch (error) {
       console.error('Error loading data:', error)
+      alert(`Error loading data: ${error}`)
     } finally {
       setIsLoading(false)
     }
   }
 
   const applyFilters = () => {
+    // Don't apply filters if data is empty
+    if (!data.aartiBookings || !data.eventNominations) {
+      setFilteredData({ aartiBookings: [], eventNominations: [] })
+      return
+    }
+
     let filtered = { ...data }
 
     // Filter by search term
@@ -175,14 +187,16 @@ export default function ParticipationOverview() {
     }
 
     // Sort Aarti Bookings chronologically by date and time
-    filtered.aartiBookings.sort((a, b) => {
-      // Parse dates and times for comparison using helper function
-      const dateA = parseAartiDateTime(a.aartiSchedule.date, a.aartiSchedule.time)
-      const dateB = parseAartiDateTime(b.aartiSchedule.date, b.aartiSchedule.time)
-      
-      // Sort chronologically (earliest to latest)
-      return dateA.getTime() - dateB.getTime()
-    })
+    if (filtered.aartiBookings.length > 0) {
+      filtered.aartiBookings.sort((a, b) => {
+        // Parse dates and times for comparison using helper function
+        const dateA = parseAartiDateTime(a.aartiSchedule.date, a.aartiSchedule.time)
+        const dateB = parseAartiDateTime(b.aartiSchedule.date, b.aartiSchedule.time)
+        
+        // Sort chronologically (earliest to latest)
+        return dateA.getTime() - dateB.getTime()
+      })
+    }
 
     setFilteredData(filtered)
   }
@@ -320,11 +334,11 @@ export default function ParticipationOverview() {
             transition={{ duration: 0.6 }}
             className="text-center mb-8"
           >
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 font-kievit">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4 font-style-script">
               Participation Overview
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-gray-200 max-w-2xl mx-auto font-medium font-kievit">
-              Track all aarti bookings and event nominations across the Ganesh Pooja celebrations
+            <p className="text-white/90 text-lg font-kievit max-w-2xl mx-auto">
+              Track all aarti bookings and event nominations across the Ganesh Pooja celebrations.
             </p>
           </motion.div>
 
@@ -420,7 +434,7 @@ export default function ParticipationOverview() {
                     // Count grouped bookings instead of raw bookings
                     const groupedBookings: { [key: string]: AartiBooking[] } = {}
                     filteredData.aartiBookings.forEach(booking => {
-                      const key = `${booking.aartiSchedule.date}-${booking.aartiSchedule.time}-${booking.userName}`
+                      const key = `${booking.aartiSchedule.date}-${booking.aartiSchedule.time}`
                       if (!groupedBookings[key]) {
                         groupedBookings[key] = []
                       }
@@ -435,63 +449,124 @@ export default function ParticipationOverview() {
                     <div className="text-gray-800 text-lg font-kievit">No aarti bookings found.</div>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="space-y-4">
                     {(() => {
-                      // Group aarti bookings by date, time, and user
-                      const groupedBookings: { [key: string]: AartiBooking[] } = {}
+                      // Group aarti bookings by date and time
+                      const groupedByDateAndTime: { [date: string]: { [time: string]: AartiBooking[] } } = {}
+                      
                       filteredData.aartiBookings.forEach(booking => {
-                        const key = `${booking.aartiSchedule.date}-${booking.aartiSchedule.time}-${booking.userName}`
-                        if (!groupedBookings[key]) {
-                          groupedBookings[key] = []
+                        const date = booking.aartiSchedule.date
+                        const time = booking.aartiSchedule.time
+                        
+                        if (!groupedByDateAndTime[date]) {
+                          groupedByDateAndTime[date] = {}
                         }
-                        groupedBookings[key].push(booking)
+                        if (!groupedByDateAndTime[date][time]) {
+                          groupedByDateAndTime[date][time] = []
+                        }
+                        groupedByDateAndTime[date][time].push(booking)
                       })
 
-                      return Object.entries(groupedBookings).map(([key, bookings], index) => {
-                        const firstBooking = bookings[0]
-                        const allFlats = bookings.map(b => b.flat).join(', ')
-                        const allBuildings = bookings.map(b => b.building).filter((building, index, arr) => arr.indexOf(building) === index).join(', ')
-                        
-                        return (
-                          <motion.div
-                            key={key}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
-                              index % 4 === 0 ? 'border-l-8 border-l-blue-500' :
-                              index % 4 === 1 ? 'border-l-8 border-l-green-500' :
-                              index % 4 === 2 ? 'border-l-8 border-l-orange-500' :
-                              'border-l-8 border-l-purple-500'
-                            }`}
-                          >
-                            <div className="space-y-3">
-                              {/* First Line: Date - Time */}
-                              <div className="text-center">
-                                <span className="text-gray-800 font-bold text-sm font-kievit">
-                                  {firstBooking.aartiSchedule.date} - {firstBooking.aartiSchedule.time}
-                                </span>
-                              </div>
-                              
-                              {/* Second Line: Name - Flats */}
-                              <div className="text-center">
-                                <span className="text-gray-700 font-semibold text-sm font-kievit">
-                                  {firstBooking.userName} - {allFlats}
-                                </span>
-                              </div>
-                              
-                              {/* Third Line: Buildings (if multiple) */}
-                              {bookings.length > 1 && (
-                                <div className="text-center">
-                                  <span className="text-gray-600 text-xs font-kievit">
-                                    Buildings: {allBuildings}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          </motion.div>
-                        )
+                      // Sort dates chronologically
+                      const sortedDates = Object.keys(groupedByDateAndTime).sort((a, b) => {
+                        const dateA = parseAartiDateTime(a, 'Morning')
+                        const dateB = parseAartiDateTime(b, 'Morning')
+                        return dateA.getTime() - dateB.getTime()
                       })
+
+                      return sortedDates.map((date, dateIndex) => (
+                        <motion.div
+                          key={date}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.6, delay: dateIndex * 0.1 }}
+                          className={`bg-white/95 backdrop-blur-sm rounded-lg border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 overflow-hidden border-l-8 ${
+                            dateIndex % 4 === 0 ? 'border-l-blue-500' :
+                            dateIndex % 4 === 1 ? 'border-l-purple-500' :
+                            dateIndex % 4 === 2 ? 'border-l-green-500' :
+                            'border-l-orange-500'
+                          }`}
+                        >
+                          <div className="flex flex-col lg:flex-row">
+                            {/* Left Side - Big Date */}
+                            <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 lg:p-6 flex flex-col justify-center items-center border-b lg:border-b-0 lg:border-r border-gray-200 min-h-[80px] lg:min-w-[200px]">
+                              <div className="text-center">
+                                <div className="text-xl lg:text-2xl font-bold text-gray-800 font-kievit mb-1">
+                                  {date.split(' ')[0].substring(0, 3)}
+                                </div>
+                                <div className="text-base lg:text-lg font-semibold text-gray-600 font-kievit">
+                                  {date.split(' ').slice(1).join(' ').replace('August', 'Aug').replace('September', 'Sep')}
+                                </div>
+                              </div>
+                            </div>
+                            
+                            {/* Right Side - Morning and Evening */}
+                            <div className="flex-1 p-4 lg:p-6">
+                              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+                                {/* Morning Section */}
+                                <div className="space-y-2 lg:space-y-3">
+                                  <div className="text-center">
+                                    <h6 className="text-base lg:text-lg font-semibold text-orange-600 font-kievit">
+                                      🌅 Morning Aarti
+                                    </h6>
+                                  </div>
+                                  
+                                  {groupedByDateAndTime[date]['Morning'] ? (
+                                    <div className="space-y-1 lg:space-y-2">
+                                      {groupedByDateAndTime[date]['Morning'].map((booking, index) => (
+                                        <div key={booking.id} className="text-center">
+                                          <span className="text-gray-700 font-bold text-sm lg:text-base font-kievit">
+                                            {booking.userName} - {booking.flat}
+                                          </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <div className="text-center py-4">
+                                      <Link 
+                                        href="/"
+                                        className="inline-block px-4 py-2 bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white rounded-lg transition-all duration-300 font-bold text-sm font-kievit shadow-lg hover:shadow-xl transform hover:scale-105 animate-pulse shadow-red-400/50 hover:shadow-yellow-400/75 leading-tight"
+                                      >
+                                        Book Aarti Now
+                                      </Link>
+                                    </div>
+                                  )}
+                                </div>
+                                
+                                {/* Evening Section */}
+                                <div className="space-y-2 lg:space-y-3">
+                                  <div className="text-center">
+                                    <h6 className="text-base lg:text-lg font-semibold text-purple-600 font-kievit">
+                                      🌙 Evening Aarti
+                                    </h6>
+                                  </div>
+                                  
+                                  {groupedByDateAndTime[date]['Evening'] ? (
+                                    <div className="space-y-1 lg:space-y-2">
+                                      {groupedByDateAndTime[date]['Evening'].map((booking, index) => (
+                                        <div key={booking.id} className="text-center">
+                                                                                        <span className="text-gray-700 font-bold text-xs lg:text-sm font-kievit">
+                                                {booking.userName} - {booking.flat}
+                                              </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <div className="text-center py-4">
+                                      <Link 
+                                        href="/"
+                                        className="inline-block px-4 py-2 bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white rounded-lg transition-all duration-300 font-bold text-sm font-kievit shadow-lg hover:shadow-xl transform hover:scale-105 animate-pulse shadow-red-400/50 hover:shadow-yellow-400/75 leading-tight"
+                                      >
+                                        Book Aarti Now
+                                      </Link>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))
                     })()}
                   </div>
                 )}
@@ -594,7 +669,7 @@ export default function ParticipationOverview() {
                         // Count grouped bookings instead of raw bookings
                         const groupedBookings: { [key: string]: AartiBooking[] } = {}
                         filteredData.aartiBookings.forEach(booking => {
-                          const key = `${booking.aartiSchedule.date}-${booking.aartiSchedule.time}-${booking.userName}`
+                          const key = `${booking.aartiSchedule.date}-${booking.aartiSchedule.time}`
                           if (!groupedBookings[key]) {
                             groupedBookings[key] = []
                           }
@@ -608,63 +683,124 @@ export default function ParticipationOverview() {
                         <div className="text-gray-800">No aarti bookings found.</div>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div className="space-y-4">
                         {(() => {
-                          // Group aarti bookings by date, time, and user
-                          const groupedBookings: { [key: string]: AartiBooking[] } = {}
+                          // Group aarti bookings by date and time
+                          const groupedByDateAndTime: { [date: string]: { [time: string]: AartiBooking[] } } = {}
+                          
                           filteredData.aartiBookings.forEach(booking => {
-                            const key = `${booking.aartiSchedule.date}-${booking.aartiSchedule.time}-${booking.userName}`
-                            if (!groupedBookings[key]) {
-                              groupedBookings[key] = []
+                            const date = booking.aartiSchedule.date
+                            const time = booking.aartiSchedule.time
+                            
+                            if (!groupedByDateAndTime[date]) {
+                              groupedByDateAndTime[date] = {}
                             }
-                            groupedBookings[key].push(booking)
+                            if (!groupedByDateAndTime[date][time]) {
+                              groupedByDateAndTime[date][time] = []
+                            }
+                            groupedByDateAndTime[date][time].push(booking)
                           })
 
-                          return Object.entries(groupedBookings).map(([key, bookings], index) => {
-                            const firstBooking = bookings[0]
-                            const allFlats = bookings.map(b => b.flat).join(', ')
-                            const allBuildings = bookings.map(b => b.building).filter((building, index, arr) => arr.indexOf(building) === index).join(', ')
-                            
-                            return (
-                              <motion.div
-                                key={key}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                                className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
-                                  index % 4 === 0 ? 'border-l-8 border-l-blue-500' :
-                                  index % 4 === 1 ? 'border-l-8 border-l-green-500' :
-                                  index % 4 === 2 ? 'border-l-8 border-l-orange-500' :
-                                  'border-l-8 border-l-purple-500'
-                                }`}
-                              >
-                                <div className="space-y-3">
-                                  {/* First Line: Date - Time */}
-                                  <div className="text-center">
-                                    <span className="text-gray-800 font-bold text-sm font-kievit">
-                                      {firstBooking.aartiSchedule.date} - {firstBooking.aartiSchedule.time}
-                                    </span>
-                                  </div>
-                                  
-                                  {/* Second Line: Name - Flats */}
-                                  <div className="text-center">
-                                    <span className="text-gray-700 font-semibold text-sm font-kievit">
-                                      {firstBooking.userName} - {allFlats}
-                                    </span>
-                                  </div>
-                                  
-                                  {/* Third Line: Buildings (if multiple) */}
-                                  {bookings.length > 1 && (
-                                    <div className="text-center">
-                                      <span className="text-gray-600 text-xs font-kievit">
-                                        Buildings: {allBuildings}
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-                              </motion.div>
-                            )
+                          // Sort dates chronologically
+                          const sortedDates = Object.keys(groupedByDateAndTime).sort((a, b) => {
+                            const dateA = parseAartiDateTime(a, 'Morning')
+                            const dateB = parseAartiDateTime(b, 'Morning')
+                            return dateA.getTime() - dateB.getTime()
                           })
+
+                          return sortedDates.map((date, dateIndex) => (
+                            <motion.div
+                              key={date}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.6, delay: dateIndex * 0.1 }}
+                              className={`bg-white/95 backdrop-blur-sm rounded-lg border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 overflow-hidden border-l-8 ${
+                                dateIndex % 4 === 0 ? 'border-l-blue-500' :
+                                dateIndex % 4 === 1 ? 'border-l-purple-500' :
+                                dateIndex % 4 === 2 ? 'border-l-green-500' :
+                                'border-l-orange-500'
+                              }`}
+                            >
+                              <div className="flex flex-col md:flex-row">
+                                {/* Left Side - Big Date */}
+                                <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 lg:p-6 flex flex-col justify-center items-center border-b lg:border-b-0 lg:border-r border-gray-200 min-h-[80px] lg:min-w-[200px]">
+                                  <div className="text-center">
+                                    <div className="text-xl lg:text-2xl font-bold text-gray-800 font-kievit mb-1">
+                                      {date.split(' ')[0].substring(0, 3)}
+                                    </div>
+                                    <div className="text-base lg:text-lg font-semibold text-gray-600 font-kievit">
+                                      {date.split(' ').slice(1).join(' ').replace('August', 'Aug').replace('September', 'Sep')}
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                {/* Right Side - Morning and Evening */}
+                                <div className="flex-1 p-6">
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Morning Section */}
+                                    <div className="space-y-3">
+                                      <div className="text-center">
+                                        <h6 className="text-lg font-semibold text-orange-600 font-kievit">
+                                          🌅 Morning Aarti
+                                        </h6>
+                                      </div>
+                                      
+                                      {groupedByDateAndTime[date]['Morning'] ? (
+                                        <div className="space-y-2">
+                                          {groupedByDateAndTime[date]['Morning'].map((booking, index) => (
+                                            <div key={booking.id} className="text-center">
+                                              <span className="text-gray-700 font-bold text-base lg:text-lg font-kievit">
+                                                {booking.userName} - {booking.flat}
+                                              </span>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      ) : (
+                                        <div className="text-center py-4">
+                                          <Link 
+                                            href="/"
+                                            className="inline-block px-4 py-2 bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white rounded-lg transition-all duration-300 font-bold text-sm font-kievit shadow-lg hover:shadow-xl transform hover:scale-105 animate-pulse shadow-red-400/50 hover:shadow-yellow-400/75 leading-tight"
+                                          >
+                                            Book Aarti Now
+                                          </Link>
+                                        </div>
+                                      )}
+                                    </div>
+                                    
+                                    {/* Evening Section */}
+                                    <div className="space-y-3">
+                                      <div className="text-center">
+                                        <h6 className="text-lg font-semibold text-purple-600 font-kievit">
+                                          🌙 Evening Aarti
+                                        </h6>
+                                      </div>
+                                      
+                                      {groupedByDateAndTime[date]['Evening'] ? (
+                                        <div className="space-y-2">
+                                          {groupedByDateAndTime[date]['Evening'].map((booking, index) => (
+                                            <div key={booking.id} className="text-center">
+                                              <span className="text-gray-700 font-bold text-base lg:text-lg font-kievit">
+                                                {booking.userName} - {booking.flat}
+                                              </span>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      ) : (
+                                        <div className="text-center py-4">
+                                          <Link 
+                                            href="/"
+                                            className="inline-block px-4 py-2 bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white rounded-lg transition-all duration-300 font-bold text-sm font-kievit shadow-lg hover:shadow-xl transform hover:scale-105 animate-pulse shadow-red-400/50 hover:shadow-yellow-400/75 leading-tight"
+                                          >
+                                            Book Aarti Now
+                                          </Link>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))
                         })()}
                       </div>
                     )}

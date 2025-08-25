@@ -482,7 +482,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                   </motion.div>
                                 </motion.div>
                                 
-                                {/* Booking Status */}
+                                                                {/* Booking Status */}
                                 {isMorningBooked && morningBooking && (
                                   <motion.div 
                                     className="absolute inset-0 bg-gradient-to-r from-gray-700 to-gray-800 rounded-lg flex items-center justify-center opacity-95"
@@ -491,7 +491,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                     transition={{ delay: 0.2, duration: 0.5 }}
                                   >
                                     <div className="text-center px-4 py-3 w-full h-full flex flex-col justify-center items-center">
-                                      <div className="text-center">
+                                    <div className="text-center">
                                         <div className="text-xl font-bold text-white mb-3">Booked by</div>
                                         {(() => {
                                           const groupedInfo = getGroupedSlotInfo(morningSlot.date, morningSlot.time)
@@ -502,11 +502,11 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                               <div className="flex items-center justify-center gap-2 text-white">
                                                 <span className="text-lg font-bold">{userInfo.userName}</span>
                                                 <span className="text-lg font-bold text-white font-mono tracking-wider">{userInfo.flats}</span>
-                                              </div>
+                                      </div>
                                               {userInfo.buildings.split(', ').length > 1 && (
                                                 <div className="text-sm text-gray-300 mt-1">
                                                   Buildings: {userInfo.buildings}
-                                                </div>
+                                      </div>
                                               )}
                                             </div>
                                           ))
@@ -585,7 +585,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                     transition={{ delay: 0.2, duration: 0.5 }}
                                   >
                                     <div className="text-center px-4 py-3 w-full h-full flex flex-col justify-center items-center">
-                                      <div className="text-center">
+                                    <div className="text-center">
                                         <div className="text-xl font-bold text-white mb-3">Booked by</div>
                                         {(() => {
                                           const groupedInfo = getGroupedSlotInfo(eveningSlot.date, eveningSlot.time)
@@ -596,11 +596,11 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                               <div className="flex items-center justify-center gap-2 text-white">
                                                 <span className="text-lg font-bold">{userInfo.userName}</span>
                                                 <span className="text-lg font-bold text-white font-mono tracking-wider">{userInfo.flats}</span>
-                                              </div>
+                                      </div>
                                               {userInfo.buildings.split(', ').length > 1 && (
                                                 <div className="text-sm text-gray-300 mt-1">
                                                   Buildings: {userInfo.buildings}
-                                                </div>
+                                      </div>
                                               )}
                                             </div>
                                           ))
@@ -791,26 +791,26 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                           {/* Daily Events Grid - Compact Cards */}
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                             {dailyEvents.map((event, eventIndex) => (
-                              <motion.div
-                                key={event.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
+                  <motion.div
+                    key={event.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: eventIndex * 0.1 }}
                                 className="transform scale-85 origin-center"
                               >
                                 <EventCard key={event.id} event={event} index={eventIndex} compact={true} />
-                              </motion.div>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
                       {/* Date-Specific Events Section */}
                       {sortedDates.map((date, dateIndex) => (
-                        <motion.div
+      <motion.div
                           key={date}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.6, delay: (dateIndex + (dailyEvents.length > 0 ? 1 : 0)) * 0.1 }}
                           className="space-y-4"
                         >
@@ -831,16 +831,16 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                           {/* Events for this date */}
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {eventsByDate[date].map((event, eventIndex) => (
-                              <motion.div
+        <motion.div
                                 key={event.id}
                                 initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, delay: (dateIndex + (dailyEvents.length > 0 ? 1 : 0)) * 0.1 + eventIndex * 0.05 }}
-                              >
+        >
                                 <EventCard key={event.id} event={event} index={eventIndex} />
                               </motion.div>
                             ))}
-                          </div>
+          </div>
                         </motion.div>
                       ))}
                     </div>
@@ -929,13 +929,13 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                           <span className="text-2xl">📅</span>
                           <h3 className="text-lg font-bold text-gray-700 font-sohne">
                             {date}
-                          </h3>
+          </h3>
                           <span className="text-sm text-gray-500 font-medium">
                             {pastEventsByDate[date].length} event{pastEventsByDate[date].length !== 1 ? 's' : ''}
                           </span>
-                        </div>
+            </div>
                         <div className="w-32 h-0.5 bg-gradient-to-r from-gray-400 to-slate-500 rounded-full mx-auto mt-3"></div>
-                      </div>
+            </div>
                       
                       {/* Past Events for this date */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -953,7 +953,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                 {event.title}
                               </h4>
                               <div className="w-16 h-1 bg-gradient-to-r from-gray-400 to-slate-500 rounded-full mx-auto"></div>
-                            </div>
+            </div>
                             
                             {/* Event Details */}
                             <div className="space-y-3 mb-6">
@@ -977,8 +977,8 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                               >
                                 📸 View Photos
                               </button>
-                            </div>
-                          </motion.div>
+          </div>
+        </motion.div>
                         ))}
                       </div>
                     </motion.div>
@@ -990,7 +990,7 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
         </AnimatePresence>
       </motion.div>
 
-     
+
       {/* Go to Top Button */}
       <AnimatePresence>
         {showScrollToTop && (
