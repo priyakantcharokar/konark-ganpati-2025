@@ -449,9 +449,6 @@ export default function EventDetailPage() {
                     <div className="text-base sm:text-lg font-semibold text-gray-600">
                       Total Bhog Offerings
                     </div>
-                    <div className="text-sm text-gray-500 mt-2">
-                      🚫 Bhog functionality is currently disabled
-                    </div>
                   </div>
                 </motion.div>
               )}
