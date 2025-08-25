@@ -56,7 +56,7 @@ export default function ParticipationOverview() {
   const [selectedBuilding, setSelectedBuilding] = useState<string>('')
   const [selectedEvent, setSelectedEvent] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<string>('')
-  const [activeTab, setActiveTab] = useState<'aarti' | 'events' | 'all'>('all')
+  const [activeTab, setActiveTab] = useState<'all' | 'aarti' | 'events'>('all')
   const [showFilters, setShowFilters] = useState(false)
 
   const buildings = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -255,21 +255,31 @@ export default function ParticipationOverview() {
             </p>
           </motion.div>
 
-          {/* Filter Section */}
+          {/* Main Filter Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/40 shadow-lg mb-8 shadow-white/20 hover:shadow-white/30 transition-all duration-300"
+            className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 mb-8"
           >
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
               <div className="flex flex-wrap gap-2">
                 <button
+                  onClick={() => setActiveTab('all')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                    activeTab === 'all'
+                      ? 'bg-blue-500 text-white border-2 border-blue-600 shadow-lg shadow-blue-200'
+                      : 'bg-white/90 text-gray-800 hover:bg-white hover:text-gray-900 border border-gray-300'
+                  }`}
+                >
+                  📊 All Registrations
+                </button>
+                <button
                   onClick={() => setActiveTab('aarti')}
                   className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                     activeTab === 'aarti'
-                      ? 'bg-white/40 text-white border-2 border-white/60 shadow-lg shadow-white/20'
-                      : 'bg-white/20 text-white hover:bg-white/30 hover:text-white border border-white/30'
+                      ? 'bg-green-500 text-white border-2 border-green-600 shadow-lg shadow-green-200'
+                      : 'bg-white/90 text-gray-800 hover:bg-white hover:text-gray-900 border border-gray-300'
                   }`}
                 >
                   🕉️ Aarti Bookings
@@ -278,21 +288,11 @@ export default function ParticipationOverview() {
                   onClick={() => setActiveTab('events')}
                   className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                     activeTab === 'events'
-                      ? 'bg-white/40 text-white border-2 border-white/60 shadow-lg shadow-white/20'
-                      : 'bg-white/20 text-white hover:bg-white/30 hover:text-white border border-white/30'
+                      ? 'bg-purple-500 text-white border-2 border-purple-600 shadow-lg shadow-purple-200'
+                      : 'bg-white/90 text-gray-800 hover:bg-white hover:text-gray-900 border border-gray-300'
                   }`}
                 >
                   🎉 Event Nominations
-                </button>
-                <button
-                  onClick={() => setActiveTab('all')}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                    activeTab === 'all'
-                      ? 'bg-white/40 text-white border-2 border-white/60 shadow-lg shadow-white/20'
-                      : 'bg-white/20 text-white hover:bg-white/30 hover:text-white border border-white/30'
-                  }`}
-                >
-                  📊 All Registrations
                 </button>
               </div>
               
@@ -303,11 +303,11 @@ export default function ParticipationOverview() {
                     placeholder="Search by name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="px-3 py-1.5 bg-white/20 border border-white/40 rounded-lg text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent digital-text shadow-lg shadow-white/10 text-sm"
+                    className="px-3 py-1.5 bg-white/90 border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent digital-text shadow-lg shadow-black/10 text-sm"
                   />
                   <button
                     onClick={clearFilters}
-                    className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white border border-white/40 rounded-lg transition-all duration-200 shadow-lg shadow-white/10 hover:shadow-white/20 text-sm whitespace-nowrap"
+                    className="px-3 py-1.5 bg-white/90 hover:bg-white text-gray-800 hover:text-gray-900 border border-gray-300 rounded-lg transition-all duration-200 shadow-lg shadow-black/10 hover:shadow-black/20 text-sm whitespace-nowrap"
                   >
                     Clear All Filters
                   </button>
@@ -323,23 +323,23 @@ export default function ParticipationOverview() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
           >
-            <div className="bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/40 shadow-lg shadow-white/20 hover:shadow-white/30 transition-all duration-300">
+            <div className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300">
               <div className="text-center">
-                <div className="text-3xl font-bold text-white mb-2 digital-numbers">
+                <div className="text-3xl font-bold text-gray-800 mb-2 digital-numbers">
                   {filteredData.aartiBookings.length}
                 </div>
-                <div className="text-white font-medium digital-text">
+                <div className="text-gray-700 font-medium digital-text">
                   Total Aarti Bookings
                 </div>
               </div>
             </div>
             
-            <div className="bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/40 shadow-lg shadow-white/20 hover:shadow-white/30 transition-all duration-300">
+            <div className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300">
               <div className="text-center">
-                <div className="text-3xl font-bold text-white mb-2 digital-numbers">
+                <div className="text-3xl font-bold text-gray-800 mb-2 digital-numbers">
                   {filteredData.eventNominations.length}
                 </div>
-                <div className="text-white font-medium digital-text">
+                <div className="text-gray-700 font-medium digital-text">
                   Total Event Nominations
                 </div>
               </div>
@@ -356,9 +356,9 @@ export default function ParticipationOverview() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.4 }}
-                className="bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/40 shadow-lg shadow-white/20 hover:shadow-white/30 transition-all duration-300"
+                className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300"
               >
-                <h3 className="text-2xl font-bold text-white mb-6 font-jaf-bernino">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 font-jaf-bernino">
                   🕉️ Aarti Bookings
                 </h3>
                 
@@ -374,30 +374,23 @@ export default function ParticipationOverview() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: index * 0.1 }}
-                        className={`bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/40 shadow-lg shadow-white/20 hover:shadow-white/30 transition-all duration-300 ${
-                          index % 2 === 0 ? 'border-l-4 border-l-blue-400/60' : 'border-l-4 border-l-green-400/60'
+                        className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
+                          index % 2 === 0 ? 'border-l-4 border-l-blue-500/80' : 'border-l-4 border-l-green-500/80'
                         }`}
                       >
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-xs font-medium">Date</span>
-                            <span className="text-white font-semibold digital-text text-xs truncate max-w-[60%]">{booking.aartiSchedule.date}</span>
+                        <div className="space-y-3">
+                          {/* First Line: Date - Time */}
+                          <div className="text-center">
+                            <span className="text-gray-800 font-bold digital-text text-sm">
+                              {booking.aartiSchedule.date} - {booking.aartiSchedule.time}
+                            </span>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-xs font-medium">Time</span>
-                            <span className="text-white font-semibold digital-text text-xs truncate max-w-[60%]">{booking.aartiSchedule.time}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-xs font-medium">Name</span>
-                            <span className="text-white font-semibold text-xs truncate max-w-[60%]">{booking.userName}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-xs font-medium">Flat</span>
-                            <span className="text-white font-semibold digital-numbers text-xs truncate max-w-[60%]">{booking.flat}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-xs font-medium">Building</span>
-                            <span className="text-white font-semibold text-xs truncate max-w-[60%]">{booking.building}</span>
+                          
+                          {/* Second Line: Name - Flat */}
+                          <div className="text-center">
+                            <span className="text-gray-700 font-semibold text-sm">
+                              {booking.userName} - {booking.flat}
+                            </span>
                           </div>
                         </div>
                       </motion.div>
@@ -415,9 +408,9 @@ export default function ParticipationOverview() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.4 }}
-                className="bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/40 shadow-lg shadow-white/20 hover:shadow-white/30 transition-all duration-300"
+                className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300"
               >
-                <h3 className="text-2xl font-bold text-white mb-6 font-jaf-bernino">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 font-jaf-bernino">
                   🎉 Event Nominations
                 </h3>
                 
@@ -433,26 +426,23 @@ export default function ParticipationOverview() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: index * 0.1 }}
-                        className={`bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/40 shadow-lg shadow-white/20 hover:shadow-white/30 transition-all duration-300 ${
-                          index % 2 === 0 ? 'border-l-4 border-l-purple-400/60' : 'border-l-4 border-l-orange-400/60'
+                        className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
+                          index % 2 === 0 ? 'border-l-4 border-l-purple-500/80' : 'border-l-4 border-l-orange-500/80'
                         }`}
                       >
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-xs font-medium">Event</span>
-                            <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.eventTitle}</span>
+                        <div className="space-y-3">
+                          {/* First Line: Event */}
+                          <div className="text-center">
+                            <span className="text-gray-800 font-bold text-sm">
+                              {nomination.eventTitle}
+                            </span>
                           </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-xs font-medium">Name</span>
-                            <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.userName}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-xs font-medium">Flat</span>
-                            <span className="text-white font-semibold digital-numbers text-xs truncate max-w-[60%]">{nomination.flat}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-white/90 text-xs font-medium">Building</span>
-                            <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.building}</span>
+                          
+                          {/* Second Line: Name - Flat */}
+                          <div className="text-center">
+                            <span className="text-gray-700 font-semibold text-sm">
+                              {nomination.userName} - {nomination.flat}
+                            </span>
                           </div>
                         </div>
                       </motion.div>
@@ -470,9 +460,9 @@ export default function ParticipationOverview() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.4 }}
-                className="bg-white/20 backdrop-blur-md rounded-xl p-6 border border-white/40 shadow-lg shadow-white/20 hover:shadow-white/30 transition-all duration-300"
+                className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300"
               >
-                <h3 className="text-2xl font-bold text-white mb-6 font-jaf-bernino">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 font-jaf-bernino">
                   📊 All Registrations
                 </h3>
                 
@@ -494,30 +484,23 @@ export default function ParticipationOverview() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className={`bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/40 shadow-lg shadow-white/20 hover:shadow-white/30 transition-all duration-300 ${
-                              index % 2 === 0 ? 'border-l-4 border-l-blue-400/60' : 'border-l-4 border-l-green-400/60'
+                            className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
+                              index % 2 === 0 ? 'border-l-4 border-l-blue-500/80' : 'border-l-4 border-l-green-500/80'
                             }`}
                           >
-                            <div className="space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-xs font-medium">Date</span>
-                                <span className="text-white font-semibold digital-text text-xs truncate max-w-[60%]">{booking.aartiSchedule.date}</span>
+                            <div className="space-y-3">
+                              {/* First Line: Date - Time */}
+                              <div className="text-center">
+                                <span className="text-gray-800 font-bold digital-text text-sm">
+                                  {booking.aartiSchedule.date} - {booking.aartiSchedule.time}
+                                </span>
                               </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-xs font-medium">Time</span>
-                                <span className="text-white font-semibold digital-text text-xs truncate max-w-[60%]">{booking.aartiSchedule.time}</span>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-xs font-medium">Name</span>
-                                <span className="text-white font-semibold text-xs truncate max-w-[60%]">{booking.userName}</span>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-xs font-medium">Flat</span>
-                                <span className="text-white font-semibold digital-numbers text-xs truncate max-w-[60%]">{booking.flat}</span>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-xs font-medium">Building</span>
-                                <span className="text-white font-semibold text-xs truncate max-w-[60%]">{booking.building}</span>
+                              
+                              {/* Second Line: Name - Flat */}
+                              <div className="text-center">
+                                <span className="text-gray-700 font-semibold text-sm">
+                                  {booking.userName} - {booking.flat}
+                                </span>
                               </div>
                             </div>
                           </motion.div>
@@ -543,26 +526,23 @@ export default function ParticipationOverview() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className={`bg-white/20 backdrop-blur-sm rounded-lg p-4 border border-white/40 shadow-lg shadow-white/20 hover:shadow-white/30 transition-all duration-300 ${
-                              index % 2 === 0 ? 'border-l-4 border-l-purple-400/60' : 'border-l-4 border-l-orange-400/60'
+                            className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
+                              index % 2 === 0 ? 'border-l-4 border-l-purple-500/80' : 'border-l-4 border-l-orange-500/80'
                             }`}
                           >
-                            <div className="space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-xs font-medium">Event</span>
-                                <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.eventTitle}</span>
+                            <div className="space-y-3">
+                              {/* First Line: Event */}
+                              <div className="text-center">
+                                <span className="text-gray-800 font-bold text-sm">
+                                  {nomination.eventTitle}
+                                </span>
                               </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-xs font-medium">Name</span>
-                                <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.userName}</span>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-xs font-medium">Flat</span>
-                                <span className="text-white font-semibold digital-numbers text-xs truncate max-w-[60%]">{nomination.flat}</span>
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-white/90 text-xs font-medium">Building</span>
-                                <span className="text-white font-semibold text-xs truncate max-w-[60%]">{nomination.building}</span>
+                              
+                              {/* Second Line: Name - Flat */}
+                              <div className="text-center">
+                                <span className="text-gray-700 font-semibold text-sm">
+                                  {nomination.userName} - {nomination.flat}
+                                </span>
                               </div>
                             </div>
                           </motion.div>
