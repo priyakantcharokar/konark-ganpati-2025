@@ -592,18 +592,10 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                   <h4 className="text-lg font-bold text-amber-800 mb-3 font-sohne">
                     💡 How to Participate
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
-                    <div className="flex items-center gap-2">
+                  <div className="text-center text-sm text-gray-700">
+                    <div className="flex items-center justify-center gap-2">
                       <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
-                      <span>Click <strong>Details</strong> to learn more</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                      <span>Click <strong>Nominate</strong> to participate</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
-                      <span>Click <strong>Nominations</strong> to see others</span>
+                      <span>Click <strong>Nominate</strong> to participate in the event</span>
                     </div>
                   </div>
                 </div>
@@ -660,14 +652,28 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                     currentEvents = currentEvents.filter(event => event.id === selectedEventFilter)
                   }
                   
-                  const eventsByDate = currentEvents.reduce((acc, event) => {
+                  // Separate daily events from date-specific events
+                  const dailyEvents = currentEvents.filter(event => 
+                    event.date.toLowerCase().includes('daily') || 
+                    event.date.toLowerCase().includes('every day') ||
+                    event.date.toLowerCase().includes('ongoing')
+                  )
+                  
+                  const dateSpecificEvents = currentEvents.filter(event => 
+                    !event.date.toLowerCase().includes('daily') && 
+                    !event.date.toLowerCase().includes('every day') &&
+                    !event.date.toLowerCase().includes('ongoing')
+                  )
+                  
+                  // Group date-specific events by date
+                  const eventsByDate = dateSpecificEvents.reduce((acc, event) => {
                     const date = event.date
                     if (!acc[date]) {
                       acc[date] = []
                     }
                     acc[date].push(event)
                     return acc
-                  }, {} as { [key: string]: typeof currentEvents })
+                  }, {} as { [key: string]: typeof dateSpecificEvents })
 
                   // Sort dates chronologically using parsed dates
                   const sortedDates = Object.keys(eventsByDate).sort((a, b) => {
@@ -689,43 +695,87 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                     )
                   }
 
-                  return sortedDates.map((date, dateIndex) => (
-                    <motion.div
-                      key={date}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: dateIndex * 0.1 }}
-                      className="space-y-4"
-                    >
-                      {/* Date Header */}
-                      <div className="text-center">
-                        <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full border border-amber-200 shadow-lg">
-                          <span className="text-2xl">📅</span>
-                          <h3 className="text-lg font-bold text-amber-800 font-sohne">
-                            {date}
-                          </h3>
-                          <span className="text-sm text-amber-600 font-medium">
-                            {eventsByDate[date].length} event{eventsByDate[date].length !== 1 ? 's' : ''}
-                          </span>
-                        </div>
-                        <div className="w-32 h-0.5 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full mx-auto mt-3"></div>
-                      </div>
-                      
-                      {/* Events for this date */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {eventsByDate[date].map((event, eventIndex) => (
-                          <motion.div
-                            key={event.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: dateIndex * 0.1 + eventIndex * 0.05 }}
-                          >
-                            <EventCard key={event.id} event={event} index={eventIndex} />
-                          </motion.div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  ))
+                  return (
+                    <div className="space-y-8">
+                      {/* Daily Events Section - Top and Smaller */}
+                      {dailyEvents.length > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.6 }}
+                          className="space-y-4"
+                        >
+                          {/* Daily Events Header */}
+                          <div className="text-center">
+                            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg">
+                              <span className="text-2xl">🔄</span>
+                              <h3 className="text-lg font-bold font-sohne">
+                                Daily Events
+                              </h3>
+                              <span className="text-sm font-medium opacity-90">
+                                {dailyEvents.length} event{dailyEvents.length !== 1 ? 's' : ''}
+                              </span>
+                            </div>
+                            <div className="w-32 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mx-auto mt-3"></div>
+                          </div>
+                          
+                          {/* Daily Events Grid - Smaller Cards */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            {dailyEvents.map((event, eventIndex) => (
+                              <motion.div
+                                key={event.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: eventIndex * 0.1 }}
+                                className="transform scale-90 origin-center"
+                              >
+                                <EventCard key={event.id} event={event} index={eventIndex} />
+                              </motion.div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {/* Date-Specific Events Section */}
+                      {sortedDates.map((date, dateIndex) => (
+                        <motion.div
+                          key={date}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.6, delay: (dateIndex + (dailyEvents.length > 0 ? 1 : 0)) * 0.1 }}
+                          className="space-y-4"
+                        >
+                          {/* Date Header */}
+                          <div className="text-center">
+                            <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full border border-amber-200 shadow-lg">
+                              <span className="text-2xl">📅</span>
+                              <h3 className="text-lg font-bold text-amber-800 font-sohne">
+                                {date}
+                              </h3>
+                              <span className="text-sm text-amber-600 font-medium">
+                                {eventsByDate[date].length} event{eventsByDate[date].length !== 1 ? 's' : ''}
+                              </span>
+                            </div>
+                            <div className="w-32 h-0.5 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full mx-auto mt-3"></div>
+                          </div>
+                          
+                          {/* Events for this date */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {eventsByDate[date].map((event, eventIndex) => (
+                              <motion.div
+                                key={event.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: (dateIndex + (dailyEvents.length > 0 ? 1 : 0)) * 0.1 + eventIndex * 0.05 }}
+                              >
+                                <EventCard key={event.id} event={event} index={eventIndex} />
+                              </motion.div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )
                 })()}
 
               </div>

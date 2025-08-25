@@ -1,10 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Calendar, Clock, Users, MapPin, X } from 'lucide-react'
-import EventNominationFlow from './EventNominationFlow'
-import EventNominations from './EventNominations'
+import { motion } from 'framer-motion'
+import { Calendar, Clock, Users, MapPin } from 'lucide-react'
 
 // WhatsApp SVG Icon Component
 const WhatsAppIcon = () => (
@@ -33,33 +30,8 @@ interface EventCardProps {
 }
 
 const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
-  const [showNominationForm, setShowNominationForm] = useState(false)
-  const [showNominations, setShowNominations] = useState(false)
-  const [showDetails, setShowDetails] = useState(false)
-
   // Check if this is a Bhog event
   const isBhogEvent = event.title.includes('छप्पन भोग') || event.title.includes('56') || event.title.includes('Bhog')
-
-  // Function to find matching event flyer image
-  const getEventFlyerImage = (eventTitle: string) => {
-    const title = eventTitle.toLowerCase()
-    
-    // Map event titles to image names
-    if (title.includes('anchoring')) return '/events/Anchoring.jpeg'
-    if (title.includes('arti') && title.includes('prasad') && title.includes('seva')) return '/events/Arti prasad seva.jpeg'
-    if (title.includes('waste') && title.includes('wow')) return '/events/BestOutOF Waste.jpeg'
-    if (title.includes('duo') && title.includes('dynamics')) return '/events/Duo Dynamics.jpeg'
-    if (title.includes('group') && title.includes('performances')) return '/events/GroupSingning.jpeg'
-    if (title.includes('idol') && title.includes('making')) return '/events/IdolMaking.jpeg'
-    if (title.includes('modak') && title.includes('mohostav')) return '/events/ModakCompetition.jpeg'
-    if (title.includes('singing')) return '/events/Singing.jpeg'
-    if (title.includes('ganapati') && title.includes('utsav') && title.includes('hosting')) return '/events/GanapatiUtsavHosting.jpeg'
-    if (title.includes('satyanarayan') && title.includes('pooja')) return '/events/Satyanarayan pooja.png'
-    if (title.includes('ganapati') && title.includes('sthapana')) return '/events/Ganapati Sthapana.png'
-    
-    // Default fallback
-    return null
-  }
 
   const getEventIcon = (eventTitle: string) => {
     const title = eventTitle.toLowerCase()
@@ -135,8 +107,6 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
     // Default
     return 'border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50'
   }
-
-  const eventFlyerImage = getEventFlyerImage(event.title)
 
   return (
     <motion.div
@@ -221,31 +191,24 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
 
       {/* Action Buttons */}
       <div className="flex gap-2 mt-3">
-        {/* Show all buttons for regular events, but hide for Tambola events */}
+        {/* Show Nominate button for regular events, but hide for special events */}
         {!event.title.includes('Aarti And Prasad Seva') && 
          !event.title.includes('Ganapati Sthapana') && 
          !event.title.toLowerCase().includes('tambola') && (
-          <>
-            <button
-              onClick={() => {
-                if (isBhogEvent) {
-                  // For Bhog events, navigate to Bhog List with source info
-                  window.location.href = `/bhog-list?source=events&event=${encodeURIComponent(event.title)}`
-                } else {
-                  setShowNominations(true)
-                }
-              }}
-              className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 text-xs"
-            >
-              {isBhogEvent ? 'Bhog List' : 'Nominations'}
-            </button>
-            <button
-              onClick={() => setShowNominationForm(true)}
-              className="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-xs"
-            >
-              {isBhogEvent ? 'Offer Bhog' : 'Nominate'}
-            </button>
-          </>
+          <button
+            onClick={() => {
+              if (isBhogEvent) {
+                // For Bhog events, navigate to Bhog List with source info
+                window.location.href = `/bhog-list?source=events&event=${encodeURIComponent(event.title)}`
+              } else {
+                // For regular events, navigate to dedicated event page
+                window.location.href = `/events/${event.id}`
+              }
+            }}
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 text-xs"
+          >
+            {isBhogEvent ? 'Offer Bhog' : 'Nominate'}
+          </button>
         )}
         
         {/* Special Book Aarti button for Aarti And Prasad Seva */}
@@ -270,141 +233,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index }) => {
             🙏 Book Aarti
           </button>
         )}
-        
-        {/* Always show Details button if event flyer image exists, or if it's a Tambola event */}
-        {eventFlyerImage && !event.title.includes('Aarti And Prasad Seva') && (
-          <button
-            onClick={() => setShowDetails(true)}
-            className={`bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs ${
-              event.title.includes('Ganapati Sthapana') || 
-              event.title.toLowerCase().includes('tambola') ? 'w-full' : 'flex-1'
-            }`}
-          >
-            Details
-          </button>
-        )}
-        
-        {/* Details button for Tambola events (without flyer) */}
-        {!eventFlyerImage && event.title.toLowerCase().includes('tambola') && (
-          <button
-            onClick={() => setShowDetails(true)}
-            className="w-full bg-gradient-to-r from-orange-500 to-amber-600 text-white py-1.5 px-3 rounded-lg font-normal hover:from-orange-600 hover:to-amber-700 transition-all duration-200 transform hover:scale-105 text-xs"
-          >
-            Details
-          </button>
-        )}
       </div>
-
-      {/* Modals */}
-      {showNominationForm && (
-        <EventNominationFlow
-          eventData={{ title: event.title, date: event.date }}
-          onClose={() => setShowNominationForm(false)}
-          onSuccess={(message: string) => {
-            setShowNominationForm(false)
-            // Optionally refresh nominations
-          }}
-        />
-      )}
-
-      {showNominations && (
-        <EventNominations
-          eventTitle={event.title}
-          eventDate={event.date}
-          onClose={() => setShowNominations(false)}
-        />
-      )}
-
-      {/* Event Details Modal */}
-      <AnimatePresence>
-        {showDetails && (eventFlyerImage || event.title.toLowerCase().includes('tambola')) && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-            onClick={() => setShowDetails(false)}
-          >
-            {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
-            
-            {/* Modal Content */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.8, opacity: 0, y: 20 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden z-[10000]"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 font-sohne">
-                  {eventFlyerImage ? 'Event Flyer' : 'Event Details'}
-                </h3>
-                <button
-                  onClick={() => setShowDetails(false)}
-                  className="w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 hover:scale-110"
-                >
-                  <X className="w-4 h-4" strokeWidth={2.5} />
-                </button>
-              </div>
-              
-              {/* Content */}
-              <div className="p-4">
-                {eventFlyerImage ? (
-                  // Show flyer image if available
-                  <div className="relative">
-                    <img
-                      src={eventFlyerImage}
-                      alt={`${event.title} Event Flyer`}
-                      className="w-full h-auto rounded-lg shadow-lg object-cover"
-                      style={{ maxHeight: '70vh' }}
-                    />
-                  </div>
-                ) : (
-                  // Show event details for events without flyers (like Tambola)
-                  <div className="text-center space-y-4">
-                    <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                      <span className="text-3xl">{getEventIcon(event.title)}</span>
-                    </div>
-                    <h4 className="text-xl font-bold text-gray-800 mb-2 font-jaf-bernino">
-                      {event.title}
-                    </h4>
-                    <div className="space-y-3 text-gray-600">
-                      <div className="flex items-center justify-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span className="font-medium">{event.date}</span>
-                      </div>
-                      {event.time && (
-                        <div className="flex items-center justify-center gap-2">
-                          <Clock className="w-4 h-4" />
-                          <span className="font-medium">{event.time}</span>
-                        </div>
-                      )}
-                      {event.description && (
-                        <div className="text-sm leading-relaxed max-w-sm mx-auto">
-                          {event.description}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Event Info Footer */}
-                <div className="mt-4 text-center">
-                  <h4 className="text-xl font-bold text-gray-800 mb-2 font-jaf-bernino">
-                    {event.title}
-                  </h4>
-                  <p className="text-gray-600 font-charter">
-                    {event.date} {event.time && `• ${event.time}`}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   )
 }
