@@ -231,7 +231,26 @@ export default function EventDetailPage() {
   }
 
   const handleBackClick = () => {
-    router.back()
+    // Check if there's navigation history
+    if (window.history.length > 1) {
+      // If there's history, try to go back
+      try {
+        router.back()
+        // Add a fallback in case router.back() fails
+        setTimeout(() => {
+          if (window.location.pathname === `/events/${eventId}`) {
+            // If still on the same page, redirect to landing
+            window.location.href = '/'
+          }
+        }, 100)
+      } catch (error) {
+        // If router.back() fails, go to landing page
+        window.location.href = '/'
+      }
+    } else {
+      // If no history (direct link), go to landing page
+      window.location.href = '/'
+    }
   }
 
   if (isLoading) {
