@@ -291,10 +291,10 @@ export default function EventDetailPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           
-          {/* Left Side - Event Flyer */}
-          <div className="space-y-6">
+          {/* Left Side - Event Flyer (Smaller) */}
+          <div className="lg:col-span-1 space-y-6">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -364,7 +364,7 @@ export default function EventDetailPage() {
                   <img
                     src={eventFlyerImage}
                     alt={`${event.title} Event Flyer`}
-                    className="w-full h-auto rounded-lg shadow-lg object-contain max-h-[60vh] sm:max-h-[70vh] mx-auto"
+                    className="w-full h-auto rounded-lg shadow-lg object-contain max-h-[50vh] sm:max-h-[60vh] mx-auto"
                     style={{ maxWidth: '100%' }}
                   />
                 </div>
@@ -372,8 +372,8 @@ export default function EventDetailPage() {
             </motion.div>
           </div>
 
-          {/* Right Side - Nominations */}
-          <div className="space-y-6">
+          {/* Right Side - Nominations (Bigger) */}
+          <div className="lg:col-span-2 space-y-6">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -393,9 +393,23 @@ export default function EventDetailPage() {
                   </div>
                   <button
                     onClick={() => setShowNominationForm(true)}
-                    className="bg-white text-amber-600 py-2 px-4 sm:px-6 rounded-lg font-semibold hover:bg-amber-50 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                    className={`py-3 px-6 sm:px-8 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl ${
+                      isBhogEvent 
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700 shadow-green-400/50 hover:shadow-emerald-400/75 animate-pulse' 
+                        : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-blue-400/50 hover:shadow-purple-400/75'
+                    }`}
                   >
-                    {isBhogEvent ? '🙏 Offer Bhog' : '🎯 Nominate'}
+                    <span className="flex items-center gap-2">
+                      <span className="text-lg">
+                        {isBhogEvent ? '🙏' : '🎯'}
+                      </span>
+                      <span>
+                        {isBhogEvent ? 'Offer Bhog' : 'Nominate'}
+                      </span>
+                      <span className="text-lg">
+                        {isBhogEvent ? '✨' : '🚀'}
+                      </span>
+                    </span>
                   </button>
                 </div>
               </div>
@@ -414,9 +428,6 @@ export default function EventDetailPage() {
                     </div>
                     <div className="text-base sm:text-lg font-semibold text-green-700">
                       Total Bhog Offerings
-                    </div>
-                    <div className="text-sm text-green-600 mt-1">
-                      {nominations.length === 1 ? 'offering' : 'offerings'} from our community
                     </div>
                   </div>
                 </motion.div>
@@ -439,9 +450,19 @@ export default function EventDetailPage() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    <div className="text-sm text-gray-500 font-medium digital-text mb-4 text-center">
-                      Total: {nominations.length} {isBhogEvent ? 'offering' : 'nomination'}{nominations.length !== 1 ? 's' : ''}
+                    {/* Column Headers */}
+                    <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center mb-3">
+                      <div className="text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                        Flat
+                      </div>
+                      <div className="text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                        Name
+                      </div>
+                      <div className="text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wide">
+                        Bhog
+                      </div>
                     </div>
+                    
                     {nominations.map((nomination, index) => (
                       <motion.div
                         key={nomination.id}
@@ -450,23 +471,15 @@ export default function EventDetailPage() {
                         transition={{ duration: 0.3, delay: index * 0.1 }}
                         className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-3 sm:p-4 border border-amber-200 hover:border-amber-300 transition-all duration-200 hover:shadow-md"
                       >
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
-                          <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-gray-800 digital-text text-sm sm:text-base">
-                              {isBhogEvent 
-                                ? `${nomination.flatNumber} - ${nomination.userName} - ${nomination.bhogName}`
-                                : `${nomination.userName} - ${nomination.flatNumber}`
-                              }
-                            </div>
-                            <div className="text-sm text-gray-600 digital-text">
-                              {isBhogEvent 
-                                ? `Building ${nomination.building}`
-                                : `${nomination.building} - ${nomination.flatNumber}`
-                              }
-                            </div>
+                        <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+                          <div className="font-semibold text-gray-800 digital-text text-sm sm:text-base">
+                            {nomination.flatNumber}
                           </div>
-                          <div className="text-xs text-gray-500 digital-text bg-white/60 px-2 py-1 rounded-full">
-                            {nomination.timestamp.toLocaleDateString()}
+                          <div className="font-semibold text-gray-800 digital-text text-sm sm:text-base">
+                            {nomination.userName}
+                          </div>
+                          <div className="font-semibold text-gray-800 digital-text text-sm sm:text-base">
+                            {nomination.bhogName}
                           </div>
                         </div>
                       </motion.div>
