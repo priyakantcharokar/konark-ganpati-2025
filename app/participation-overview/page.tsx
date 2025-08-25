@@ -307,12 +307,11 @@ export default function ParticipationOverview() {
                 <span className="text-xl sm:text-2xl">🕉️</span>
                 <Link 
                   href="/" 
-                  className="text-lg sm:text-xl font-bold text-gray-800 font-style-script hover:text-orange-600 transition-colors duration-200 cursor-pointer"
+                  className="text-base sm:text-2xl lg:text-3xl font-bold text-gray-800 font-style-script hover:text-orange-600 transition-colors duration-200 cursor-pointer"
                 >
                   Konark Exotica
                 </Link>
-                <span className="text-gray-400 mx-1 sm:mx-2">•</span>
-                <span className="text-sm sm:text-lg font-semibold text-gray-700 font-kievit">Participation Overview</span>
+                
               </div>
               
               <Link 
