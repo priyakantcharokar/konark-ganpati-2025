@@ -316,36 +316,6 @@ export default function ParticipationOverview() {
             </div>
           </motion.div>
 
-          {/* Statistics Cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
-          >
-            <div className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-800 mb-2 digital-numbers">
-                  {filteredData.aartiBookings.length}
-                </div>
-                <div className="text-gray-700 font-medium digital-text">
-                  Total Aarti Bookings
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-white/60 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-black/30 transition-all duration-300">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-800 mb-2 digital-numbers">
-                  {filteredData.eventNominations.length}
-                </div>
-                <div className="text-gray-700 font-medium digital-text">
-                  Total Event Nominations
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
           {/* Content Tabs */}
           <div className="space-y-6">
             {/* Aarti Bookings Tab */}
@@ -375,13 +345,16 @@ export default function ParticipationOverview() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: index * 0.1 }}
                         className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
-                          index % 2 === 0 ? 'border-l-4 border-l-blue-500/80' : 'border-l-4 border-l-green-500/80'
+                          index % 4 === 0 ? 'border-l-8 border-l-blue-500' :
+                          index % 4 === 1 ? 'border-l-8 border-l-green-500' :
+                          index % 4 === 2 ? 'border-l-8 border-l-orange-500' :
+                          'border-l-8 border-l-purple-500'
                         }`}
                       >
                         <div className="space-y-3">
                           {/* First Line: Date - Time */}
                           <div className="text-center">
-                            <span className="text-gray-800 font-bold digital-text text-sm">
+                            <span className="text-gray-800 font-bold text-sm">
                               {booking.aartiSchedule.date} - {booking.aartiSchedule.time}
                             </span>
                           </div>
@@ -427,7 +400,10 @@ export default function ParticipationOverview() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: index * 0.1 }}
                         className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
-                          index % 2 === 0 ? 'border-l-4 border-l-purple-500/80' : 'border-l-4 border-l-orange-500/80'
+                          index % 4 === 0 ? 'border-l-8 border-l-purple-500' :
+                          index % 4 === 1 ? 'border-l-8 border-l-cyan-500' :
+                          index % 4 === 2 ? 'border-l-8 border-l-emerald-500' :
+                          'border-l-8 border-l-yellow-500'
                         }`}
                       >
                         <div className="space-y-3">
@@ -438,10 +414,10 @@ export default function ParticipationOverview() {
                             </span>
                           </div>
                           
-                          {/* Second Line: Name - Flat */}
+                          {/* Second Line: Person Name */}
                           <div className="text-center">
                             <span className="text-gray-700 font-semibold text-sm">
-                              {nomination.userName} - {nomination.flat}
+                              {nomination.userName}
                             </span>
                           </div>
                         </div>
@@ -485,13 +461,16 @@ export default function ParticipationOverview() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
                             className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
-                              index % 2 === 0 ? 'border-l-4 border-l-blue-500/80' : 'border-l-4 border-l-green-500/80'
+                              index % 4 === 0 ? 'border-l-8 border-l-blue-500' :
+                              index % 4 === 1 ? 'border-l-8 border-l-green-500' :
+                              index % 4 === 2 ? 'border-l-8 border-l-orange-500' :
+                              'border-l-8 border-l-purple-500'
                             }`}
                           >
                             <div className="space-y-3">
                               {/* First Line: Date - Time */}
                               <div className="text-center">
-                                <span className="text-gray-800 font-bold digital-text text-sm">
+                                <span className="text-gray-800 font-bold text-sm">
                                   {booking.aartiSchedule.date} - {booking.aartiSchedule.time}
                                 </span>
                               </div>
@@ -527,7 +506,10 @@ export default function ParticipationOverview() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
                             className={`bg-white/95 backdrop-blur-sm rounded-lg p-4 border border-white/70 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transition-all duration-300 ${
-                              index % 2 === 0 ? 'border-l-4 border-l-purple-500/80' : 'border-l-4 border-l-orange-500/80'
+                              index % 4 === 0 ? 'border-l-8 border-l-purple-500' :
+                              index % 4 === 1 ? 'border-l-8 border-l-cyan-500' :
+                              index % 4 === 2 ? 'border-l-8 border-l-emerald-500' :
+                              'border-l-8 border-l-yellow-500'
                             }`}
                           >
                             <div className="space-y-3">
@@ -538,10 +520,10 @@ export default function ParticipationOverview() {
                                 </span>
                               </div>
                               
-                              {/* Second Line: Name - Flat */}
+                              {/* Second Line: Person Name */}
                               <div className="text-center">
                                 <span className="text-gray-700 font-semibold text-sm">
-                                  {nomination.userName} - {nomination.flat}
+                                  {nomination.userName}
                                 </span>
                               </div>
                             </div>
