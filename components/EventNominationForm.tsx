@@ -331,7 +331,7 @@ const EventNominationForm: React.FC<EventNominationFormProps> = ({
                   disabled={isSubmitting || !userName.trim() || userName.length < 2 || !/^\d{10}$/.test(mobileNumber) || (isBhogEvent && !bhogName.trim())}
                   className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
                 >
-                  {isSubmitting ? 'Submitting...' : (isBhogEvent ? 'Offer Bhog' : 'Submit Nomination')}
+                  {isSubmitting ? 'Submitting...' : (isBhogEvent ? 'Bhog Entry Closed' : 'Submit Nomination')}
                 </button>
               </motion.form>
             )}

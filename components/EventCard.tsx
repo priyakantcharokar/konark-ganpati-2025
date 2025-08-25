@@ -202,9 +202,13 @@ const EventCard: React.FC<EventCardProps> = ({ event, index, compact = false }) 
               // For all events (including Bhog), navigate to dedicated event page
               window.location.href = `/events/${event.id}`
             }}
-            className={`w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white ${compact ? 'py-1 px-2 text-xs' : 'py-1.5 px-3 text-xs'} rounded-lg font-normal hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105`}
+            disabled={isBhogEvent}
+            className={`w-full ${isBhogEvent 
+              ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-60' 
+              : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105'
+            } ${compact ? 'py-1 px-2 text-xs' : 'py-1.5 px-3 text-xs'} rounded-lg font-normal`}
           >
-            {isBhogEvent ? 'Offer Bhog' : 'Nominate'}
+            {isBhogEvent ? 'Bhog Entry Closed' : 'Nominate'}
           </button>
         )}
         

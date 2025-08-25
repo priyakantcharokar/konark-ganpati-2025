@@ -412,21 +412,22 @@ export default function EventDetailPage() {
                   </div>
                   <button
                     onClick={() => setShowNominationForm(true)}
+                    disabled={isBhogEvent}
                     className={`py-3 px-6 sm:px-8 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl ${
                       isBhogEvent 
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-700 text-white hover:from-blue-700 hover:to-purple-800 shadow-blue-500/50 hover:shadow-purple-500/75 heartbeat-glow' 
+                        ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-60' 
                         : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-blue-400/50 hover:shadow-purple-400/75 glow-pulse-blue'
                     }`}
                   >
                     <span className="flex items-center gap-2">
                       <span className="text-lg">
-                        {isBhogEvent ? '🙏' : '🎯'}
+                        {isBhogEvent ? '🚫' : '🎯'}
                       </span>
                       <span>
-                        {isBhogEvent ? 'Offer Bhog' : 'Nominate'}
+                        {isBhogEvent ? 'Bhog Entry Closed' : 'Nominate'}
                       </span>
                       <span className="text-lg">
-                        {isBhogEvent ? '✨' : '🚀'}
+                        {isBhogEvent ? '❌' : '🚀'}
                       </span>
                     </span>
                   </button>
@@ -439,14 +440,17 @@ export default function EventDetailPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 sm:p-6 border-b border-green-200"
+                  className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 sm:p-6 border-b border-gray-200"
                 >
                   <div className="text-center">
-                    <div className="text-3xl sm:text-4xl font-bold text-green-600 mb-2 font-mono">
+                    <div className="text-3xl sm:text-4xl font-bold text-gray-500 mb-2 font-mono">
                       {nominations.length}
                     </div>
-                    <div className="text-base sm:text-lg font-semibold text-green-700">
+                    <div className="text-base sm:text-lg font-semibold text-gray-600">
                       Total Bhog Offerings
+                    </div>
+                    <div className="text-sm text-gray-500 mt-2">
+                      🚫 Bhog functionality is currently disabled
                     </div>
                   </div>
                 </motion.div>
@@ -464,7 +468,7 @@ export default function EventDetailPage() {
                       No {isBhogEvent ? 'Bhog offerings' : 'nominations'} yet
                     </p>
                     <p className="text-gray-500 text-sm sm:text-base digital-text">
-                      Be the first to {isBhogEvent ? 'offer Bhog' : 'nominate'} for this event!
+                      {isBhogEvent ? 'Bhog functionality is currently disabled' : 'Be the first to nominate for this event!'}
                     </p>
                   </div>
                 ) : (

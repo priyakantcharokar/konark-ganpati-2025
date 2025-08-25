@@ -158,7 +158,7 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
       case 'details':
         return isBhogEvent ? 'Enter Bhog Details' : 'Enter Your Details'
       default:
-        return isBhogEvent ? 'Offer Bhog' : 'Nominate for Event'
+        return isBhogEvent ? 'Bhog Entry Closed' : 'Nominate for Event'
     }
   }
 
@@ -443,7 +443,7 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
                   disabled={isSubmitting || !userName.trim() || userName.length < 2 || (isBhogEvent && !bhogName.trim())}
                   className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
                 >
-                  {isSubmitting ? 'Submitting...' : (isBhogEvent ? 'Offer Bhog' : 'Submit Nomination')}
+                  {isSubmitting ? 'Submitting...' : (isBhogEvent ? 'Bhog Entry Closed' : 'Submit Nomination')}
                 </button>
               </motion.form>
             )}
