@@ -19,7 +19,7 @@ const EventNominations: React.FC<EventNominationsProps> = ({
   const [loading, setLoading] = useState(true)
 
   // Check if this is a Bhog event
-  const isBhogEvent = eventTitle.includes('छप्पन भोग') || eventTitle.includes('56') || eventTitle.includes('Bhog')
+  const isBhogEvent = eventTitle.includes('छप्पन भोग') && eventTitle.includes('56') && eventTitle.includes('Bhog')
 
   useEffect(() => {
     // If it's a Bhog event, redirect to Bhog List page

@@ -32,7 +32,7 @@ const EventNominationFlow: React.FC<EventNominationFlowProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Check if this is a Bhog event
-  const isBhogEvent = eventData.title.includes('छप्पन भोग') || eventData.title.includes('56') || eventData.title.includes('Bhog')
+  const isBhogEvent = eventData.title.includes('छप्पन भोग') && eventData.title.includes('56') && eventData.title.includes('Bhog')
 
   const buildings = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 

@@ -114,7 +114,21 @@ export default function BhogList() {
             </div>
           </motion.div>
 
-         
+          <motion.div
+            whileHover={{ y: -5, scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white rounded-2xl p-6 shadow-lg border border-green-100"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center">
+                <Home className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Active Flats</p>
+                <p className="text-2xl font-bold text-gray-800 font-mono tracking-wider">{getUniqueFlats()}</p>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
 
         {/* Search and Filters */}

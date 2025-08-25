@@ -32,7 +32,7 @@ interface EventCardProps {
 
 const EventCard: React.FC<EventCardProps> = ({ event, index, compact = false }) => {
   // Check if this is a Bhog event
-  const isBhogEvent = event.title.includes('छप्पन भोग') || event.title.includes('56') || event.title.includes('Bhog')
+  const isBhogEvent = event.title.includes('छप्पन भोग') && event.title.includes('56') && event.title.includes('Bhog')
 
   const getEventIcon = (eventTitle: string) => {
     const title = eventTitle.toLowerCase()
@@ -199,13 +199,8 @@ const EventCard: React.FC<EventCardProps> = ({ event, index, compact = false }) 
          !event.title.toLowerCase().includes('tambola') && (
           <button
             onClick={() => {
-              if (isBhogEvent) {
-                // For Bhog events, navigate to Bhog List with source info
-                window.location.href = `/bhog-list?source=events&event=${encodeURIComponent(event.title)}`
-              } else {
-                // For regular events, navigate to dedicated event page
-                window.location.href = `/events/${event.id}`
-              }
+              // For all events (including Bhog), navigate to dedicated event page
+              window.location.href = `/events/${event.id}`
             }}
             className={`w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white ${compact ? 'py-1 px-2 text-xs' : 'py-1.5 px-3 text-xs'} rounded-lg font-normal hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105`}
           >

@@ -34,7 +34,7 @@ const EventNominationForm: React.FC<EventNominationFormProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Check if this is a Bhog event
-  const isBhogEvent = eventTitle.includes('छप्पन भोग') || eventTitle.includes('56') || eventTitle.includes('Bhog')
+  const isBhogEvent = eventTitle.includes('छप्पन भोग') && eventTitle.includes('56') && eventTitle.includes('Bhog')
 
   // Load flats data
   useEffect(() => {

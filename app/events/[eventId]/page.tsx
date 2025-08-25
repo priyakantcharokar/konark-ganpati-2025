@@ -23,6 +23,7 @@ interface EventNomination {
   userName: string
   flatNumber: string
   building: string
+  bhogName?: string // Optional for Bhog events
   timestamp: Date
 }
 
@@ -130,19 +131,22 @@ export default function EventDetailPage() {
         
         setEvent(eventData)
         
+        // Check if this is a Bhog event AFTER loading the event data
+        const isBhogEventCheck = eventData.title.includes('छप्पन भोग') && eventData.title.includes('56') && eventData.title.includes('Bhog')
+        
         // Load nominations for this event
-        if (isBhogEvent) {
-          // For Bhog events, load Bhog nominations
+        if (isBhogEventCheck) {
+          // For Bhog events, load all Bhog nominations (since they're all for this event type)
+          console.log('Loading Bhog nominations...')
           const bhogNominations = await databaseService.getAllBhogNominations()
-          const eventBhogNominations = bhogNominations.filter(nom => 
-            nom.bhog_name === eventData.title
-          )
-          setNominations(eventBhogNominations.map(nom => ({
+          console.log('Bhog nominations loaded:', bhogNominations)
+          setNominations(bhogNominations.map(nom => ({
             id: nom.id,
             eventTitle: nom.bhog_name,
             userName: nom.user_name,
             flatNumber: nom.flat,
             building: nom.building,
+            bhogName: nom.bhog_name, // Add Bhog name for display
             timestamp: new Date(nom.created_at)
           })))
         } else {
@@ -172,7 +176,7 @@ export default function EventDetailPage() {
     if (eventId) {
       loadEventData()
     }
-  }, [eventId, isBhogEvent])
+  }, [eventId])
 
   const handleNominationSuccess = async (message: string) => {
     setShowNominationForm(false)
@@ -180,17 +184,17 @@ export default function EventDetailPage() {
     // Reload nominations
     if (event) {
       try {
-        if (isBhogEvent) {
+        const isBhogEventCheck = event.title.includes('छप्पन भोग') && event.title.includes('56') && event.title.includes('Bhog')
+        
+        if (isBhogEventCheck) {
           const bhogNominations = await databaseService.getAllBhogNominations()
-          const eventBhogNominations = bhogNominations.filter(nom => 
-            nom.bhog_name === event.title
-          )
-          setNominations(eventBhogNominations.map(nom => ({
+          setNominations(bhogNominations.map(nom => ({
             id: nom.id,
             eventTitle: nom.bhog_name,
             userName: nom.user_name,
             flatNumber: nom.flat,
             building: nom.building,
+            bhogName: nom.bhog_name,
             timestamp: new Date(nom.created_at)
           })))
         } else {
@@ -360,6 +364,28 @@ export default function EventDetailPage() {
                 </button>
               </div>
 
+              {/* Total Offerings Card - Only for Bhog events */}
+              {isBhogEvent && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200 shadow-lg mb-6"
+                >
+                  <div className="text-center">
+                    <div className="text-4xl font-bold text-green-600 mb-2">
+                      {nominations.length}
+                    </div>
+                    <div className="text-lg font-semibold text-green-700">
+                      Total Bhog Offerings
+                    </div>
+                    <div className="text-sm text-green-600 mt-1">
+                      {nominations.length === 1 ? 'offering' : 'offerings'} from our community
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
               {/* Nominations List */}
               {nominations.length === 0 ? (
                 <div className="text-center py-12">
@@ -387,10 +413,16 @@ export default function EventDetailPage() {
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="font-semibold text-gray-800 digital-text">
-                            {nomination.userName}
+                            {isBhogEvent 
+                              ? `${nomination.flatNumber} - ${nomination.userName} - ${nomination.bhogName}`
+                              : `${nomination.userName} - ${nomination.flatNumber}`
+                            }
                           </div>
                           <div className="text-sm text-gray-600 digital-text">
-                            {nomination.building} - {nomination.flatNumber}
+                            {isBhogEvent 
+                              ? `Building ${nomination.building}`
+                              : `${nomination.building} - ${nomination.flatNumber}`
+                            }
                           </div>
                         </div>
                         <div className="text-xs text-gray-500 digital-text">
