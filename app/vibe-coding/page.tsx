@@ -293,21 +293,21 @@ export default function VibeCodingPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <div className="flex items-center justify-center mb-6">
+          <div className="flex items-center justify-between mb-6 px-2">
             <button 
               onClick={handleBackClick}
-              className="text-white hover:text-yellow-300 transition-colors duration-200 mr-6 p-2 rounded-full hover:bg-white/20"
+              className="text-white hover:text-yellow-300 transition-colors duration-200 p-2 rounded-full hover:bg-white/20 flex-shrink-0"
             >
-              <ArrowLeft className="w-6 h-6" />
+              <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
             </button>
-            <h1 className="text-4xl md:text-5xl font-bold text-white font-mono">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white font-mono text-center flex-1 px-2 whitespace-nowrap">
               🚀 Vibe Coding
             </h1>
             <button 
               onClick={toggleTheme}
-              className="ml-6 p-2 rounded-full hover:bg-white/20 transition-colors duration-200"
+              className="text-white hover:text-yellow-300 transition-colors duration-200 p-2 rounded-full hover:bg-white/20 flex-shrink-0"
             >
-              {isDarkMode ? <Sun className="w-6 h-6 text-yellow-300" /> : <Moon className="w-6 h-6 text-white" />}
+              {isDarkMode ? <Sun className="w-5 h-5 md:w-6 md:h-6 text-yellow-300" /> : <Moon className="w-5 h-5 md:w-6 md:h-6 text-white" />}
             </button>
           </div>
           
@@ -662,7 +662,7 @@ export default function VibeCodingPage() {
             className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border`}
           >
             <div className="text-center mb-6">
-              <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="hidden lg:flex items-center justify-center gap-3 mb-4">
                 <Users className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />
                 <h2 className={`text-lg md:text-2xl font-bold font-mono ${themeStyles.text}`}>
                   Registered Coders
