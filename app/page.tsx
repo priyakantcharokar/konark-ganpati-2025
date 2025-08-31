@@ -88,6 +88,9 @@ export default function Home() {
               <Link href="/participation-overview" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium digital-text">
                 Participation
               </Link>
+              <Link href="/vibe-coding" className="text-white hover:text-yellow-300 transition-colors duration-200 font-medium digital-text">
+                Vibe Coding
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -163,6 +166,15 @@ export default function Home() {
                           >
                             <span className="text-lg mr-3">📊</span>
                             <span className="font-medium">Participation</span>
+                          </Link>
+                          
+                          <Link 
+                            href="/vibe-coding"
+                            onClick={() => setShowMobileMenu(false)}
+                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 digital-text"
+                          >
+                            <span className="text-lg mr-3">🚀</span>
+                            <span className="font-medium">Vibe Coding</span>
                           </Link>
                         </div>
                         
