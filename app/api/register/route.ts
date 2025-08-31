@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { databaseService } from '@/lib/database-service'
 
 export async function POST(request: NextRequest) {
+  let body: any = {}
+  
   try {
-    const body = await request.json()
+    body = await request.json()
     const { fullName, ageGroup, flatNumber, websiteIdea, vibeCode, expectations, eventType } = body
 
     // Validate required fields
@@ -56,13 +58,13 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating vibe registration:', error)
     console.error('Error details:', {
-      fullName: body.fullName,
-      ageGroup: body.ageGroup,
-      flatNumber: body.flatNumber,
-      websiteIdea: body.websiteIdea,
-      vibeCode: body.vibeCode,
-      expectations: body.expectations,
-      eventType: body.eventType
+      fullName: body?.fullName,
+      ageGroup: body?.ageGroup,
+      flatNumber: body?.flatNumber,
+      websiteIdea: body?.websiteIdea,
+      vibeCode: body?.vibeCode,
+      expectations: body?.expectations,
+      eventType: body?.eventType
     })
     return NextResponse.json(
       { message: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
