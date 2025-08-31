@@ -5,16 +5,27 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 // Check if environment variables are set
 if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('❌ Supabase environment variables not set!')
+  console.error('   NEXT_PUBLIC_SUPABASE_URL:', supabaseUrl ? '✅ Set' : '❌ Missing')
+  console.error('   NEXT_PUBLIC_SUPABASE_ANON_KEY:', supabaseAnonKey ? '✅ Set' : '❌ Missing')
+  
   if (process.env.NODE_ENV === 'development') {
-    console.warn('⚠️  Supabase environment variables not set. Please check your .env.local file.')
+    console.warn('⚠️  Please check your .env.local file.')
     console.warn('   Follow SUPABASE_SETUP.md for complete setup instructions.')
+  } else {
+    console.error('💥 Production environment missing Supabase configuration!')
   }
 }
 
-// Create Supabase client with fallback for development
+// Create Supabase client with proper error handling
 export const supabase = createClient(
   supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder-key'
+  supabaseAnonKey || 'placeholder-key',
+  {
+    auth: {
+      persistSession: false // Disable session persistence for server-side usage
+    }
+  }
 )
 
 // Types for our database

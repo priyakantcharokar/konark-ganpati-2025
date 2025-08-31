@@ -406,15 +406,22 @@ export class DatabaseService {
   // Get all vibe registrations
   async getAllVibeRegistrations(): Promise<VibeRegistration[]> {
     try {
+      console.log('🗄️ Database: Fetching vibe registrations...')
+      
       const { data, error } = await supabase
         .from('vibe_registrations')
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (error) throw error
+      if (error) {
+        console.error('❌ Database error:', error)
+        throw error
+      }
+      
+      console.log('✅ Database: Successfully fetched', data?.length || 0, 'registrations')
       return data || []
     } catch (error) {
-      console.error('Error fetching vibe registrations:', error)
+      console.error('💥 Database: Error fetching vibe registrations:', error)
       return []
     }
   }
@@ -422,11 +429,15 @@ export class DatabaseService {
   // Create a new vibe registration
   async createVibeRegistration(registration: CreateVibeRegistration): Promise<VibeRegistration | null> {
     try {
+      console.log('🗄️ Database: Creating new vibe registration...')
+      
       // Always provide an explicit UUID since gen_random_uuid() isn't working
       const registrationWithId = {
         ...registration,
         id: crypto.randomUUID()
       }
+
+      console.log('📝 Database: Inserting registration with ID:', registrationWithId.id)
 
       const { data, error } = await supabase
         .from('vibe_registrations')
@@ -434,10 +445,15 @@ export class DatabaseService {
         .select()
         .single()
 
-      if (error) throw error
+      if (error) {
+        console.error('❌ Database error during insert:', error)
+        throw error
+      }
+      
+      console.log('✅ Database: Successfully created registration:', data?.id)
       return data
     } catch (error) {
-      console.error('Error creating vibe registration:', error)
+      console.error('💥 Database: Error creating vibe registration:', error)
       return null
     }
   }

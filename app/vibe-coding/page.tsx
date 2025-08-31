@@ -102,59 +102,47 @@ export default function VibeCodingPage() {
 
   // Load registrations on component mount
   useEffect(() => {
-    loadRegistrations()
-  }, [])
-
-  // Fallback function to get count if main loading fails
-  const loadCountFallback = async () => {
-    try {
-      const response = await fetch('/api/vibe-count')
-      if (response.ok) {
-        const data = await response.json()
-        if (data.count > 0) {
-          console.log('Found registrations via count endpoint:', data.count)
-          // Set a temporary state to show the count
-          setRegistrations(Array(data.count).fill(null).map((_, i) => ({
-            id: `temp-${i}`,
-            full_name: 'Loading...',
-            age_group: '10-13',
-            building: 'A',
-            flat: '101',
-            website_idea: 'Loading...',
-            vibe_code: 'Loading...',
-            expectations: '',
-            created_at: new Date().toISOString()
-          })))
-        }
-      }
-    } catch (error) {
-      console.error('Count fallback error:', error)
+    const loadData = async () => {
+      console.log('🔄 Component mounted - loading registrations...')
+      await loadRegistrations()
     }
-  }
+    loadData()
+  }, [])
 
   const loadRegistrations = async () => {
     try {
-      console.log('Loading registrations...')
-      const response = await fetch('/api/vibe-registrations')
-      console.log('Response status:', response.status)
+      console.log('📡 Fetching registrations from API...')
+      setIsLoadingRegistrations(true)
+      
+      const response = await fetch('/api/vibe-registrations', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-cache' // Ensure fresh data
+      })
+      
+      console.log('📊 Response status:', response.status, response.statusText)
       
       if (response.ok) {
         const data = await response.json()
-        console.log('Loaded registrations:', data)
+        console.log('✅ Successfully loaded registrations:', data.length, 'records')
         setRegistrations(data)
       } else {
         const errorData = await response.json().catch(() => ({}))
-        console.error('Failed to load registrations:', response.status, response.statusText, errorData)
+        console.error('❌ Failed to load registrations:', response.status, response.statusText, errorData)
         
-        // If it's an RLS error, show a helpful message and try fallback
+        // If it's an RLS error, show a helpful message
         if (errorData.code === '42501') {
-          console.error('RLS policy is blocking data access. Please run the SQL fix.')
-          // Try fallback count method
-          await loadCountFallback()
+          console.error('🔒 RLS policy is blocking data access. Please run the SQL fix.')
         }
+        
+        // Set empty array to show no registrations
+        setRegistrations([])
       }
     } catch (error) {
-      console.error('Error loading registrations:', error)
+      console.error('💥 Network error loading registrations:', error)
+      setRegistrations([])
     } finally {
       setIsLoadingRegistrations(false)
     }
@@ -199,12 +187,14 @@ export default function VibeCodingPage() {
         setFlatNumbers([])
         
         // Reload registrations to show the new one
+        console.log('🔄 Form submitted successfully - reloading registrations...')
         try {
           // Small delay to ensure database transaction is complete
-          await new Promise(resolve => setTimeout(resolve, 500))
+          await new Promise(resolve => setTimeout(resolve, 1000))
           await loadRegistrations()
+          console.log('✅ Registrations reloaded successfully after submission')
         } catch (loadError) {
-          console.warn('Failed to reload registrations:', loadError)
+          console.warn('⚠️ Failed to reload registrations after submission:', loadError)
           // Don't show error to user since form submission was successful
         }
       } else {
