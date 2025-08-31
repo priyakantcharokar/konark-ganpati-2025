@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Laptop, Star, Code, Rocket, Sparkles, Sun, Moon, Users } from 'lucide-react'
 
 interface VibeRegistration {
   fullName: string
+  ageGroup: string
   flatNumber: string
   websiteIdea: string
   vibeCode: string
@@ -15,6 +16,7 @@ interface VibeRegistration {
 interface VibeRegistrationData {
   id: string
   full_name: string
+  age_group: string
   building: string
   flat: string
   website_idea: string
@@ -26,6 +28,7 @@ interface VibeRegistrationData {
 export default function VibeCodingPage() {
   const [formData, setFormData] = useState<VibeRegistration>({
     fullName: '',
+    ageGroup: '',
     flatNumber: '',
     websiteIdea: '',
     vibeCode: '',
@@ -38,16 +41,48 @@ export default function VibeCodingPage() {
   const [registrations, setRegistrations] = useState<VibeRegistrationData[]>([])
   const [isLoadingRegistrations, setIsLoadingRegistrations] = useState(true)
 
-  const flatNumbers = [
-    'A-101', 'A-102', 'A-103', 'A-104', 'A-105', 'A-106', 'A-107', 'A-108',
-    'B-101', 'B-102', 'B-103', 'B-104', 'B-105', 'B-106', 'B-107', 'B-108',
-    'C-101', 'C-102', 'C-103', 'C-104', 'C-105', 'C-106', 'C-107', 'C-108',
-    'D-101', 'D-102', 'D-103', 'D-104', 'D-105', 'D-106', 'D-107', 'D-108',
-    'E-101', 'E-102', 'E-103', 'E-104', 'E-105', 'E-106', 'E-107', 'E-108',
-    'F-101', 'F-102', 'F-103', 'F-104', 'F-105', 'F-106', 'F-107', 'F-108',
-    'G-101', 'G-102', 'G-103', 'G-104', 'G-105', 'G-106', 'G-107', 'G-108',
-    'H-101', 'H-102', 'H-103', 'H-104', 'H-105', 'H-106', 'H-107', 'H-108'
-  ]
+  const [allFlats, setAllFlats] = useState<string[]>([])
+  const [selectedBuilding, setSelectedBuilding] = useState<string>('')
+  const [flatNumbers, setFlatNumbers] = useState<string[]>([])
+
+  // Load flat numbers from JSON file
+  useEffect(() => {
+    const loadFlatNumbers = async () => {
+      try {
+        const response = await fetch('/flats.json')
+        const data = await response.json()
+        setAllFlats(data.flats || [])
+      } catch (error) {
+        console.error('Error loading flat numbers:', error)
+        // Fallback to default flats if JSON fails to load
+        setAllFlats([
+          'A101', 'A102', 'A103', 'A104', 'A201', 'A202', 'A203', 'A204',
+          'B101', 'B102', 'B103', 'B104', 'B201', 'B202', 'B203', 'B204',
+          'C101', 'C102', 'C103', 'C104', 'C201', 'C202', 'C203', 'C204',
+          'D101', 'D102', 'D103', 'D104', 'D201', 'D202', 'D203', 'D204'
+        ])
+      }
+    }
+    loadFlatNumbers()
+  }, [])
+
+  // Get unique buildings from all flats
+  const buildings = useMemo(() => {
+    const buildingSet = new Set(allFlats.map(flat => flat.charAt(0)))
+    return Array.from(buildingSet).sort()
+  }, [allFlats])
+
+  // Filter flats based on selected building
+  useEffect(() => {
+    if (selectedBuilding) {
+      const filteredFlats = allFlats.filter(flat => flat.charAt(0) === selectedBuilding)
+      setFlatNumbers(filteredFlats)
+      // Reset flat number selection when building changes
+      handleInputChange('flatNumber', '')
+    } else {
+      setFlatNumbers([])
+    }
+  }, [selectedBuilding, allFlats])
 
   // Load theme preference from localStorage
   useEffect(() => {
@@ -70,12 +105,53 @@ export default function VibeCodingPage() {
     loadRegistrations()
   }, [])
 
-  const loadRegistrations = async () => {
+  // Fallback function to get count if main loading fails
+  const loadCountFallback = async () => {
     try {
-      const response = await fetch('/api/vibe-registrations')
+      const response = await fetch('/api/vibe-count')
       if (response.ok) {
         const data = await response.json()
+        if (data.count > 0) {
+          console.log('Found registrations via count endpoint:', data.count)
+          // Set a temporary state to show the count
+          setRegistrations(Array(data.count).fill(null).map((_, i) => ({
+            id: `temp-${i}`,
+            full_name: 'Loading...',
+            age_group: '10-13',
+            building: 'A',
+            flat: '101',
+            website_idea: 'Loading...',
+            vibe_code: 'Loading...',
+            expectations: '',
+            created_at: new Date().toISOString()
+          })))
+        }
+      }
+    } catch (error) {
+      console.error('Count fallback error:', error)
+    }
+  }
+
+  const loadRegistrations = async () => {
+    try {
+      console.log('Loading registrations...')
+      const response = await fetch('/api/vibe-registrations')
+      console.log('Response status:', response.status)
+      
+      if (response.ok) {
+        const data = await response.json()
+        console.log('Loaded registrations:', data)
         setRegistrations(data)
+      } else {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('Failed to load registrations:', response.status, response.statusText, errorData)
+        
+        // If it's an RLS error, show a helpful message and try fallback
+        if (errorData.code === '42501') {
+          console.error('RLS policy is blocking data access. Please run the SQL fix.')
+          // Try fallback count method
+          await loadCountFallback()
+        }
       }
     } catch (error) {
       console.error('Error loading registrations:', error)
@@ -112,18 +188,31 @@ export default function VibeCodingPage() {
         setSubmitSuccess(true)
         setFormData({
           fullName: '',
+          ageGroup: '',
           flatNumber: '',
           websiteIdea: '',
           vibeCode: '',
           expectations: ''
         })
+        // Reset building selection
+        setSelectedBuilding('')
+        setFlatNumbers([])
+        
         // Reload registrations to show the new one
-        loadRegistrations()
+        try {
+          // Small delay to ensure database transaction is complete
+          await new Promise(resolve => setTimeout(resolve, 500))
+          await loadRegistrations()
+        } catch (loadError) {
+          console.warn('Failed to reload registrations:', loadError)
+          // Don't show error to user since form submission was successful
+        }
       } else {
         const errorData = await response.json()
         setSubmitError(errorData.message || 'Something went wrong! Please try again.')
       }
     } catch (error) {
+      console.error('Form submission error:', error)
       setSubmitError('Network error! Please check your connection and try again.')
     } finally {
       setIsSubmitting(false)
@@ -214,12 +303,13 @@ export default function VibeCodingPage() {
             </button>
           </div>
           
-          <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl`}>
-            <p className={`text-lg md:text-xl font-medium leading-relaxed font-mono ${themeStyles.text}`}>
-              🚀 Welcome to Vibe Coding! Imagine building your OWN website idea and bringing your vibe to life online. 
-              No boring theory, only fun + creativity. Register below to join the session!
-            </p>
-          </div>
+                           <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl`}>
+                   <p className={`text-lg md:text-xl font-medium leading-relaxed font-mono ${themeStyles.text}`}>
+                     🚀 Welcome to <span className={`font-bold ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>Exoticas Vibe Coding</span>! 
+                     Calling all <span className={`font-bold ${isDarkMode ? 'text-green-300' : 'text-green-600'}`}>Exoticans kids</span> - imagine building your OWN website idea and bringing your vibe to life online. 
+                     No boring theory, only fun + creativity. Register below to join the exclusive Exoticas coding session!
+                   </p>
+                 </div>
         </motion.div>
 
         {/* Main Content Grid */}
@@ -259,80 +349,190 @@ export default function VibeCodingPage() {
                 </h2>
 
                 {/* Full Name */}
-                <div>
-                  <label className={`block text-sm font-bold mb-2 font-mono ${themeStyles.text}`}>
+                <div className="group">
+                  <label className={`block text-sm font-bold mb-3 font-mono ${themeStyles.text} group-hover:text-purple-600 transition-colors duration-200`}>
                     👤 Full Name *
                   </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.fullName}
-                    onChange={(e) => handleInputChange('fullName', e.target.value)}
-                    placeholder="Enter your awesome name!"
-                    className={`w-full p-4 border-2 border-purple-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-200 font-mono ${themeStyles.inputBg}`}
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      value={formData.fullName}
+                      onChange={(e) => handleInputChange('fullName', e.target.value)}
+                      placeholder="Enter your awesome name!"
+                      className={`w-full p-4 pl-12 border-2 border-purple-300 rounded-2xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-300 font-mono ${themeStyles.inputBg} hover:border-purple-400 group-hover:shadow-lg`}
+                    />
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-500">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Age Group Selection */}
+                <div className="group">
+                  <label className={`block text-sm font-bold mb-3 font-mono ${themeStyles.text} group-hover:text-purple-600 transition-colors duration-200`}>
+                    🎂 What's your age group? *
+                  </label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('ageGroup', '10-13')}
+                      className={`px-6 py-4 rounded-2xl font-bold text-lg font-mono transition-all duration-300 hover:scale-105 building-button ${
+                        formData.ageGroup === '10-13'
+                          ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg building-selected'
+                          : isDarkMode 
+                            ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border-2 border-gray-600' 
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-200'
+                      }`}
+                    >
+                      🧒 I am between 10 to 13
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('ageGroup', '13+')}
+                      className={`px-6 py-4 rounded-2xl font-bold text-lg font-mono transition-all duration-300 hover:scale-105 building-button ${
+                        formData.ageGroup === '13+'
+                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg building-selected'
+                          : isDarkMode 
+                            ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border-2 border-gray-600' 
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-200'
+                      }`}
+                    >
+                      🚀 I am 13 above
+                    </button>
+                  </div>
+                </div>
+
+                {/* Building Selection */}
+                <div className="group">
+                  <label className={`block text-sm font-bold mb-3 font-mono ${themeStyles.text} group-hover:text-purple-600 transition-colors duration-200`}>
+                    🏢 Select Building *
+                  </label>
+                  <div className="grid grid-cols-4 md:grid-cols-8 gap-2 mb-4">
+                    {buildings.map(building => (
+                                          <button
+                      key={building}
+                      type="button"
+                      onClick={() => setSelectedBuilding(building)}
+                      className={`px-3 py-2 rounded-xl font-bold text-sm font-mono building-button ${
+                        selectedBuilding === building
+                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg building-selected'
+                          : isDarkMode 
+                            ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border-2 border-gray-600' 
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-200'
+                      }`}
+                    >
+                      {building}
+                    </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Flat Number */}
-                <div>
-                  <label className={`block text-sm font-bold mb-2 font-mono ${themeStyles.text}`}>
-                    🏠 Flat Number *
+                <div className="group">
+                  <label className={`block text-sm font-bold mb-3 font-mono ${themeStyles.text} group-hover:text-purple-600 transition-colors duration-200`}>
+                    🏠 Select Flat Number *
                   </label>
-                  <select
-                    required
-                    value={formData.flatNumber}
-                    onChange={(e) => handleInputChange('flatNumber', e.target.value)}
-                    className={`w-full p-4 border-2 border-purple-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-200 font-mono ${themeStyles.inputBg}`}
-                  >
-                    <option value="">Select your flat number</option>
-                    {flatNumbers.map(flat => (
-                      <option key={flat} value={flat}>{flat}</option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      required
+                      disabled={!selectedBuilding}
+                      value={formData.flatNumber}
+                      onChange={(e) => handleInputChange('flatNumber', e.target.value)}
+                      className={`w-full p-4 pl-12 border-2 border-purple-300 rounded-2xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-300 font-mono ${themeStyles.inputBg} hover:border-purple-400 group-hover:shadow-lg appearance-none cursor-pointer ${
+                        !selectedBuilding ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                    >
+                      <option value="">
+                        {selectedBuilding ? `Select flat in Building ${selectedBuilding}` : 'Please select a building first'}
+                      </option>
+                      {flatNumbers.map(flat => (
+                        <option key={flat} value={flat}>{flat}</option>
+                      ))}
+                    </select>
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-500">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    </div>
+                    <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-purple-500 pointer-events-none">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
+                  {!selectedBuilding && (
+                    <p className="text-sm text-gray-500 mt-2 font-mono">
+                      💡 First select your building above, then choose your flat number
+                    </p>
+                  )}
                 </div>
 
                 {/* Website Idea */}
-                <div>
-                  <label className={`block text-sm font-bold mb-2 font-mono ${themeStyles.text}`}>
+                <div className="group">
+                  <label className={`block text-sm font-bold mb-3 font-mono ${themeStyles.text} group-hover:text-green-600 transition-colors duration-200`}>
                     💡 If you want to create your own website, what would it be? *
                   </label>
-                  <textarea
-                    required
-                    value={formData.websiteIdea}
-                    onChange={(e) => handleInputChange('websiteIdea', e.target.value)}
-                    placeholder="Describe your amazing website idea! (e.g., A game website, a pet blog, a music player...)"
-                    rows={4}
-                    className={`w-full p-4 border-2 border-green-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all duration-200 font-mono resize-none ${themeStyles.inputBg}`}
-                  />
+                  <div className="relative">
+                    <textarea
+                      required
+                      value={formData.websiteIdea}
+                      onChange={(e) => handleInputChange('websiteIdea', e.target.value)}
+                      placeholder="Describe your amazing website idea! (e.g., A game website, a pet blog, a music player...)"
+                      rows={4}
+                      className={`w-full p-4 pl-12 border-2 border-green-300 rounded-2xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all duration-300 font-mono resize-none ${themeStyles.inputBg} hover:border-green-400 group-hover:shadow-lg`}
+                    />
+                    <div className="absolute left-4 top-6 text-green-500">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Vibe Code */}
-                <div>
-                  <label className={`block text-sm font-bold mb-2 font-mono ${themeStyles.text}`}>
+                <div className="group">
+                  <label className={`block text-sm font-bold mb-3 font-mono ${themeStyles.text} group-hover:text-yellow-600 transition-colors duration-200`}>
                     🌟 Your vibe code (something that resembles you) *
                   </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.vibeCode}
-                    onChange={(e) => handleInputChange('vibeCode', e.target.value)}
-                    placeholder="e.g., cool gamer, nature lover, disco vibe, tech wizard..."
-                    className={`w-full p-4 border-2 border-yellow-300 rounded-xl focus:ring-4 focus:ring-yellow-200 focus:border-yellow-500 transition-all duration-200 font-mono ${themeStyles.inputBg}`}
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      value={formData.vibeCode}
+                      onChange={(e) => handleInputChange('vibeCode', e.target.value)}
+                      placeholder="e.g., cool gamer, nature lover, disco vibe, tech wizard..."
+                      className={`w-full p-4 pl-12 border-2 border-yellow-300 rounded-2xl focus:ring-4 focus:ring-yellow-200 focus:border-yellow-500 transition-all duration-300 font-mono ${themeStyles.inputBg} hover:border-yellow-400 group-hover:shadow-lg`}
+                    />
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-yellow-500">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Expectations */}
-                <div>
-                  <label className={`block text-sm font-bold mb-2 font-mono ${themeStyles.text}`}>
+                <div className="group">
+                  <label className={`block text-sm font-bold mb-3 font-mono ${themeStyles.text} group-hover:text-pink-600 transition-colors duration-200`}>
                     🎯 Any other expectations from this session?
                   </label>
-                  <textarea
-                    value={formData.expectations}
-                    onChange={(e) => handleInputChange('expectations', e.target.value)}
-                    placeholder="What do you hope to learn or create? (optional)"
-                    rows={3}
-                    className={`w-full p-4 border-2 border-pink-300 rounded-xl focus:ring-4 focus:ring-pink-200 focus:border-pink-500 transition-all duration-200 font-mono resize-none ${themeStyles.inputBg}`}
-                  />
+                  <div className="relative">
+                    <textarea
+                      value={formData.expectations}
+                      onChange={(e) => handleInputChange('expectations', e.target.value)}
+                      placeholder="What do you hope to learn or create? (optional)"
+                      rows={3}
+                      className={`w-full p-4 pl-12 border-2 border-pink-300 rounded-2xl focus:ring-4 focus:ring-pink-200 focus:border-pink-500 transition-all duration-300 font-mono resize-none ${themeStyles.inputBg} hover:border-pink-400 group-hover:shadow-lg`}
+                    />
+                    <div className="absolute left-4 top-6 text-pink-500">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Error Message */}
@@ -391,12 +591,22 @@ export default function VibeCodingPage() {
               </div>
               
               {/* Count Display */}
-              <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-3 md:p-4 mb-6 count-glow">
-                <div className="text-3xl md:text-4xl font-bold text-purple-600 font-mono">
-                  {registrations.length}
+              <div className={`bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 md:p-6 mb-6 count-glow ${isDarkMode ? 'from-gray-700 to-gray-800' : ''}`}>
+                <div className="text-center mb-3">
+                  <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Users className="w-6 h-6 md:w-8 md:h-8 text-white" />
+                  </div>
+                  <div className={`text-4xl md:text-6xl font-bold font-mono ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>
+                    {registrations.length}
+                  </div>
                 </div>
-                <div className="hidden md:block text-lg text-purple-700 font-medium">
-                  Awesome Ideas Registered! 🚀
+                <div className="hidden md:block text-center">
+                  <div className={`text-lg font-medium mb-1 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
+                    Awesome Vibers Registered!
+                  </div>
+                  <div className={`text-sm ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
+                    🚀 Ready to code! 🚀
+                  </div>
                 </div>
               </div>
             </div>
@@ -409,41 +619,48 @@ export default function VibeCodingPage() {
             ) : registrations.length === 0 ? (
               <div className="text-center py-8">
                 <div className="text-4xl mb-4">🌟</div>
-                <p className={`font-mono ${themeStyles.text}`}>Be the first to register!</p>
-                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Your amazing idea could be next!</p>
+                <p className={`font-mono ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Be the first to register!</p>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Your amazing idea could be next!</p>
               </div>
             ) : (
               <div className="space-y-4 max-h-96 overflow-y-auto">
                 {registrations.map((registration, index) => (
-                  <motion.div
-                    key={registration.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                                         className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200 hover:border-purple-300 transition-all duration-200 registration-card-hover"
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className={`font-bold font-mono ${themeStyles.text}`}>
-                        {registration.full_name}
-                      </h3>
-                      <span className={`text-sm font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                        {registration.building}-{registration.flat}
-                      </span>
-                    </div>
-                    <div className="space-y-2">
-                      <p className={`text-sm ${themeStyles.text}`}>
-                        <span className="font-semibold">💡 Idea:</span> {registration.website_idea}
-                      </p>
-                      <p className={`text-sm ${themeStyles.text}`}>
-                        <span className="font-semibold">🌟 Vibe:</span> {registration.vibe_code}
-                      </p>
-                      {registration.expectations && (
-                        <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          <span className="font-semibold">🎯 Expectations:</span> {registration.expectations}
-                        </p>
-                      )}
-                    </div>
-                  </motion.div>
+                                     <motion.div
+                     key={registration.id}
+                     initial={{ opacity: 0, y: 10 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ duration: 0.3, delay: index * 0.1 }}
+                     className={`bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200 hover:border-purple-300 transition-all duration-300 registration-card-hover ${isDarkMode ? 'from-gray-700 to-gray-800 border-gray-600' : ''}`}
+                   >
+                     <div className="flex items-center justify-between mb-3">
+                       <div className="flex items-center gap-3">
+                         <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                           {registration.full_name.charAt(0).toUpperCase()}
+                         </div>
+                         <div>
+                           <h3 className={`font-bold font-mono text-base ${themeStyles.text}`}>
+                             {registration.full_name}
+                           </h3>
+                           <span className={`text-sm font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                             {registration.building}-{registration.flat}
+                           </span>
+                         </div>
+                       </div>
+                       <div className="text-xs text-gray-500 font-mono">
+                         #{index + 1}
+                       </div>
+                     </div>
+                     <div className="flex items-start gap-2">
+                       <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                         isDarkMode ? 'bg-green-800' : 'bg-green-100'
+                       }`}>
+                         <span className={`text-xs ${isDarkMode ? 'text-green-200' : 'text-green-600'}`}>💡</span>
+                       </div>
+                       <div className="flex-1">
+                         <p className={`text-sm ${themeStyles.text} line-clamp-2`}>{registration.website_idea}</p>
+                       </div>
+                     </div>
+                   </motion.div>
                 ))}
               </div>
             )}
@@ -463,7 +680,7 @@ export default function VibeCodingPage() {
               <Star className="w-8 h-8 text-yellow-300" />
               <Code className="w-8 h-8 text-purple-300" />
             </div>
-            <p className={`font-mono text-lg ${themeStyles.text}`}>
+            <p className={`font-mono text-lg ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
               Ready to code your dreams into reality? Let's make magic happen! ✨
             </p>
           </div>

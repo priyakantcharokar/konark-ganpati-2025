@@ -78,6 +78,7 @@ export interface CreateBhogNomination {
 export interface VibeRegistration {
   id: string
   full_name: string
+  age_group: string
   building: string
   flat: string
   website_idea: string
@@ -90,6 +91,7 @@ export interface VibeRegistration {
 
 export interface CreateVibeRegistration {
   full_name: string
+  age_group?: string
   building: string
   flat: string
   website_idea: string
@@ -420,9 +422,15 @@ export class DatabaseService {
   // Create a new vibe registration
   async createVibeRegistration(registration: CreateVibeRegistration): Promise<VibeRegistration | null> {
     try {
+      // Always provide an explicit UUID since gen_random_uuid() isn't working
+      const registrationWithId = {
+        ...registration,
+        id: crypto.randomUUID()
+      }
+
       const { data, error } = await supabase
         .from('vibe_registrations')
-        .insert([registration])
+        .insert([registrationWithId])
         .select()
         .single()
 

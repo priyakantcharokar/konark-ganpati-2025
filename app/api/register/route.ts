@@ -4,7 +4,7 @@ import { databaseService } from '@/lib/database-service'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { fullName, flatNumber, websiteIdea, vibeCode, expectations, eventType } = body
+    const { fullName, ageGroup, flatNumber, websiteIdea, vibeCode, expectations, eventType } = body
 
     // Validate required fields
     if (!fullName || !flatNumber || !websiteIdea || !vibeCode) {
@@ -14,8 +14,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Extract building and flat from flatNumber (e.g., "A-101" -> building: "A", flat: "101")
-    const [building, flat] = flatNumber.split('-')
+    // Extract building and flat from flatNumber (e.g., "A101" -> building: "A", flat: "101")
+    const building = flatNumber.charAt(0)
+    const flat = flatNumber.substring(1)
     
     if (!building || !flat) {
       return NextResponse.json(
@@ -27,6 +28,7 @@ export async function POST(request: NextRequest) {
     // Store the registration in the database
     const registration = await databaseService.createVibeRegistration({
       full_name: fullName,
+      age_group: ageGroup || '10-13', // Default value if not provided
       building: building,
       flat: flat,
       website_idea: websiteIdea,
@@ -45,8 +47,17 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Error creating vibe registration:', error)
+    console.error('Error details:', {
+      fullName: body.fullName,
+      ageGroup: body.ageGroup,
+      flatNumber: body.flatNumber,
+      websiteIdea: body.websiteIdea,
+      vibeCode: body.vibeCode,
+      expectations: body.expectations,
+      eventType: body.eventType
+    })
     return NextResponse.json(
-      { message: 'Internal server error' },
+      { message: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
