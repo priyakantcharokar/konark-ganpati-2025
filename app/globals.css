@@ -193,4 +193,123 @@ html {
   .spiritual-glow:hover {
     box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 0 60px rgba(255, 140, 0, 0.3);
   }
+
+  /* Vibe Coding specific animations */
+  @keyframes code-typing {
+    0% { opacity: 0; transform: translateY(10px); }
+    50% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+  }
+
+  @keyframes rainbow-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.5), 0 0 40px rgba(168, 85, 247, 0.3), 0 0 60px rgba(251, 191, 36, 0.2);
+    }
+    33% {
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.6), 0 0 50px rgba(251, 191, 36, 0.4), 0 0 75px rgba(34, 197, 94, 0.3);
+    }
+    66% {
+      box-shadow: 0 0 30px rgba(251, 191, 36, 0.7), 0 0 60px rgba(34, 197, 94, 0.5), 0 0 90px rgba(168, 85, 247, 0.4);
+    }
+  }
+
+  @keyframes float-gentle {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-5px) rotate(1deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(0deg);
+    }
+    75% {
+      transform: translateY(-5px) rotate(-1deg);
+    }
+  }
+
+  .code-typing {
+    animation: code-typing 3s ease-in-out infinite;
+  }
+
+  .rainbow-glow {
+    animation: rainbow-glow 3s ease-in-out infinite;
+  }
+
+  .float-gentle {
+    animation: float-gentle 4s ease-in-out infinite;
+  }
+
+  /* Enhanced button hover effects for Vibe Coding */
+  .vibe-button-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .vibe-button-hover:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Glowing text effect */
+  .glowing-text {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+
+  /* Matrix-style background effect */
+  .matrix-bg {
+    background: linear-gradient(45deg, 
+      rgba(34, 197, 94, 0.1) 0%, 
+      rgba(168, 85, 247, 0.1) 25%, 
+      rgba(251, 191, 36, 0.1) 50%, 
+      rgba(236, 72, 153, 0.1) 75%, 
+      rgba(34, 197, 94, 0.1) 100%);
+    background-size: 400% 400%;
+    animation: matrix-shift 8s ease-in-out infinite;
+  }
+
+  @keyframes matrix-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  /* Theme transition effects */
+  .theme-transition {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* Enhanced floating code visibility */
+  .floating-code {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  /* Dark mode specific enhancements */
+  .dark-mode-enhanced {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Registration card hover effects */
+  .registration-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .registration-card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Count display glow effect */
+  .count-glow {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3), 0 0 40px rgba(168, 85, 247, 0.1);
+  }
+
+  .count-glow:hover {
+    box-shadow: 0 0 30px rgba(168, 85, 247, 0.5), 0 0 60px rgba(168, 85, 247, 0.2);
+  }
 }

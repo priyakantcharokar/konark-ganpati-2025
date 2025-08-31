@@ -74,6 +74,30 @@ export interface CreateBhogNomination {
   bhog_name: string
 }
 
+// Vibe Registration Types
+export interface VibeRegistration {
+  id: string
+  full_name: string
+  building: string
+  flat: string
+  website_idea: string
+  vibe_code: string
+  expectations: string
+  event_type: string
+  created_at: string
+  updated_at: string
+}
+
+export interface CreateVibeRegistration {
+  full_name: string
+  building: string
+  flat: string
+  website_idea: string
+  vibe_code: string
+  expectations: string
+  event_type: string
+}
+
 // Database Service Class
 export class DatabaseService {
   
@@ -371,6 +395,57 @@ export class DatabaseService {
       return true
     } catch (error) {
       console.error('Error deleting bhog nomination:', error)
+      return false
+    }
+  }
+
+  // Vibe Registration Methods
+  
+  // Get all vibe registrations
+  async getAllVibeRegistrations(): Promise<VibeRegistration[]> {
+    try {
+      const { data, error } = await supabase
+        .from('vibe_registrations')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data || []
+    } catch (error) {
+      console.error('Error fetching vibe registrations:', error)
+      return []
+    }
+  }
+
+  // Create a new vibe registration
+  async createVibeRegistration(registration: CreateVibeRegistration): Promise<VibeRegistration | null> {
+    try {
+      const { data, error } = await supabase
+        .from('vibe_registrations')
+        .insert([registration])
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      console.error('Error creating vibe registration:', error)
+      return null
+    }
+  }
+
+  // Delete a vibe registration (for admin purposes)
+  async deleteVibeRegistration(registrationId: string): Promise<boolean> {
+    try {
+      const { error } = await supabase
+        .from('vibe_registrations')
+        .delete()
+        .eq('id', registrationId)
+
+      if (error) throw error
+      return true
+    } catch (error) {
+      console.error('Error deleting vibe registration:', error)
       return false
     }
   }
