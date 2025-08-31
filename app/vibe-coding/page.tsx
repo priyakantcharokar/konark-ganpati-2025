@@ -92,8 +92,8 @@ export default function VibeCodingPage() {
     if (savedTheme) {
       setIsDarkMode(savedTheme === 'dark')
     } else {
-      // Default to light mode
-      setIsDarkMode(false)
+      // Default to dark mode
+      setIsDarkMode(true)
     }
   }, [])
 
@@ -340,7 +340,9 @@ export default function VibeCodingPage() {
             <div className="text-center">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <Users className="w-6 h-6 text-purple-600" />
-                <h2 className={`text-lg font-bold font-mono ${themeStyles.text}`}>
+                <h2 className={`text-lg font-bold font-mono ${
+                  isDarkMode ? 'text-white' : 'text-gray-800'
+                }`}>
                   Awesome Vibers Registered!
                 </h2>
                 <Users className="w-6 h-6 text-purple-600" />
@@ -349,19 +351,29 @@ export default function VibeCodingPage() {
               {/* Mobile Count Display */}
               <div 
                 onClick={handleCountCardClick}
-                className={`bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 count-glow cursor-pointer hover:scale-105 transition-all duration-300 ${isDarkMode ? 'from-gray-700 to-gray-800' : ''}`}
+                className={`bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 count-glow cursor-pointer hover:scale-105 transition-all duration-300 ${
+                  isDarkMode 
+                    ? 'from-gray-800 to-gray-900 border border-gray-600' 
+                    : ''
+                }`}
               >
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Users className="w-6 h-6 text-white" />
                   </div>
-                  <div className={`text-4xl font-bold font-mono ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>
+                  <div className={`text-4xl font-bold font-mono ${
+                    isDarkMode ? 'text-white' : 'text-purple-600'
+                  }`}>
                     {registrations.length}
                   </div>
-                  <div className={`text-sm mt-2 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
+                  <div className={`text-sm mt-2 ${
+                    isDarkMode ? 'text-gray-200' : 'text-purple-600'
+                  }`}>
                     🚀 Ready to code! 🚀
                   </div>
-                  <div className={`text-xs mt-2 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
+                  <div className={`text-xs mt-2 ${
+                    isDarkMode ? 'text-gray-300' : 'text-purple-600'
+                  }`}>
                     👆 Tap to see details
                   </div>
                 </div>
@@ -377,7 +389,7 @@ export default function VibeCodingPage() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border`}
+            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border min-h-[600px] flex flex-col`}
           >
             {submitSuccess ? (
               <motion.div
@@ -393,14 +405,17 @@ export default function VibeCodingPage() {
                   Your vibe has been captured! We'll see you at the coding session! 🚀
                 </p>
                 <button
-                  onClick={() => setSubmitSuccess(false)}
+                  onClick={() => {
+                    setSubmitSuccess(false)
+                    setShowWhatsAppInvite(false)
+                  }}
                   className="bg-gradient-to-r from-green-500 to-purple-600 text-white px-8 py-3 rounded-xl font-bold hover:from-green-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
                 >
                   Register Another Idea! ✨
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col">
                 <h2 className={`text-2xl font-bold text-center mb-8 font-mono ${themeStyles.text}`}>
                   <Code className="inline w-8 h-8 text-purple-600 mr-2" />
                   Join the Coding Adventure!
@@ -610,7 +625,7 @@ export default function VibeCodingPage() {
                   disabled={isSubmitting}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full bg-gradient-to-r from-green-500 via-purple-500 to-yellow-500 text-white py-6 px-8 rounded-2xl font-bold text-xl font-mono shadow-2xl hover:shadow-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group rainbow-glow vibe-button-hover"
+                  className="w-full bg-gradient-to-r from-green-500 via-purple-500 to-yellow-500 text-white py-6 px-8 rounded-2xl font-bold text-xl font-mono shadow-2xl hover:shadow-3xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group rainbow-glow vibe-button-hover mt-auto"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-purple-400 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <span className="relative flex items-center justify-center gap-2 md:gap-3 whitespace-nowrap">
@@ -674,7 +689,7 @@ export default function VibeCodingPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border hidden lg:block`}
+            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border hidden lg:block min-h-[600px] flex flex-col`}
           >
             <div className="text-center mb-6">
               <div className="hidden lg:flex items-center justify-center gap-3 mb-4">
@@ -686,20 +701,30 @@ export default function VibeCodingPage() {
               </div>
               
               {/* Count Display */}
-              <div className={`bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 md:p-6 mb-6 count-glow ${isDarkMode ? 'from-gray-700 to-gray-800' : ''}`}>
+              <div className={`bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 md:p-6 mb-6 count-glow ${
+                isDarkMode 
+                  ? 'from-gray-800 to-gray-900 border border-gray-600' 
+                  : ''
+              }`}>
                 <div className="text-center mb-3">
                   <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Users className="w-6 h-6 md:w-8 md:h-8 text-white" />
                   </div>
-                  <div className={`text-4xl md:text-6xl font-bold font-mono ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>
+                  <div className={`text-4xl md:text-6xl font-bold font-mono ${
+                    isDarkMode ? 'text-white' : 'text-purple-600'
+                  }`}>
                     {registrations.length}
                   </div>
                 </div>
                 <div className="hidden lg:block text-center">
-                  <div className={`text-lg font-medium mb-1 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
+                  <div className={`text-lg font-medium mb-1 ${
+                    isDarkMode ? 'text-gray-200' : 'text-purple-700'
+                  }`}>
                     Awesome Vibers Registered!
                   </div>
-                  <div className={`text-sm ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
+                  <div className={`text-sm ${
+                    isDarkMode ? 'text-gray-300' : 'text-purple-600'
+                  }`}>
                     🚀 Ready to code! 🚀
                   </div>
                 </div>
@@ -707,9 +732,44 @@ export default function VibeCodingPage() {
             </div>
 
             {isLoadingRegistrations ? (
-              <div className="text-center py-8">
-                <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                <p className={`${themeStyles.text}`}>Loading registrations...</p>
+              <div className="space-y-4 flex-1">
+                {/* Skeleton Count Display */}
+                <div className="bg-gradient-to-r from-gray-200 to-gray-300 rounded-2xl p-4 md:p-6 mb-6 animate-pulse">
+                  <div className="text-center mb-3">
+                    <div className="w-12 h-12 md:w-16 md:h-16 bg-gray-300 rounded-full mx-auto mb-3 animate-pulse"></div>
+                    <div className="w-16 h-16 md:w-24 md:h-24 bg-gray-300 rounded-lg mx-auto animate-pulse"></div>
+                  </div>
+                  <div className="hidden lg:block text-center">
+                    <div className="w-32 h-6 bg-gray-300 rounded mx-auto mb-2 animate-pulse"></div>
+                    <div className="w-24 h-4 bg-gray-300 rounded mx-auto animate-pulse"></div>
+                  </div>
+                </div>
+                
+                {/* Skeleton Registration Cards */}
+                {[...Array(5)].map((_, index) => (
+                  <div
+                    key={index}
+                    className="bg-gradient-to-r from-gray-200 to-gray-300 rounded-xl p-4 border border-gray-300 animate-pulse"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gray-300 rounded-full animate-pulse"></div>
+                        <div className="space-y-2">
+                          <div className="w-20 h-4 bg-gray-300 rounded animate-pulse"></div>
+                          <div className="w-32 h-3 bg-gray-300 rounded animate-pulse"></div>
+                        </div>
+                      </div>
+                      <div className="w-8 h-4 bg-gray-300 rounded animate-pulse"></div>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <div className="w-5 h-5 bg-gray-300 rounded-full animate-pulse"></div>
+                      <div className="flex-1 space-y-2">
+                        <div className="w-full h-3 bg-gray-300 rounded animate-pulse"></div>
+                        <div className="w-3/4 h-3 bg-gray-300 rounded animate-pulse"></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : registrations.length === 0 ? (
               <div className="text-center py-8">
@@ -718,7 +778,7 @@ export default function VibeCodingPage() {
                 <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Your amazing idea could be next!</p>
               </div>
             ) : (
-              <div className="space-y-4 max-h-96 overflow-y-auto">
+              <div className="space-y-4 flex-1 overflow-y-auto">
                 {registrations.map((registration, index) => {
                   const isOptimistic = registration.id.startsWith('temp-')
                   return (
@@ -737,15 +797,21 @@ export default function VibeCodingPage() {
                            {registration.vibe_code.charAt(0).toUpperCase()}
                          </div>
                          <div>
-                           <h3 className={`font-bold font-mono text-base ${themeStyles.text}`}>
+                           <h3 className={`font-bold font-mono text-base ${
+                             isDarkMode ? 'text-white' : 'text-gray-800'
+                           }`}>
                              {registration.vibe_code}
                            </h3>
-                           <span className={`text-sm font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                           <span className={`text-sm font-mono ${
+                             isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                           }`}>
                              {registration.full_name} • {registration.building}-{registration.flat}
                            </span>
                          </div>
                        </div>
-                       <div className="text-xs text-gray-500 font-mono">
+                       <div className={`text-xs font-mono ${
+                         isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                       }`}>
                          #{index + 1}
                        </div>
                      </div>
@@ -756,7 +822,9 @@ export default function VibeCodingPage() {
                          <span className={`text-xs ${isDarkMode ? 'text-green-200' : 'text-green-600'}`}>💡</span>
                        </div>
                        <div className="flex-1">
-                         <p className={`text-sm ${themeStyles.text} line-clamp-2`}>{registration.website_idea}</p>
+                         <p className={`text-sm line-clamp-2 ${
+                           isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                         }`}>{registration.website_idea}</p>
                        </div>
                      </div>
                      {isOptimistic && (
@@ -820,7 +888,9 @@ export default function VibeCodingPage() {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <Users className="w-6 h-6 text-purple-600" />
-                  <h2 className={`text-xl font-bold font-mono ${themeStyles.text}`}>
+                  <h2 className={`text-xl font-bold font-mono ${
+                    isDarkMode ? 'text-white' : 'text-gray-800'
+                  }`}>
                     Registered Vibers
                   </h2>
                 </div>
@@ -837,9 +907,32 @@ export default function VibeCodingPage() {
               {/* Content */}
               <div className="space-y-4 max-h-60 overflow-y-auto">
                 {isLoadingRegistrations ? (
-                  <div className="text-center py-8">
-                    <div className="w-8 h-8 border-2 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className={`${themeStyles.text}`}>Loading registrations...</p>
+                  <div className="space-y-4">
+                    {/* Skeleton Registration Cards for Popup */}
+                    {[...Array(3)].map((_, index) => (
+                      <div
+                        key={index}
+                        className="bg-gradient-to-r from-gray-200 to-gray-300 rounded-xl p-4 border border-gray-300 animate-pulse"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-gray-300 rounded-full animate-pulse"></div>
+                            <div className="space-y-1">
+                              <div className="w-16 h-3 bg-gray-300 rounded animate-pulse"></div>
+                              <div className="w-24 h-2 bg-gray-300 rounded animate-pulse"></div>
+                            </div>
+                          </div>
+                          <div className="w-6 h-2 bg-gray-300 rounded animate-pulse"></div>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <div className="w-4 h-4 bg-gray-300 rounded-full animate-pulse"></div>
+                          <div className="flex-1 space-y-1">
+                            <div className="w-full h-2 bg-gray-300 rounded animate-pulse"></div>
+                            <div className="w-2/3 h-2 bg-gray-300 rounded animate-pulse"></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ) : registrations.length === 0 ? (
                   <div className="text-center py-8">
@@ -866,15 +959,21 @@ export default function VibeCodingPage() {
                               {registration.vibe_code.charAt(0).toUpperCase()}
                             </div>
                             <div>
-                              <h3 className={`font-bold font-mono text-sm ${themeStyles.text}`}>
+                              <h3 className={`font-bold font-mono text-sm ${
+                                isDarkMode ? 'text-white' : 'text-gray-800'
+                              }`}>
                                 {registration.vibe_code}
                               </h3>
-                              <span className={`text-xs font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                              <span className={`text-xs font-mono ${
+                                isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                              }`}>
                                 {registration.full_name} • {registration.building}-{registration.flat}
                               </span>
                             </div>
                           </div>
-                          <div className="text-xs text-gray-500 font-mono">
+                          <div className={`text-xs font-mono ${
+                            isDarkMode ? 'text-gray-400' : 'text-gray-500'
+                          }`}>
                             #{index + 1}
                           </div>
                         </div>
@@ -885,7 +984,9 @@ export default function VibeCodingPage() {
                             <span className={`text-xs ${isDarkMode ? 'text-green-200' : 'text-green-600'}`}>💡</span>
                           </div>
                           <div className="flex-1">
-                            <p className={`text-xs ${themeStyles.text} line-clamp-2`}>{registration.website_idea}</p>
+                            <p className={`text-xs line-clamp-2 ${
+                              isDarkMode ? 'text-gray-200' : 'text-gray-800'
+                            }`}>{registration.website_idea}</p>
                           </div>
                         </div>
                         {isOptimistic && (
