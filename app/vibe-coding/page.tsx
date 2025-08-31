@@ -433,7 +433,7 @@ export default function VibeCodingPage() {
                       value={formData.fullName}
                       onChange={(e) => handleInputChange('fullName', e.target.value)}
                       placeholder="Enter your awesome name!"
-                      className={`w-full p-4 pl-12 border-2 border-purple-300 rounded-2xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-300 font-mono ${themeStyles.inputBg} hover:border-purple-400 group-hover:shadow-lg`}
+                      className={`w-full p-4 pl-12 border-2 border-purple-300 rounded-2xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-300 font-mono text-sm md:text-base ${themeStyles.inputBg} hover:border-purple-400 group-hover:shadow-lg`}
                     />
                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-500">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -555,7 +555,7 @@ export default function VibeCodingPage() {
                       onChange={(e) => handleInputChange('websiteIdea', e.target.value)}
                       placeholder="Describe your amazing website idea! (e.g., A game website, a pet blog, a music player...)"
                       rows={4}
-                      className={`w-full p-4 pl-12 border-2 border-green-300 rounded-2xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all duration-300 font-mono resize-none ${themeStyles.inputBg} hover:border-green-400 group-hover:shadow-lg`}
+                      className={`w-full p-4 pl-12 border-2 border-green-300 rounded-2xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all duration-300 font-mono text-sm md:text-base resize-none ${themeStyles.inputBg} hover:border-green-400 group-hover:shadow-lg`}
                     />
                     <div className="absolute left-4 top-6 text-green-500">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -568,7 +568,7 @@ export default function VibeCodingPage() {
                 {/* Vibe Code */}
                 <div className="group">
                   <label className={`block text-sm font-bold mb-3 font-mono ${themeStyles.text} group-hover:text-yellow-600 transition-colors duration-200`}>
-                    🌟 Your vibe code (something that resembles you) *
+                    🌟 Your vibe code (something that resembles you) / Avatar name *
                   </label>
                   <div className="relative">
                     <input
@@ -577,7 +577,7 @@ export default function VibeCodingPage() {
                       value={formData.vibeCode}
                       onChange={(e) => handleInputChange('vibeCode', e.target.value)}
                       placeholder="e.g., cool gamer, nature lover, disco vibe, tech wizard..."
-                      className={`w-full p-4 pl-12 border-2 border-yellow-300 rounded-2xl focus:ring-4 focus:ring-yellow-200 focus:border-yellow-500 transition-all duration-300 font-mono ${themeStyles.inputBg} hover:border-yellow-400 group-hover:shadow-lg`}
+                      className={`w-full p-4 pl-12 border-2 border-yellow-300 rounded-2xl focus:ring-4 focus:ring-yellow-200 focus:border-yellow-500 transition-all duration-300 font-mono text-sm md:text-base ${themeStyles.inputBg} hover:border-yellow-400 group-hover:shadow-lg`}
                     />
                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-yellow-500">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -598,7 +598,7 @@ export default function VibeCodingPage() {
                       onChange={(e) => handleInputChange('expectations', e.target.value)}
                       placeholder="What do you hope to learn or create? (optional)"
                       rows={3}
-                      className={`w-full p-4 pl-12 border-2 border-pink-300 rounded-2xl focus:ring-4 focus:ring-pink-200 focus:border-pink-500 transition-all duration-300 font-mono resize-none ${themeStyles.inputBg} hover:border-pink-400 group-hover:shadow-lg`}
+                      className={`w-full p-4 pl-12 border-2 border-pink-300 rounded-2xl focus:ring-4 focus:ring-pink-200 focus:border-pink-500 transition-all duration-300 font-mono text-sm md:text-base resize-none ${themeStyles.inputBg} hover:border-pink-400 group-hover:shadow-lg`}
                     />
                     <div className="absolute left-4 top-6 text-pink-500">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
