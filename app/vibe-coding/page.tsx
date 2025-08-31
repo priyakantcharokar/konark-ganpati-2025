@@ -320,6 +320,41 @@ export default function VibeCodingPage() {
                  </div>
         </motion.div>
 
+        {/* Mobile Count Display */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="lg:hidden mb-8"
+        >
+          <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl`}>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Users className="w-6 h-6 text-purple-600" />
+                <h2 className={`text-lg font-bold font-mono ${themeStyles.text}`}>
+                  Awesome Vibers Registered!
+                </h2>
+                <Users className="w-6 h-6 text-purple-600" />
+              </div>
+              
+              {/* Mobile Count Display */}
+              <div className={`bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 count-glow ${isDarkMode ? 'from-gray-700 to-gray-800' : ''}`}>
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  <div className={`text-4xl font-bold font-mono ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>
+                    {registrations.length}
+                  </div>
+                  <div className={`text-sm mt-2 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
+                    🚀 Ready to code! 🚀
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Side - Registration Form */}
@@ -645,7 +680,7 @@ export default function VibeCodingPage() {
                     {registrations.length}
                   </div>
                 </div>
-                <div className="hidden md:block text-center">
+                <div className="hidden lg:block text-center">
                   <div className={`text-lg font-medium mb-1 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
                     Awesome Vibers Registered!
                   </div>
