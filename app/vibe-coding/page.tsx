@@ -473,7 +473,7 @@ export default function VibeCodingPage() {
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-200'
                       }`}
                     >
-                      🚀 I am 13 above
+                      I am 13 to 16
                     </button>
                   </div>
                 </div>
