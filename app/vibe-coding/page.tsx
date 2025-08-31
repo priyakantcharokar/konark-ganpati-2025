@@ -37,6 +37,7 @@ export default function VibeCodingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [showWhatsAppInvite, setShowWhatsAppInvite] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [registrations, setRegistrations] = useState<VibeRegistrationData[]>([])
   const [isLoadingRegistrations, setIsLoadingRegistrations] = useState(true)
@@ -160,6 +161,22 @@ export default function VibeCodingPage() {
     setIsSubmitting(true)
     setSubmitError(null)
 
+    // Optimistically add the new registration to the list
+    const optimisticRegistration = {
+      id: `temp-${Date.now()}`,
+      full_name: formData.fullName,
+      age_group: formData.ageGroup,
+      building: formData.flatNumber.charAt(0),
+      flat: formData.flatNumber.substring(1),
+      website_idea: formData.websiteIdea,
+      vibe_code: formData.vibeCode,
+      expectations: formData.expectations,
+      created_at: new Date().toISOString()
+    }
+    
+    // Add to registrations immediately for instant UI update
+    setRegistrations(prev => [optimisticRegistration, ...prev])
+
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
@@ -173,7 +190,11 @@ export default function VibeCodingPage() {
       })
 
       if (response.ok) {
+        const result = await response.json()
+        console.log('✅ Form submitted successfully:', result)
+        
         setSubmitSuccess(true)
+        setShowWhatsAppInvite(true)
         setFormData({
           fullName: '',
           ageGroup: '',
@@ -186,22 +207,19 @@ export default function VibeCodingPage() {
         setSelectedBuilding('')
         setFlatNumbers([])
         
-        // Reload registrations to show the new one
-        console.log('🔄 Form submitted successfully - reloading registrations...')
-        try {
-          // Small delay to ensure database transaction is complete
-          await new Promise(resolve => setTimeout(resolve, 1000))
-          await loadRegistrations()
-          console.log('✅ Registrations reloaded successfully after submission')
-        } catch (loadError) {
-          console.warn('⚠️ Failed to reload registrations after submission:', loadError)
-          // Don't show error to user since form submission was successful
-        }
+        // Immediately reload registrations to get the real data from server
+        console.log('🔄 Immediately reloading registrations...')
+        await loadRegistrations()
+        console.log('✅ Registrations reloaded successfully after submission')
       } else {
+        // Remove optimistic registration if submission failed
+        setRegistrations(prev => prev.filter(r => r.id !== optimisticRegistration.id))
         const errorData = await response.json()
         setSubmitError(errorData.message || 'Something went wrong! Please try again.')
       }
     } catch (error) {
+      // Remove optimistic registration if network error
+      setRegistrations(prev => prev.filter(r => r.id !== optimisticRegistration.id))
       console.error('Form submission error:', error)
       setSubmitError('Network error! Please check your connection and try again.')
     } finally {
@@ -562,6 +580,43 @@ export default function VibeCodingPage() {
                 </motion.button>
               </form>
             )}
+
+            {/* WhatsApp Group Invite */}
+            {showWhatsAppInvite && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border border-green-300 mt-6`}
+              >
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl">📱</span>
+                  </div>
+                  <h3 className={`text-xl font-bold font-mono mb-3 ${themeStyles.text}`}>
+                    🎉 Registration Successful!
+                  </h3>
+                  <p className={`text-base mb-6 font-mono ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                    Welcome to the Exoticas Vibe Coding community! Join our WhatsApp group to stay connected with fellow coders and get updates about the session.
+                  </p>
+                  
+                  <a
+                    href="https://chat.whatsapp.com/J0tp1htbF0j7hVYemqOB6l?mode=ems_copy_c"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-8 rounded-2xl font-bold text-lg font-mono shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  >
+                    <span className="text-2xl">💬</span>
+                    Join WhatsApp Group
+                    <span className="text-2xl">🚀</span>
+                  </a>
+                  
+                  <p className={`text-sm mt-4 font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    Group: <strong>🚀 Exotica Vibe Coders</strong>
+                  </p>
+                </div>
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Right Side - Registrations List */}
@@ -614,25 +669,29 @@ export default function VibeCodingPage() {
               </div>
             ) : (
               <div className="space-y-4 max-h-96 overflow-y-auto">
-                {registrations.map((registration, index) => (
-                                     <motion.div
-                     key={registration.id}
-                     initial={{ opacity: 0, y: 10 }}
-                     animate={{ opacity: 1, y: 0 }}
-                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                     className={`bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200 hover:border-purple-300 transition-all duration-300 registration-card-hover ${isDarkMode ? 'from-gray-700 to-gray-800 border-gray-600' : ''}`}
-                   >
+                {registrations.map((registration, index) => {
+                  const isOptimistic = registration.id.startsWith('temp-')
+                  return (
+                    <motion.div
+                      key={registration.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className={`bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200 hover:border-purple-300 transition-all duration-300 registration-card-hover ${
+                        isDarkMode ? 'from-gray-700 to-gray-800 border-gray-600' : ''
+                      } ${isOptimistic ? 'animate-pulse border-yellow-400' : ''}`}
+                    >
                      <div className="flex items-center justify-between mb-3">
                        <div className="flex items-center gap-3">
                          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                           {registration.full_name.charAt(0).toUpperCase()}
+                           {registration.vibe_code.charAt(0).toUpperCase()}
                          </div>
                          <div>
                            <h3 className={`font-bold font-mono text-base ${themeStyles.text}`}>
-                             {registration.full_name}
+                             {registration.vibe_code}
                            </h3>
                            <span className={`text-sm font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                             {registration.building}-{registration.flat}
+                             {registration.full_name} • {registration.building}-{registration.flat}
                            </span>
                          </div>
                        </div>
@@ -650,8 +709,16 @@ export default function VibeCodingPage() {
                          <p className={`text-sm ${themeStyles.text} line-clamp-2`}>{registration.website_idea}</p>
                        </div>
                      </div>
+                     {isOptimistic && (
+                       <div className="mt-2 text-center">
+                         <span className="text-xs text-yellow-600 font-mono animate-pulse">
+                           ⏳ Saving...
+                         </span>
+                       </div>
+                     )}
                    </motion.div>
-                ))}
+                 )
+               })}
               </div>
             )}
           </motion.div>
