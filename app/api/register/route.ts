@@ -37,6 +37,14 @@ export async function POST(request: NextRequest) {
       event_type: eventType || 'vibe_coding'
     })
 
+    // Check if registration was successful
+    if (!registration) {
+      return NextResponse.json(
+        { message: 'Failed to create registration' },
+        { status: 500 }
+      )
+    }
+
     return NextResponse.json(
       { 
         message: 'Registration successful!',
