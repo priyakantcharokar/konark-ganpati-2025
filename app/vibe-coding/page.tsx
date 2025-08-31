@@ -659,7 +659,7 @@ export default function VibeCodingPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border`}
+            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border hidden lg:block`}
           >
             <div className="text-center mb-6">
               <div className="hidden lg:flex items-center justify-center gap-3 mb-4">
