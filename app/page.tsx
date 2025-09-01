@@ -116,7 +116,7 @@ export default function Home() {
               <div className={`${themeStyles.cardBg} rounded-xl p-6 shadow-lg border hover:shadow-xl transition-all duration-300 transform hover:scale-105`}>
                 {/* Status Ribbon */}
                 <div className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse shadow-lg">
-                  Registration Ongoing
+                  Registration Open
                 </div>
                 
                 {/* Card Header */}
