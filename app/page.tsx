@@ -42,7 +42,7 @@ export default function Home() {
           </div>
           
           <div className={`${themeStyles.cardBg} rounded-xl p-6 border shadow-lg max-w-2xl mx-auto`}>
-            <p className={`text-base md:text-lg font-medium leading-relaxed ${themeStyles.text}`}>
+            <p className={`text-base md:text-lg font-medium leading-relaxed font-kievit ${themeStyles.text}`}>
               Welcome to <span className={`font-bold ${themeStyles.accent}`}>Konark Exotica</span>! 
               Choose from our community events below.
             </p>
@@ -70,10 +70,10 @@ export default function Home() {
                   <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-3">
                     <span className="text-xl">🕉️</span>
                   </div>
-                  <h2 className={`text-xl font-bold mb-1 ${themeStyles.text}`}>
+                  <h2 className={`text-xl font-bold mb-1 font-kievit ${themeStyles.text}`}>
                     Ganesh Pooja
                   </h2>
-                  <p className={`text-sm ${themeStyles.muted}`}>
+                  <p className={`text-sm font-kievit ${themeStyles.muted}`}>
                     Spiritual Celebration
                   </p>
                 </div>
@@ -82,21 +82,21 @@ export default function Home() {
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-blue-500" />
-                    <span className={`text-sm ${themeStyles.text}`}>Daily Aarti Booking</span>
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Daily Aarti Booking</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Users className="w-4 h-4 text-green-500" />
-                    <span className={`text-sm ${themeStyles.text}`}>Event Participation</span>
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Event Participation</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Star className="w-4 h-4 text-yellow-500" />
-                    <span className={`text-sm ${themeStyles.text}`}>Photo Gallery</span>
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Photo Gallery</span>
                   </div>
                 </div>
 
                 {/* CTA Button */}
                 <div className="text-center">
-                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:from-orange-600 hover:to-yellow-600 transition-all duration-300">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:from-orange-600 hover:to-yellow-600 transition-all duration-300 font-kievit">
                     <span>Explore Events</span>
                     <ArrowRight className="w-4 h-4" />
                   </div>
@@ -124,10 +124,10 @@ export default function Home() {
                   <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
                     <span className="text-xl">🚀</span>
                   </div>
-                  <h2 className={`text-xl font-bold mb-1 ${themeStyles.text}`}>
+                  <h2 className={`text-xl font-bold mb-1 font-kievit ${themeStyles.text}`}>
                     Vibe Coding
                   </h2>
-                  <p className={`text-sm ${themeStyles.muted}`}>
+                  <p className={`text-sm font-kievit ${themeStyles.muted}`}>
                     Creative Coding for Kids 
                   </p>
                 </div>
@@ -136,21 +136,21 @@ export default function Home() {
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2">
                     <Users className="w-4 h-4 text-purple-500" />
-                    <span className={`text-sm ${themeStyles.text}`}>Website Registration</span>
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Website Registration</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Star className="w-4 h-4 text-green-500" />
-                    <span className={`text-sm ${themeStyles.text}`}>Community Building</span>
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Community Building</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-blue-500" />
-                    <span className={`text-sm ${themeStyles.text}`}>WhatsApp Group</span>
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>WhatsApp Group</span>
                   </div>
                 </div>
 
                 {/* CTA Button */}
                 <div className="text-center">
-                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:from-green-600 hover:to-blue-600 transition-all duration-300">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:from-green-600 hover:to-blue-600 transition-all duration-300 font-kievit">
                     <span>Join Coding</span>
                     <ArrowRight className="w-4 h-4" />
                   </div>
@@ -168,7 +168,7 @@ export default function Home() {
           className="text-center mt-12"
         >
           <div className={`${themeStyles.cardBg} rounded-xl p-4 border`}>
-            <p className={`text-sm ${themeStyles.muted}`}>
+            <p className={`text-sm font-kievit ${themeStyles.muted}`}>
               Click on any event card above to explore and participate in our community activities.
             </p>
           </div>
