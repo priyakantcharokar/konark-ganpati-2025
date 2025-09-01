@@ -306,12 +306,19 @@ export default function GalleryPage() {
         )}
       </AnimatePresence>
 
-      {/* Footer */}
+            {/* Footer */}
       <footer className="text-center py-8 bg-white/50 border-t border-amber-200">
         <p className="text-sm text-gray-500 digital-text">
           Beautiful memories captured during our Ganesh Pooja Festival celebrations
         </p>
       </footer>
+
+      {/* Data Not Updated Message */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <div className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg animate-pulse font-bold text-sm md:text-base">
+          ⚠️ Data is not updated
+        </div>
+      </div>
     </div>
   )
 }

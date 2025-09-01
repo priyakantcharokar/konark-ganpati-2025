@@ -501,6 +501,13 @@ export default function EventDetailPage() {
           />
         )}
       </AnimatePresence>
+
+      {/* Data Not Updated Message */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <div className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg animate-pulse font-bold text-sm md:text-base">
+          ⚠️ Data is not updated
+        </div>
+      </div>
     </div>
   )
 } 

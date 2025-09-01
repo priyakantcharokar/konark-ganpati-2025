@@ -278,10 +278,10 @@ export default function VibeCodingPage() {
             {/* Konark Exotica Logo */}
             <div className="flex-1 text-center">
               <Link href="/" className="inline-block">
-                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-style-script text-white leading-tight hover:text-yellow-300 transition-colors duration-200">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-style-script text-white leading-tight hover:text-yellow-300 transition-colors duration-200">
                   Konark Exotica
                 </h2>
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl font-medium font-style-script text-white leading-relaxed">
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-medium font-style-script text-white leading-relaxed">
                   Where Love Resides
                 </p>
               </Link>
@@ -302,7 +302,7 @@ export default function VibeCodingPage() {
                            <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl`}>
                    <p className={`text-lg md:text-xl font-medium leading-relaxed font-mono ${themeStyles.text}`}>
                      🚀 Welcome to <span className={`font-bold ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>Exoticas Vibe Coding</span>! 
-                     Calling all <span className={`font-bold ${isDarkMode ? 'text-green-300' : 'text-green-600'}`}>Exoticans kids</span> - imagine building your OWN website idea and bringing your vibe to life online. 
+                     Calling all <span className={`font-bold ${isDarkMode ? 'text-green-300' : 'text-green-600'}`}>Exoticans kids (Age grp - 10 to 16)</span> - imagine building your OWN website idea and bringing your vibe to life online. 
                      No boring theory, only fun + creativity. Register below to join the exclusive Exoticas coding session!
                    </p>
                  </div>
@@ -330,11 +330,7 @@ export default function VibeCodingPage() {
               {/* Mobile Count Display */}
               <div 
                 onClick={handleCountCardClick}
-                className={`bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 count-glow cursor-pointer hover:scale-105 transition-all duration-300 ${
-                  isDarkMode 
-                    ? 'from-gray-800 to-gray-900 border border-gray-600' 
-                    : ''
-                }`}
+                className={`${themeStyles.cardBg} rounded-2xl p-4 count-glow cursor-pointer hover:scale-105 transition-all duration-300`}
               >
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -345,14 +341,10 @@ export default function VibeCodingPage() {
                   }`}>
                     {registrations.length}
                   </div>
-                  <div className={`text-sm mt-2 ${
-                    isDarkMode ? 'text-gray-200' : 'text-purple-600'
-                  }`}>
+                  <div className={`text-sm mt-2 ${themeStyles.text}`}>
                     🚀 Ready to code! 🚀
                   </div>
-                  <div className={`text-xs mt-2 ${
-                    isDarkMode ? 'text-gray-300' : 'text-purple-600'
-                  }`}>
+                  <div className={`text-xs mt-2 ${themeStyles.muted}`}>
                     👆 Tap to see details
                   </div>
                 </div>
@@ -682,11 +674,7 @@ export default function VibeCodingPage() {
               </div>
               
               {/* Count Display */}
-              <div className={`bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-4 md:p-6 mb-6 count-glow ${
-                isDarkMode 
-                  ? 'from-gray-800 to-gray-900 border border-gray-600' 
-                  : ''
-              }`}>
+              <div className={`${themeStyles.cardBg} rounded-2xl p-4 md:p-6 mb-6 count-glow`}>
                 <div className="text-center mb-3">
                   <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Users className="w-6 h-6 md:w-8 md:h-8 text-white" />
@@ -698,14 +686,10 @@ export default function VibeCodingPage() {
                   </div>
                 </div>
                 <div className="hidden lg:block text-center">
-                  <div className={`text-lg font-medium mb-1 ${
-                    isDarkMode ? 'text-gray-200' : 'text-purple-700'
-                  }`}>
+                  <div className={`text-lg font-medium mb-1 ${themeStyles.text}`}>
                     Your friends are joining! 👥
                   </div>
-                  <div className={`text-sm ${
-                    isDarkMode ? 'text-gray-300' : 'text-purple-600'
-                  }`}>
+                  <div className={`text-sm ${themeStyles.muted}`}>
                     🚀 Ready to code! 🚀
                   </div>
                 </div>
@@ -768,9 +752,9 @@ export default function VibeCodingPage() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className={`bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200 hover:border-purple-300 transition-all duration-300 registration-card-hover ${
-                        isDarkMode ? 'from-gray-700 to-gray-800 border-gray-600' : ''
-                      } ${isOptimistic ? 'animate-pulse border-yellow-400' : ''}`}
+                      className={`${themeStyles.cardBg} rounded-xl p-4 border hover:border-purple-300 transition-all duration-300 registration-card-hover ${
+                        isOptimistic ? 'animate-pulse border-yellow-400' : ''
+                      }`}
                     >
                      <div className="flex items-center justify-between mb-3">
                        <div className="flex items-center gap-3">
@@ -778,21 +762,15 @@ export default function VibeCodingPage() {
                            {registration.vibe_code.charAt(0).toUpperCase()}
                          </div>
                          <div>
-                           <h3 className={`font-bold font-mono text-base ${
-                             isDarkMode ? 'text-white' : 'text-gray-800'
-                           }`}>
+                           <h3 className={`font-bold font-mono text-base ${themeStyles.text}`}>
                              {registration.vibe_code}
                            </h3>
-                           <span className={`text-sm font-mono ${
-                             isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                           }`}>
+                           <span className={`text-sm font-mono ${themeStyles.muted}`}>
                              {registration.full_name} • {registration.building}-{registration.flat}
                            </span>
                          </div>
                        </div>
-                       <div className={`text-xs font-mono ${
-                         isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                       }`}>
+                       <div className={`text-xs font-mono ${themeStyles.muted}`}>
                          #{index + 1}
                        </div>
                      </div>
@@ -803,9 +781,7 @@ export default function VibeCodingPage() {
                          <span className={`text-xs ${isDarkMode ? 'text-green-200' : 'text-green-600'}`}>💡</span>
                        </div>
                        <div className="flex-1">
-                         <p className={`text-sm line-clamp-2 ${
-                           isDarkMode ? 'text-gray-200' : 'text-gray-800'
-                         }`}>{registration.website_idea}</p>
+                         <p className={`text-sm line-clamp-2 ${themeStyles.text}`}>{registration.website_idea}</p>
                        </div>
                      </div>
                      {isOptimistic && (
@@ -930,9 +906,9 @@ export default function VibeCodingPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.05 }}
-                        className={`bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200 hover:border-purple-300 transition-all duration-300 ${
-                          isDarkMode ? 'from-gray-700 to-gray-800 border-gray-600' : ''
-                        } ${isOptimistic ? 'animate-pulse border-yellow-400' : ''}`}
+                        className={`${themeStyles.cardBg} rounded-xl p-4 border hover:border-purple-300 transition-all duration-300 ${
+                          isOptimistic ? 'animate-pulse border-yellow-400' : ''
+                        }`}
                       >
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-3">
@@ -940,21 +916,15 @@ export default function VibeCodingPage() {
                               {registration.vibe_code.charAt(0).toUpperCase()}
                             </div>
                             <div>
-                              <h3 className={`font-bold font-mono text-sm ${
-                                isDarkMode ? 'text-white' : 'text-gray-800'
-                              }`}>
+                              <h3 className={`font-bold font-mono text-sm ${themeStyles.text}`}>
                                 {registration.vibe_code}
                               </h3>
-                              <span className={`text-xs font-mono ${
-                                isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                              }`}>
+                              <span className={`text-xs font-mono ${themeStyles.muted}`}>
                                 {registration.full_name} • {registration.building}-{registration.flat}
                               </span>
                             </div>
                           </div>
-                          <div className={`text-xs font-mono ${
-                            isDarkMode ? 'text-gray-400' : 'text-gray-500'
-                          }`}>
+                          <div className={`text-xs font-mono ${themeStyles.muted}`}>
                             #{index + 1}
                           </div>
                         </div>
@@ -965,9 +935,7 @@ export default function VibeCodingPage() {
                             <span className={`text-xs ${isDarkMode ? 'text-green-200' : 'text-green-600'}`}>💡</span>
                           </div>
                           <div className="flex-1">
-                            <p className={`text-xs line-clamp-2 ${
-                              isDarkMode ? 'text-gray-200' : 'text-gray-800'
-                            }`}>{registration.website_idea}</p>
+                            <p className={`text-xs line-clamp-2 ${themeStyles.text}`}>{registration.website_idea}</p>
                           </div>
                         </div>
                         {isOptimistic && (
