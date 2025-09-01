@@ -343,7 +343,7 @@ export default function VibeCodingPage() {
                 <h2 className={`text-lg font-bold font-mono ${
                   isDarkMode ? 'text-white' : 'text-gray-800'
                 }`}>
-                  Awesome Vibers Registered!
+                  Your friends are joining! 👥
                 </h2>
                 <Users className="w-6 h-6 text-purple-600" />
               </div>
@@ -720,7 +720,7 @@ export default function VibeCodingPage() {
                   <div className={`text-lg font-medium mb-1 ${
                     isDarkMode ? 'text-gray-200' : 'text-purple-700'
                   }`}>
-                    Awesome Vibers Registered!
+                    Your friends are joining! 👥
                   </div>
                   <div className={`text-sm ${
                     isDarkMode ? 'text-gray-300' : 'text-purple-600'
