@@ -3,6 +3,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Laptop, Star, Code, Rocket, Sparkles, Sun, Moon, Users } from 'lucide-react'
+import { useTheme } from '@/lib/theme-context'
+import Link from 'next/link'
 
 interface VibeRegistration {
   fullName: string
@@ -39,9 +41,9 @@ export default function VibeCodingPage() {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [showWhatsAppInvite, setShowWhatsAppInvite] = useState(false)
   const [showRegistrationsPopup, setShowRegistrationsPopup] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(false)
   const [registrations, setRegistrations] = useState<VibeRegistrationData[]>([])
   const [isLoadingRegistrations, setIsLoadingRegistrations] = useState(true)
+  const { isDarkMode, toggleTheme, themeStyles } = useTheme()
 
   const [allFlats, setAllFlats] = useState<string[]>([])
   const [selectedBuilding, setSelectedBuilding] = useState<string>('')
@@ -85,22 +87,6 @@ export default function VibeCodingPage() {
       setFlatNumbers([])
     }
   }, [selectedBuilding, allFlats])
-
-  // Load theme preference from localStorage
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('vibe-coding-theme')
-    if (savedTheme) {
-      setIsDarkMode(savedTheme === 'dark')
-    } else {
-      // Default to dark mode
-      setIsDarkMode(true)
-    }
-  }, [])
-
-  // Save theme preference to localStorage
-  useEffect(() => {
-    localStorage.setItem('vibe-coding-theme', isDarkMode ? 'dark' : 'light')
-  }, [isDarkMode])
 
   // Load registrations on component mount
   useEffect(() => {
@@ -232,10 +218,6 @@ export default function VibeCodingPage() {
     window.location.href = '/'
   }
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode)
-  }
-
   const handleCountCardClick = () => {
     setShowRegistrationsPopup(true)
   }
@@ -244,25 +226,8 @@ export default function VibeCodingPage() {
     setShowRegistrationsPopup(false)
   }
 
-  // Theme-based styles
-  const themeStyles = {
-    background: isDarkMode 
-      ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900' 
-      : 'bg-gradient-to-br from-green-400 via-purple-500 to-yellow-400',
-    text: isDarkMode ? 'text-white' : 'text-gray-800',
-    cardBg: isDarkMode 
-      ? 'bg-gray-800/90 backdrop-blur-md border-gray-700' 
-      : 'bg-white/90 backdrop-blur-md border-white/30',
-    inputBg: isDarkMode 
-      ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
-      : 'bg-white/50 border-gray-200 text-gray-700 placeholder-gray-500',
-    floatingCode: isDarkMode 
-      ? 'text-green-400 text-yellow-400 text-purple-400 text-pink-400' 
-      : 'text-green-300 text-yellow-300 text-purple-300 text-pink-300'
-  }
-
   return (
-    <div className={`min-h-screen ${themeStyles.background} relative overflow-hidden`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900' : 'bg-gradient-to-br from-green-400 via-purple-500 to-yellow-400'} relative overflow-hidden`}>
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Floating Code Elements - Enhanced visibility */}
@@ -309,9 +274,19 @@ export default function VibeCodingPage() {
             >
               <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
             </button>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white font-mono text-center flex-1 px-2 whitespace-nowrap">
-              🚀 Vibe Coding
-            </h1>
+            
+            {/* Konark Exotica Logo */}
+            <div className="flex-1 text-center">
+              <Link href="/" className="inline-block">
+                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-style-script text-white leading-tight hover:text-yellow-300 transition-colors duration-200">
+                  Konark Exotica
+                </h2>
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl font-medium font-style-script text-white leading-relaxed">
+                  Where Love Resides
+                </p>
+              </Link>
+            </div>
+            
             <button 
               onClick={toggleTheme}
               className="text-white hover:text-yellow-300 transition-colors duration-200 p-2 rounded-full hover:bg-white/20 flex-shrink-0"
@@ -319,6 +294,10 @@ export default function VibeCodingPage() {
               {isDarkMode ? <Sun className="w-5 h-5 md:w-6 md:h-6 text-yellow-300" /> : <Moon className="w-5 h-5 md:w-6 md:h-6 text-white" />}
             </button>
           </div>
+          
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white font-mono text-center mb-6 whitespace-nowrap">
+            🚀 Vibe Coding
+          </h1>
           
                            <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl`}>
                    <p className={`text-lg md:text-xl font-medium leading-relaxed font-mono ${themeStyles.text}`}>
@@ -694,7 +673,9 @@ export default function VibeCodingPage() {
             <div className="text-center mb-6">
               <div className="hidden lg:flex items-center justify-center gap-3 mb-4">
                 <Users className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />
-                <h2 className={`text-lg md:text-2xl font-bold font-mono ${themeStyles.text}`}>
+                <h2 className={`text-lg md:text-2xl font-bold font-mono ${
+                  isDarkMode ? 'text-white' : 'text-gray-800'
+                }`}>
                   Registered Coders
                 </h2>
                 <Users className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />

@@ -2,11 +2,12 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
+import { ThemeProvider } from '@/lib/theme-context'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Konark Exotica - Ganesh Pooja 2025',
+  title: 'Konark Exotica - Where Love Resides',
   description: 'Complete schedule and information for the Ganesh Pooja Festival 2025 at Konark Exotica',
   keywords: 'Ganesh Pooja, Festival, Schedule, Events, Ganpati, Konark Exotica',
   icons: {
@@ -33,8 +34,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
-        <Toaster />
+        <ThemeProvider>
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )

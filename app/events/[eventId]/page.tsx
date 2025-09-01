@@ -392,24 +392,16 @@ export default function EventDetailPage() {
                     </p>
                   </div>
                   <button
-                    onClick={() => setShowNominationForm(true)}
-                    disabled={isBhogEvent}
-                    className={`py-3 px-6 sm:px-8 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl ${
-                      isBhogEvent 
-                        ? 'bg-gray-400 text-gray-600 cursor-not-allowed opacity-60' 
-                        : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-blue-400/50 hover:shadow-purple-400/75 glow-pulse-blue'
-                    }`}
+                    onClick={() => {
+                      // Disabled - nominations are closed
+                    }}
+                    disabled={true}
+                    className="py-3 px-6 sm:px-8 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl bg-gray-400 text-gray-600 cursor-not-allowed opacity-60"
                   >
                     <span className="flex items-center gap-2">
-                      <span className="text-lg">
-                        {isBhogEvent ? '🚫' : '🎯'}
-                      </span>
-                      <span>
-                        {isBhogEvent ? 'Bhog Entry Closed' : 'Nominate'}
-                      </span>
-                      <span className="text-lg">
-                        {isBhogEvent ? '❌' : '🚀'}
-                      </span>
+                      <span className="text-lg">🚫</span>
+                      <span>Nominations Closed</span>
+                      <span className="text-lg">❌</span>
                     </span>
                   </button>
                 </div>
@@ -446,7 +438,7 @@ export default function EventDetailPage() {
                       No {isBhogEvent ? 'Bhog offerings' : 'nominations'} yet
                     </p>
                     <p className="text-gray-500 text-sm sm:text-base digital-text">
-                      {isBhogEvent ? 'Bhog functionality is currently disabled' : 'Be the first to nominate for this event!'}
+                      Nominations are closed - Browse existing entries
                     </p>
                   </div>
                 ) : (

@@ -644,12 +644,12 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
               <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-amber-200 shadow-lg max-w-4xl mx-auto mb-8">
                 <div className="text-center">
                   <h4 className="text-lg font-bold text-amber-800 mb-3 font-sohne">
-                    💡 How to Participate
+                    📋 Event Information
                   </h4>
                   <div className="text-center text-sm text-gray-700">
                     <div className="flex items-center justify-center gap-2">
-                      <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
-                      <span>Click <strong>Nominate</strong> to participate in the event</span>
+                      <div className="w-6 h-6 bg-gray-500 text-white rounded-full flex items-center justify-center text-xs font-bold">ℹ️</div>
+                      <span><strong>Nominations are closed</strong> - Browse events and view details</span>
                     </div>
                   </div>
                 </div>
