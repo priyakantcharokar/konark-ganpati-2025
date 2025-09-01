@@ -48,6 +48,7 @@ export default function VibeCodingPage() {
   const [allFlats, setAllFlats] = useState<string[]>([])
   const [selectedBuilding, setSelectedBuilding] = useState<string>('')
   const [flatNumbers, setFlatNumbers] = useState<string[]>([])
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
 
   // Load flat numbers from JSON file
   useEffect(() => {
@@ -143,10 +144,120 @@ export default function VibeCodingPage() {
     }))
   }
 
+  // Validation functions
+  const validateFullName = (name: string): { isValid: boolean; error: string } => {
+    if (!name.trim()) {
+      return { isValid: false, error: 'Full name is required' }
+    }
+    if (name.length < 2) {
+      return { isValid: false, error: 'Name must be at least 2 characters long' }
+    }
+    if (name.length > 50) {
+      return { isValid: false, error: 'Name must be less than 50 characters' }
+    }
+    // Only allow letters, spaces, and common name characters (no special symbols)
+    const nameRegex = /^[a-zA-Z\s\.\-']+$/
+    if (!nameRegex.test(name)) {
+      return { isValid: false, error: 'Name can only contain letters, spaces, dots, hyphens, and apostrophes' }
+    }
+    return { isValid: true, error: '' }
+  }
+
+  const validateVibeCode = (vibeCode: string): { isValid: boolean; error: string } => {
+    if (!vibeCode.trim()) {
+      return { isValid: false, error: 'Vibe code is required' }
+    }
+    if (vibeCode.length < 3) {
+      return { isValid: false, error: 'Vibe code must be at least 3 characters long' }
+    }
+    if (vibeCode.length > 30) {
+      return { isValid: false, error: 'Vibe code must be less than 30 characters' }
+    }
+    // Allow letters, numbers, spaces, and some special characters for creative names
+    const vibeCodeRegex = /^[a-zA-Z0-9\s\-_!@#$%^&*()]+$/
+    if (!vibeCodeRegex.test(vibeCode)) {
+      return { isValid: false, error: 'Vibe code can contain letters, numbers, spaces, and common symbols' }
+    }
+    return { isValid: true, error: '' }
+  }
+
+  const validateWebsiteIdea = (idea: string): { isValid: boolean; error: string } => {
+    if (!idea.trim()) {
+      return { isValid: false, error: 'Website idea is required' }
+    }
+    if (idea.length < 10) {
+      return { isValid: false, error: 'Website idea must be at least 10 characters long' }
+    }
+    if (idea.length > 500) {
+      return { isValid: false, error: 'Website idea must be less than 500 characters' }
+    }
+    // Allow most characters except potentially harmful ones
+    const ideaRegex = /^[a-zA-Z0-9\s\-_!@#$%^&*()\[\]{}|\\:;"'<>?,.\/+=]+$/
+    if (!ideaRegex.test(idea)) {
+      return { isValid: false, error: 'Website idea contains invalid characters' }
+    }
+    return { isValid: true, error: '' }
+  }
+
+  const validateExpectations = (expectations: string): { isValid: boolean; error: string } => {
+    if (expectations.length > 300) {
+      return { isValid: false, error: 'Expectations must be less than 300 characters' }
+    }
+    // Allow most characters except potentially harmful ones
+    const expectationsRegex = /^[a-zA-Z0-9\s\-_!@#$%^&*()\[\]{}|\\:;"'<>?,.\/+=]+$/
+    if (expectations && !expectationsRegex.test(expectations)) {
+      return { isValid: false, error: 'Expectations contains invalid characters' }
+    }
+    return { isValid: true, error: '' }
+  }
+
+  const validateForm = (): { isValid: boolean; errors: Record<string, string> } => {
+    const errors: Record<string, string> = {}
+    
+    const nameValidation = validateFullName(formData.fullName)
+    if (!nameValidation.isValid) {
+      errors.fullName = nameValidation.error
+    }
+    
+    if (!formData.ageGroup) {
+      errors.ageGroup = 'Age group is required'
+    }
+    
+    if (!formData.flatNumber) {
+      errors.flatNumber = 'Flat number is required'
+    }
+    
+    const vibeCodeValidation = validateVibeCode(formData.vibeCode)
+    if (!vibeCodeValidation.isValid) {
+      errors.vibeCode = vibeCodeValidation.error
+    }
+    
+    const websiteIdeaValidation = validateWebsiteIdea(formData.websiteIdea)
+    if (!websiteIdeaValidation.isValid) {
+      errors.websiteIdea = websiteIdeaValidation.error
+    }
+    
+    const expectationsValidation = validateExpectations(formData.expectations)
+    if (!expectationsValidation.isValid) {
+      errors.expectations = expectationsValidation.error
+    }
+    
+    return { isValid: Object.keys(errors).length === 0, errors }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitError(null)
+    setValidationErrors({})
+
+    // Validate form before submission
+    const validation = validateForm()
+    if (!validation.isValid) {
+      setValidationErrors(validation.errors)
+      setIsSubmitting(false)
+      return
+    }
 
     // Optimistically add the new registration to the list
     const optimisticRegistration = {
@@ -193,6 +304,7 @@ export default function VibeCodingPage() {
         // Reset building selection
         setSelectedBuilding('')
         setFlatNumbers([])
+        setValidationErrors({})
         
         // Immediately reload registrations to get the real data from server
         console.log('🔄 Immediately reloading registrations...')
@@ -404,7 +516,9 @@ export default function VibeCodingPage() {
                       value={formData.fullName}
                       onChange={(e) => handleInputChange('fullName', e.target.value)}
                       placeholder="Enter your awesome name!"
-                      className={`w-full p-4 pl-12 border-2 border-purple-300 rounded-2xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-300 font-mono text-sm md:text-base ${themeStyles.inputBg} hover:border-purple-400 group-hover:shadow-lg`}
+                      className={`w-full p-4 pl-12 border-2 rounded-2xl focus:ring-4 focus:ring-purple-200 transition-all duration-300 font-mono text-sm md:text-base ${themeStyles.inputBg} hover:border-purple-400 group-hover:shadow-lg ${
+                        validationErrors.fullName ? 'border-red-500 focus:border-red-500' : 'border-purple-300 focus:border-purple-500'
+                      }`}
                     />
                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-purple-500">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -412,6 +526,15 @@ export default function VibeCodingPage() {
                       </svg>
                     </div>
                   </div>
+                  {validationErrors.fullName && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-red-500 text-sm mt-2 font-mono"
+                    >
+                      ⚠️ {validationErrors.fullName}
+                    </motion.div>
+                  )}
                 </div>
 
                 {/* Age Group Selection */}
@@ -447,6 +570,15 @@ export default function VibeCodingPage() {
                       I am 13 to 16
                     </button>
                   </div>
+                  {validationErrors.ageGroup && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-red-500 text-sm mt-2 font-mono"
+                    >
+                      ⚠️ {validationErrors.ageGroup}
+                    </motion.div>
+                  )}
                 </div>
 
                 {/* Building Selection */}
@@ -512,6 +644,15 @@ export default function VibeCodingPage() {
                       💡 First select your building above, then choose your flat number
                     </p>
                   )}
+                  {validationErrors.flatNumber && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-red-500 text-sm mt-2 font-mono"
+                    >
+                      ⚠️ {validationErrors.flatNumber}
+                    </motion.div>
+                  )}
                 </div>
 
                 {/* Website Idea */}
@@ -526,7 +667,9 @@ export default function VibeCodingPage() {
                       onChange={(e) => handleInputChange('websiteIdea', e.target.value)}
                       placeholder="Describe your amazing website idea! (e.g., A game website, a pet blog, a music player...)"
                       rows={4}
-                      className={`w-full p-4 pl-12 border-2 border-green-300 rounded-2xl focus:ring-4 focus:ring-green-200 focus:border-green-500 transition-all duration-300 font-mono text-sm md:text-base resize-none ${themeStyles.inputBg} hover:border-green-400 group-hover:shadow-lg`}
+                      className={`w-full p-4 pl-12 border-2 rounded-2xl focus:ring-4 focus:ring-green-200 transition-all duration-300 font-mono text-sm md:text-base resize-none ${themeStyles.inputBg} hover:border-green-400 group-hover:shadow-lg ${
+                        validationErrors.websiteIdea ? 'border-red-500 focus:border-red-500' : 'border-green-300 focus:border-green-500'
+                      }`}
                     />
                     <div className="absolute left-4 top-6 text-green-500">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -534,6 +677,15 @@ export default function VibeCodingPage() {
                       </svg>
                     </div>
                   </div>
+                  {validationErrors.websiteIdea && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-red-500 text-sm mt-2 font-mono"
+                    >
+                      ⚠️ {validationErrors.websiteIdea}
+                    </motion.div>
+                  )}
                 </div>
 
                 {/* Vibe Code */}
