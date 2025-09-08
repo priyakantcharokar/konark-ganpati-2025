@@ -432,9 +432,9 @@ export default function VibeCodingPage() {
                            : 'text-purple-600 hover:text-purple-700 hover:bg-purple-100'
                        }`}
                      >
-                       <span>👨‍💻</span>
-                       <span>Know more about me</span>
-                       <span>→</span>
+                       <span className="text-lg">👨‍💻</span>
+                       <span className="text-lg font-['Style_Script']">Know more about me</span>
+                       <span className="text-lg">→</span>
                      </Link>
                    </div>
                  </div>
