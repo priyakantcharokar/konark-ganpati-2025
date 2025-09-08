@@ -408,7 +408,14 @@ export default function VibeCodingPage() {
           </div>
           
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white font-mono text-center mb-6 whitespace-nowrap">
-            🚀 Vibe Coding
+            🚀 Vibe Coding by{' '}
+            <Link 
+              href="/about-me"
+              className="text-yellow-300 hover:text-yellow-200 transition-colors duration-200 underline decoration-2 underline-offset-4 hover:decoration-yellow-200"
+              title="Click to know why me?"
+            >
+              Me 
+            </Link>
           </h1>
           
                            <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl`}>
@@ -417,6 +424,20 @@ export default function VibeCodingPage() {
                      Calling all <span className={`font-bold ${isDarkMode ? 'text-green-300' : 'text-green-600'}`}>Exoticans kids (Age grp - 10 to 16)</span> - imagine building your OWN website idea and bringing your vibe to life online. 
                      No boring theory, only fun + creativity. Register below to join the exclusive Exoticas coding session!
                    </p>
+                   <div className="text-center mt-4">
+                     <Link 
+                       href="/about-me" 
+                       className={`inline-flex items-center gap-2 text-sm font-mono px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                         isDarkMode 
+                           ? 'text-purple-300 hover:text-purple-200 hover:bg-purple-900/30' 
+                           : 'text-purple-600 hover:text-purple-700 hover:bg-purple-100'
+                       }`}
+                     >
+                       <span>👨‍💻</span>
+                       <span>Know more about me</span>
+                       <span>→</span>
+                     </Link>
+                   </div>
                  </div>
         </motion.div>
 
