@@ -113,7 +113,7 @@ export default function AboutMePage() {
             
             <div className="mt-4 text-center">
               <h3 className={`text-lg font-bold font-mono ${themeStyles.text}`}>
-                📸 IIM Calcutta
+                IIM Calcutta
               </h3>
               <p className={`text-sm font-mono ${themeStyles.muted}`}>
                 Proud alumnus
@@ -145,7 +145,7 @@ export default function AboutMePage() {
                 <div className={`${themeStyles.cardBg} rounded-xl p-4 border text-center`}>
                   <Home className={`w-6 h-6 mx-auto mb-2 ${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`} />
                   <div className={`text-lg font-bold font-mono ${themeStyles.text}`}>Exotican</div>
-                  <div className={`text-xs font-mono ${themeStyles.muted}`}>Residing 14 years</div>
+                  <div className={`text-xs font-mono ${themeStyles.muted}`}>Since 2010</div>
                 </div>
               <div className={`${themeStyles.cardBg} rounded-xl p-4 border text-center`}>
                 <Building className={`w-6 h-6 mx-auto mb-2 ${isDarkMode ? 'text-green-300' : 'text-green-600'}`} />
@@ -265,7 +265,7 @@ export default function AboutMePage() {
                 }`}
               >
                 <span>←</span>
-                <span>Back to Vibe Coding</span>
+                <span>Register for Vibe Coding</span>
                 <span>💻</span>
               </Link>
               <Link 
