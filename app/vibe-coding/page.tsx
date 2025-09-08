@@ -408,20 +408,19 @@ export default function VibeCodingPage() {
           </div>
           
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white font-mono text-center mb-6 whitespace-nowrap">
-            🚀 Vibe Coding by{' '}
+            🚀 Vibe Coding{' '}
             <Link 
               href="/about-me"
               className="text-yellow-300 hover:text-yellow-200 transition-colors duration-200 underline decoration-2 underline-offset-4 hover:decoration-yellow-200"
               title="Click to know why me?"
-            >
-              Me 
+            > 
             </Link>
           </h1>
           
                            <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl`}>
                    <p className={`text-lg md:text-xl font-medium leading-relaxed font-mono ${themeStyles.text}`}>
-                     🚀 Welcome to <span className={`font-bold ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>Exoticas Vibe Coding</span>! 
-                     Calling all <span className={`font-bold ${isDarkMode ? 'text-green-300' : 'text-green-600'}`}>Exoticans kids (Age grp - 10 to 16)</span> - imagine building your OWN website idea and bringing your vibe to life online. 
+                     🚀 Welcome to <span className={`font-bold ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>Exoticas Kids Vibe Coding</span>! 
+                     Calling all <span className={`font-bold ${isDarkMode ? 'text-green-300' : 'text-green-600'}`}>kids (Age grp - 10 to 16)</span> - imagine building your OWN website idea and bringing your vibe to life online. 
                      No boring theory, only fun + creativity. Register below to join the exclusive Exoticas coding session!
                    </p>
                    <div className="text-center mt-4">

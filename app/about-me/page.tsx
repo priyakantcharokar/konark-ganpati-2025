@@ -1,29 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Sun, Moon, Code, Heart, Star, Rocket, Users, Award, GraduationCap, Building, Lightbulb } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { ArrowLeft, Sun, Moon, Code, Heart, Star, Rocket, Users, Award, GraduationCap, Building, Lightbulb, Home } from 'lucide-react'
 import { useTheme } from '@/lib/theme-context'
 import Link from 'next/link'
 import Image from 'next/image'
 
 export default function AboutMePage() {
   const { isDarkMode, toggleTheme, themeStyles } = useTheme()
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  
-  const images = [
-    '/about-me/iimc-pics/iimc.jpg',
-    '/about-me/iimc-pics/iimc1.jpg',
-    '/about-me/iimc-pics/iimc award.jpg'
-  ]
-
-  // Auto-rotate carousel every 2 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length)
-    }, 2000)
-    return () => clearInterval(interval)
-  }, [images.length])
 
   const handleBackClick = () => {
     window.location.href = '/vibe-coding'
@@ -112,47 +96,29 @@ export default function AboutMePage() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className={`${themeStyles.cardBg} rounded-3xl p-6 shadow-2xl border overflow-hidden`}
+            className={`${themeStyles.cardBg} rounded-3xl p-6 shadow-2xl border overflow-hidden flex flex-col justify-center`}
           >
-            <div className="relative h-80 lg:h-96">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentImageIndex}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.5 }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={images[currentImageIndex]}
-                    alt={`IIMC Photo ${currentImageIndex + 1}`}
-                    fill
-                    className="object-cover rounded-2xl"
-                    priority
-                  />
-                </motion.div>
-              </AnimatePresence>
-              
-              {/* Image indicators */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                {images.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === currentImageIndex 
-                        ? 'bg-white scale-125' 
-                        : 'bg-white/50'
-                    }`}
-                  />
-                ))}
-              </div>
+            <div className="relative h-80 lg:h-96 flex items-center justify-center">
+              <Image
+                src="/about-me/iimc-pics/iimc1.jpg"
+                alt="IIM Calcutta - Priyakant"
+                fill
+                className="object-cover rounded-2xl"
+                priority
+              />
               
               {/* Overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl" />
             </div>
             
-            
+            <div className="mt-4 text-center">
+              <h3 className={`text-lg font-bold font-mono ${themeStyles.text}`}>
+                📸 IIM Calcutta
+              </h3>
+              <p className={`text-sm font-mono ${themeStyles.muted}`}>
+                Proud alumnus
+              </p>
+            </div>
           </motion.div>
 
           {/* Personal Introduction */}
@@ -163,9 +129,9 @@ export default function AboutMePage() {
             className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border flex flex-col justify-center`}
           >
             <div className="text-center mb-6">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              {/* <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">👨‍💻</span>
-              </div>
+              </div> */}
               <h2 className={`text-2xl font-bold font-mono mb-3 ${themeStyles.text}`}>
                 Hi, I'm Priyakant! 👋
               </h2>
@@ -176,11 +142,11 @@ export default function AboutMePage() {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className={`${themeStyles.cardBg} rounded-xl p-4 border text-center`}>
-                <GraduationCap className={`w-6 h-6 mx-auto mb-2 ${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`} />
-                <div className={`text-lg font-bold font-mono ${themeStyles.text}`}>IIM Calcutta</div>
-                <div className={`text-xs font-mono ${themeStyles.muted}`}>Alumnus</div>
-              </div>
+                <div className={`${themeStyles.cardBg} rounded-xl p-4 border text-center`}>
+                  <Home className={`w-6 h-6 mx-auto mb-2 ${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`} />
+                  <div className={`text-lg font-bold font-mono ${themeStyles.text}`}>Exotican</div>
+                  <div className={`text-xs font-mono ${themeStyles.muted}`}>Residing 14 years</div>
+                </div>
               <div className={`${themeStyles.cardBg} rounded-xl p-4 border text-center`}>
                 <Building className={`w-6 h-6 mx-auto mb-2 ${isDarkMode ? 'text-green-300' : 'text-green-600'}`} />
                 <div className={`text-lg font-bold font-mono ${themeStyles.text}`}>21+ Years</div>
