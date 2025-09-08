@@ -79,9 +79,9 @@ export default function AboutMePage() {
             </button>
           </div>
           
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white font-mono text-center mb-6 whitespace-nowrap">
+          {/* <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white font-mono text-center mb-6 whitespace-nowrap">
             👨‍💻 About Me
-          </h1>
+          </h1> */}
         </motion.div>
 
         {/* Hero Section with Photo Carousel */}
@@ -100,7 +100,7 @@ export default function AboutMePage() {
           >
             <div className="relative h-80 lg:h-96 flex items-center justify-center">
               <Image
-                src="/about-me/iimc-pics/iimc1.jpg"
+                src="/about-me/iimc-pics/iimc100.jpg"
                 alt="IIM Calcutta - Priyakant"
                 fill
                 className="object-cover rounded-2xl"
