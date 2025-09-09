@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Laptop, Star, Code, Rocket, Sparkles, Sun, Moon, Users } from 'lucide-react'
+import { ArrowLeft, Laptop, Star, Code, Rocket, Sparkles, Sun, Moon, Users, RefreshCw } from 'lucide-react'
 import { useTheme } from '@/lib/theme-context'
 import Link from 'next/link'
 
@@ -843,6 +843,17 @@ export default function VibeCodingPage() {
                   Registered Coders
                 </h2>
                 <Users className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />
+                <button
+                  onClick={loadRegistrations}
+                  className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
+                    isDarkMode 
+                      ? 'text-purple-300 hover:text-purple-200 hover:bg-purple-900/30' 
+                      : 'text-purple-600 hover:text-purple-700 hover:bg-purple-100'
+                  }`}
+                  title="Refresh data"
+                >
+                  <RefreshCw className="w-5 h-5" />
+                </button>
               </div>
               
               {/* Count Display */}

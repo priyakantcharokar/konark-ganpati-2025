@@ -424,7 +424,7 @@ export class DatabaseService {
       const { data, error } = await supabase
         .from('vibe_registrations')
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('created_at', { ascending: true })
 
       if (error) {
         console.error('❌ Database error:', error)
