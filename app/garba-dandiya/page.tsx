@@ -411,7 +411,7 @@ export default function GarbaDandiyaPage() {
               {/* Header */}
               <div className="text-center mb-12">
                 
-                <h3 className={`text-4xl font-bold mb-6 font-kievit ${themeStyles.text} bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent`}>
+                <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-6 font-kievit ${themeStyles.text} bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent`}>
                   🎭 Join Our Dance Circle! 🎭
                 </h3>
                 <p className={`text-xl font-kievit ${themeStyles.muted} max-w-2xl mx-auto leading-relaxed`}>
@@ -589,7 +589,7 @@ export default function GarbaDandiyaPage() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      <span className="text-2xl">📱</span>
+                        <span className="text-2xl">💬</span>
                       <span>9687663916</span>
                     </motion.a>
                     
