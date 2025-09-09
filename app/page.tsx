@@ -50,7 +50,7 @@ export default function Home() {
         </motion.div>
 
         {/* Event Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {/* Ganesh Pooja Card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -152,6 +152,60 @@ export default function Home() {
                 <div className="text-center">
                   <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:from-green-600 hover:to-blue-600 transition-all duration-300 font-kievit">
                     <span>Join Coding</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* Navratri Utsav Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="group relative"
+          >
+            <Link href="/navratri-utsav" className="block">
+              <div className={`${themeStyles.cardBg} rounded-xl p-6 shadow-lg border hover:shadow-xl transition-all duration-300 transform hover:scale-105`}>
+                {/* Status Ribbon */}
+                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
+                  Coming Soon
+                </div>
+                
+                {/* Card Header */}
+                <div className="text-center mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span className="text-xl">🕉️</span>
+                  </div>
+                  <h2 className={`text-xl font-bold mb-1 font-kievit ${themeStyles.text}`}>
+                    Navratri Utsav
+                  </h2>
+                  <p className={`text-sm font-kievit ${themeStyles.muted}`}>
+                    Nine Nights Celebration
+                  </p>
+                </div>
+
+                {/* Features List */}
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-purple-500" />
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Daily Pooja</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-pink-500" />
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Garba & Dandiya</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Star className="w-4 h-4 text-yellow-500" />
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Cultural Events</span>
+                  </div>
+                </div>
+
+                {/* CTA Button */}
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-kievit">
+                    <span>Explore Festival</span>
                     <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
