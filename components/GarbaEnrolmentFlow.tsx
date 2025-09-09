@@ -87,8 +87,9 @@ const GarbaEnrolmentFlow: React.FC<GarbaEnrolmentFlowProps> = ({
       return
     }
     
-    if (!/^\d{10}$/.test(mobileNumber)) {
-      alert('Please enter a valid 10-digit mobile number')
+    // Mobile number is optional, but if provided, it should be valid
+    if (mobileNumber.trim() && !/^\d{10}$/.test(mobileNumber)) {
+      alert('Please enter a valid 10-digit mobile number or leave it empty')
       return
     }
 
@@ -107,9 +108,9 @@ const GarbaEnrolmentFlow: React.FC<GarbaEnrolmentFlowProps> = ({
 
       if (enrolment) {
         onSuccess(`🎉 Enrolment successful! ${userName} from Flat ${selectedFlat} in Building ${selectedBuilding} has enrolled for Garba & Dandiya Workshop!`)
-        // Redirect to landing page after success
+        // Redirect to Garba & Dandiya page after success
         setTimeout(() => {
-          window.location.href = '/'
+          window.location.href = '/garba-dandiya'
         }, 2000)
       } else {
         alert('Failed to submit enrolment. Please try again.')
@@ -269,16 +270,15 @@ const GarbaEnrolmentFlow: React.FC<GarbaEnrolmentFlowProps> = ({
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2 font-kievit">
                       <Phone className="w-4 h-4 inline mr-2" />
-                      Mobile Number *
+                      Mobile Number (Optional)
                     </label>
                     <input
                       type="tel"
                       value={mobileNumber}
                       onChange={(e) => setMobileNumber(e.target.value)}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent font-kievit"
-                      placeholder="Enter 10-digit mobile number"
+                      placeholder="Enter 10-digit mobile number (optional)"
                       maxLength={10}
-                      required
                     />
                   </div>
 

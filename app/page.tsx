@@ -35,9 +35,9 @@ export default function Home() {
             </div>
             <button 
               onClick={toggleTheme}
-              className="text-white hover:text-blue-300 transition-colors duration-200 p-2 rounded-full hover:bg-white/10"
+              className={`p-2 rounded-full hover:bg-white/10 transition-all duration-200 ${themeStyles.cardBg} border ${themeStyles.border}`}
             >
-              {isDarkMode ? <Moon className="w-5 h-5 text-blue-300" /> : <Sun className="w-5 h-5 text-blue-300" />}
+              {isDarkMode ? <Sun className={`w-5 h-5 ${themeStyles.text}`} /> : <Moon className={`w-5 h-5 ${themeStyles.text}`} />}
             </button>
           </div>
           
@@ -81,15 +81,15 @@ export default function Home() {
                 {/* Features List */}
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-blue-500" />
+                    <Calendar className={`w-4 h-4 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} />
                     <span className={`text-sm font-kievit ${themeStyles.text}`}>Daily Aarti Booking</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-green-500" />
+                    <Users className={`w-4 h-4 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
                     <span className={`text-sm font-kievit ${themeStyles.text}`}>Event Participation</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Star className="w-4 h-4 text-yellow-500" />
+                    <Star className={`w-4 h-4 ${isDarkMode ? 'text-yellow-400' : 'text-yellow-600'}`} />
                     <span className={`text-sm font-kievit ${themeStyles.text}`}>Photo Gallery</span>
                   </div>
                 </div>
@@ -135,15 +135,15 @@ export default function Home() {
                 {/* Features List */}
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-purple-500" />
+                    <Users className={`w-4 h-4 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
                     <span className={`text-sm font-kievit ${themeStyles.text}`}>Website Registration</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Star className="w-4 h-4 text-green-500" />
+                    <Star className={`w-4 h-4 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
                     <span className={`text-sm font-kievit ${themeStyles.text}`}>Community Building</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-blue-500" />
+                    <Calendar className={`w-4 h-4 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} />
                     <span className={`text-sm font-kievit ${themeStyles.text}`}>WhatsApp Group</span>
                   </div>
                 </div>
@@ -189,15 +189,15 @@ export default function Home() {
                 {/* Features List */}
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-purple-500" />
+                    <Calendar className={`w-4 h-4 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
                     <span className={`text-sm font-kievit ${themeStyles.text}`}>Daily Pooja</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-pink-500" />
+                    <Users className={`w-4 h-4 ${isDarkMode ? 'text-pink-400' : 'text-pink-600'}`} />
                     <span className={`text-sm font-kievit ${themeStyles.text}`}>Garba & Dandiya</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Star className="w-4 h-4 text-yellow-500" />
+                    <Star className={`w-4 h-4 ${isDarkMode ? 'text-yellow-400' : 'text-yellow-600'}`} />
                     <span className={`text-sm font-kievit ${themeStyles.text}`}>Cultural Events</span>
                   </div>
                 </div>

@@ -2,16 +2,20 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Calendar, Clock, Users, Star, Sun, Moon, ArrowUp } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, Users, Star, Sun, Moon, ArrowUp, X, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react'
 import { useTheme } from '@/lib/theme-context'
 import Link from 'next/link'
 import GarbaEnrolmentFlow from '@/components/GarbaEnrolmentFlow'
+import { databaseService } from '@/lib/database-service'
 
 export default function GarbaDandiyaPage() {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [showEnrolmentModal, setShowEnrolmentModal] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [showGoToTop, setShowGoToTop] = useState(false)
+  const [participants, setParticipants] = useState<any[]>([])
+  const [isParticipantsCollapsed, setIsParticipantsCollapsed] = useState(true)
+  const [loadingParticipants, setLoadingParticipants] = useState(false)
   const { isDarkMode, toggleTheme, themeStyles } = useTheme()
 
   // Close mobile menu when clicking outside
@@ -44,6 +48,32 @@ export default function GarbaDandiyaPage() {
       behavior: 'smooth'
     })
   }
+
+  // Fetch Garba & Dandiya participants
+  const fetchParticipants = async () => {
+    setLoadingParticipants(true)
+    try {
+      const response = await fetch('/api/event-nominations')
+      if (response.ok) {
+        const data = await response.json()
+        // Filter for Garba & Dandiya workshop participants
+        const garbaParticipants = data.filter((participant: any) => 
+          participant.event_title === 'Garba & Dandiya Workshop 2025'
+        )
+        setParticipants(garbaParticipants)
+        console.log('🎭 Garba participants found:', garbaParticipants.length)
+      }
+    } catch (error) {
+      console.error('Error fetching participants:', error)
+    } finally {
+      setLoadingParticipants(false)
+    }
+  }
+
+  // Fetch participants on component mount
+  useEffect(() => {
+    fetchParticipants()
+  }, [])
 
   return (
     <div className={`min-h-screen ${themeStyles.background}`}>
@@ -377,12 +407,7 @@ export default function GarbaDandiyaPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className={`text-4xl font-bold mb-4 font-kievit ${themeStyles.text}`}>
-              🎭 Dance Workshop Details 🎭
-            </h2>
-            <p className={`text-xl font-kievit ${themeStyles.muted}`}>
-              Everything you need to know about our traditional Garba & Dandiya dance workshop
-            </p>
+            
           </motion.div>
 
           {/* Combined Workshop & Registration Card */}
@@ -395,17 +420,48 @@ export default function GarbaDandiyaPage() {
           >
             <div className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border ${themeStyles.border}`}>
               {/* Header */}
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🎭</span>
-                </div>
-                <h3 className={`text-3xl font-bold mb-4 font-kievit ${themeStyles.text}`}>
+              <div className="text-center mb-12">
+                
+                <h3 className={`text-4xl font-bold mb-6 font-kievit ${themeStyles.text} bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent`}>
                   🎭 Join Our Dance Circle! 🎭
                 </h3>
-                <p className={`text-lg font-kievit ${themeStyles.muted}`}>
+                <p className={`text-xl font-kievit ${themeStyles.muted} max-w-2xl mx-auto leading-relaxed`}>
                   Let's dance our way through Navratri celebrations! 💃✨
                 </p>
+                
+                {/* Floating Dance Emojis */}
+                <div className="flex justify-center space-x-4 mt-6">
+                  <motion.span
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0 }}
+                    className="text-2xl"
+                  >
+                    💃
+                  </motion.span>
+                  <motion.span
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                    className="text-2xl"
+                  >
+                    🕺
+                  </motion.span>
+                  <motion.span
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="text-2xl"
+                  >
+                    ✨
+                  </motion.span>
+                  <motion.span
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                    className="text-2xl"
+                  >
+                    🎪
+                  </motion.span>
+                </div>
               </div>
+
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Workshop Information */}
@@ -510,20 +566,59 @@ export default function GarbaDandiyaPage() {
               </div>
 
               {/* Contact Information */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mt-8 border border-blue-200">
-                <h4 className="font-bold text-gray-800 mb-3 font-kievit text-center text-lg">
-                  📞 Contact Dr. Bharti for Enrolment
-                </h4>
-                <div className="text-center">
-                  <a 
-                    href="tel:‪96876 63916‬" 
-                    className="text-blue-600 hover:text-blue-800 font-bold font-kievit text-xl transition-colors duration-200"
-                  >
-                    📱 ‪96876 63916‬
-                  </a>
-                  <p className="text-sm text-gray-600 font-kievit mt-2">
-                    For payment details and enrolment confirmation
-                  </p>
+              <div className={`${themeStyles.cardBg} rounded-2xl p-8 mt-12 shadow-xl border ${themeStyles.border} backdrop-blur-sm relative overflow-hidden`}>
+                {/* Background Pattern */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-50"></div>
+                
+                <div className="relative z-10">
+                  <div className="text-center mb-6">
+                    <motion.div
+                      animate={{ 
+                        scale: [1, 1.1, 1],
+                      }}
+                      transition={{ 
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg"
+                    >
+                      <span className="text-2xl">📞</span>
+                    </motion.div>
+                    <h4 className={`text-2xl font-bold mb-2 font-kievit ${themeStyles.text}`}>
+                      Contact Dr. Bharti
+                    </h4>
+                    <p className={`text-base font-kievit ${themeStyles.muted}`}>
+                      For enrolment and payment details
+                    </p>
+                  </div>
+                  
+                  <div className="text-center">
+                    <motion.a 
+                      href="tel:‪96876 63916‬" 
+                      className={`inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-xl font-bold font-kievit text-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <span className="text-2xl">📱</span>
+                      <span>96876 63916</span>
+                    </motion.a>
+                    
+                    <div className="mt-4 flex justify-center space-x-6">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-3 h-3 rounded-full ${isDarkMode ? 'bg-green-400' : 'bg-green-600'}`}></div>
+                        <span className={`text-sm font-kievit ${themeStyles.muted}`}>Quick Response</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-3 h-3 rounded-full ${isDarkMode ? 'bg-blue-400' : 'bg-blue-600'}`}></div>
+                        <span className={`text-sm font-kievit ${themeStyles.muted}`}>Payment Details</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-3 h-3 rounded-full ${isDarkMode ? 'bg-purple-400' : 'bg-purple-600'}`}></div>
+                        <span className={`text-sm font-kievit ${themeStyles.muted}`}>Confirmation</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -544,12 +639,119 @@ export default function GarbaDandiyaPage() {
                 >
                   🎯 Enrol Now
                 </motion.button>
-                <p className="text-sm font-kievit text-gray-600 mt-3">
-                  Or contact Dr. Bharti directly: 📱 ‪96876 63916‬
-                </p>
+                
               </div>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Participants List Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className={`${themeStyles.cardBg} rounded-2xl p-6 shadow-xl border ${themeStyles.border} backdrop-blur-sm`}>
+            <motion.button
+              onClick={() => setIsParticipantsCollapsed(!isParticipantsCollapsed)}
+              className={`w-full flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] ${isDarkMode ? 'hover:bg-gray-700/50' : 'hover:bg-gray-50'}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                  <div className="text-left">
+                    <h4 className={`text-xl font-bold font-kievit ${themeStyles.text}`}>
+                      💃 Dance Circle Participants
+                    </h4>
+                    <p className={`text-sm font-kievit ${themeStyles.muted}`}>
+                      {participants.length} {participants.length === 1 ? 'participant' : 'participants'} enrolled
+                    </p>
+                  </div>
+                  <motion.button
+                    onClick={fetchParticipants}
+                    disabled={loadingParticipants}
+                    className={`p-2 rounded-lg transition-all duration-200 ${isDarkMode ? 'hover:bg-gray-700/50' : 'hover:bg-gray-50'} ${loadingParticipants ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    whileHover={{ scale: loadingParticipants ? 1 : 1.05 }}
+                    whileTap={{ scale: loadingParticipants ? 1 : 0.95 }}
+                  >
+                    <RefreshCw className={`w-5 h-5 ${themeStyles.text} ${loadingParticipants ? 'animate-spin' : ''}`} />
+                  </motion.button>
+              </div>
+              <motion.div
+                animate={{ rotate: isParticipantsCollapsed ? 0 : 180 }}
+                transition={{ duration: 0.2 }}
+              >
+                {isParticipantsCollapsed ? (
+                  <ChevronDown className={`w-6 h-6 ${themeStyles.text}`} />
+                ) : (
+                  <ChevronUp className={`w-6 h-6 ${themeStyles.text}`} />
+                )}
+              </motion.div>
+            </motion.button>
+
+            <AnimatePresence>
+              {!isParticipantsCollapsed && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <div className="pt-4 border-t border-gray-200 dark:border-gray-600">
+                    {loadingParticipants ? (
+                      <div className="text-center py-8">
+                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+                        <p className={`mt-2 font-kievit ${themeStyles.muted}`}>Loading participants...</p>
+                      </div>
+                    ) : participants.length === 0 ? (
+                      <div className="text-center py-8">
+                        <div className="w-16 h-16 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <Users className="w-8 h-8 text-white" />
+                        </div>
+                        <p className={`text-lg font-kievit ${themeStyles.text}`}>No participants yet</p>
+                        <p className={`text-sm font-kievit ${themeStyles.muted}`}>Be the first to join our dance circle!</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {participants.map((participant, index) => (
+                          <motion.div
+                            key={participant.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className={`${themeStyles.cardBg} rounded-xl p-4 border ${themeStyles.border} hover:shadow-lg transition-all duration-200`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full flex items-center justify-center shadow-md">
+                                <span className="text-white font-bold text-sm">
+                                  {participant.user_name?.charAt(0)?.toUpperCase() || '?'}
+                                </span>
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className={`font-medium font-kievit ${themeStyles.text} truncate`}>
+                                  {participant.user_name || 'Unknown'}
+                                </p>
+                                <p className={`text-sm font-kievit ${themeStyles.muted}`}>
+                                  {participant.building} - {participant.flat}
+                                </p>
+                                {participant.mobile_number && (
+                                  <p className={`text-xs font-kievit ${themeStyles.muted}`}>
+                                    📱 {participant.mobile_number}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </section>
 

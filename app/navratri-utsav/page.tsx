@@ -48,9 +48,6 @@ export default function NavratriUtsavPage() {
               <Link href="/gallery" className={`${themeStyles.text} hover:text-purple-300 transition-colors duration-200 font-medium digital-text`}>
                 Gallery
               </Link>
-              <Link href="/participation-overview" className={`${themeStyles.text} hover:text-purple-300 transition-colors duration-200 font-medium digital-text`}>
-                Participation
-              </Link>
             </div>
 
             {/* Theme Toggle */}
@@ -146,15 +143,6 @@ export default function NavratriUtsavPage() {
                             <span className="text-lg mr-3">📸</span>
                             <span className="font-medium">Gallery</span>
                           </Link>
-                          
-                          <Link 
-                            href="/participation-overview"
-                            onClick={() => setShowMobileMenu(false)}
-                            className={`flex items-center px-4 py-3 ${themeStyles.text} hover:bg-purple-50 hover:text-purple-600 transition-colors duration-200 digital-text`}
-                          >
-                            <span className="text-lg mr-3">📊</span>
-                            <span className="font-medium">Participation</span>
-                          </Link>
                         </div>
                         
                         <div className="px-4 py-3 border-t border-gray-100">
@@ -242,7 +230,7 @@ export default function NavratriUtsavPage() {
                   }}
                   className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-2 rounded-full font-medium text-xs sm:text-sm shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 backdrop-blur-sm"
                 >
-                  ✨ Enrol
+                  Participate
                 </motion.button>
               </div>
             </Link>
@@ -254,65 +242,9 @@ export default function NavratriUtsavPage() {
           </motion.div>
         </div>
 
-        {/* Scroll Down Arrow */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center text-white cursor-pointer"
-            onClick={() => document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            <div className="text-2xl sm:text-3xl mb-2">⬇️</div>
-            <motion.div
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="text-sm sm:text-base font-medium digital-text"
-            >
-              Scroll Down
-            </motion.div>
-          </motion.div>
-        </motion.div>
       </section>
 
-      {/* Coming Soon Section */}
-      <section id="events" className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <div className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border ${themeStyles.border}`}>
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-2xl">🚧</span>
-              </div>
-              <h2 className={`text-3xl font-bold mb-4 font-kievit ${themeStyles.text}`}>
-                More Events Coming Soon
-              </h2>
-              <p className={`text-lg mb-6 font-kievit ${themeStyles.muted}`}>
-                We're preparing more amazing events for Navratri Utsav! 
-                Stay tuned for updates on daily pooja schedules and other cultural activities.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <div className="flex items-center justify-center gap-2">
-                  <Calendar className="w-5 h-5 text-purple-500" />
-                  <span className={`font-medium font-kievit ${themeStyles.text}`}>Daily Pooja</span>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <Star className="w-5 h-5 text-yellow-500" />
-                  <span className={`font-medium font-kievit ${themeStyles.text}`}>Cultural Events</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      
 
       {/* Footer */}
       <footer className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-8 text-center">
