@@ -116,6 +116,7 @@ export default function VibeCodingPage() {
       if (response.ok) {
         const data = await response.json()
         console.log('✅ Successfully loaded registrations:', data.length, 'records')
+        console.log('📊 Sample registration data:', data[0]) // Debug: log first registration
         setRegistrations(data)
       } else {
         const errorData = await response.json().catch(() => ({}))
@@ -185,11 +186,11 @@ export default function VibeCodingPage() {
     if (!idea.trim()) {
       return { isValid: false, error: 'Website idea is required' }
     }
-    if (idea.length < 10) {
-      return { isValid: false, error: 'Website idea must be at least 10 characters long' }
+    if (idea.length < 5) {
+      return { isValid: false, error: 'Website idea must be at least 5 characters long' }
     }
-    if (idea.length > 500) {
-      return { isValid: false, error: 'Website idea must be less than 500 characters' }
+    if (idea.length > 100) {
+      return { isValid: false, error: 'Website idea must be less than 100 characters' }
     }
     // Allow most characters except potentially harmful ones
     const ideaRegex = /^[a-zA-Z0-9\s\-_!@#$%^&*()\[\]{}|\\:;"'<>?,.\/+=]+$/
@@ -953,9 +954,7 @@ export default function VibeCodingPage() {
                            </span>
                          </div>
                        </div>
-                       <div className={`text-xs font-mono ${themeStyles.muted}`}>
-                         #{index + 1}
-                       </div>
+                       
                      </div>
                      <div className="flex items-start gap-2">
                        <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
@@ -1089,38 +1088,54 @@ export default function VibeCodingPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.05 }}
-                        className={`${themeStyles.cardBg} rounded-xl p-4 border hover:border-purple-300 transition-all duration-300 ${
+                        className={`${themeStyles.cardBg} rounded-lg p-3 border hover:border-purple-300 transition-all duration-300 ${
                           isOptimistic ? 'animate-pulse border-yellow-400' : ''
                         }`}
                       >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
+                          {/* Left Side - User Info */}
+                          <div className="flex items-center gap-2 flex-shrink-0">
                             <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
                               {registration.vibe_code.charAt(0).toUpperCase()}
                             </div>
-                            <div>
-                              <h3 className={`font-bold font-mono text-sm ${themeStyles.text}`}>
+                            <div className="min-w-0">
+                              <h3 className={`font-bold font-mono text-sm ${themeStyles.text} truncate`}>
                                 {registration.vibe_code}
                               </h3>
-                              <span className={`text-xs font-mono ${themeStyles.muted}`}>
+                              <span className={`text-xs font-mono ${themeStyles.muted} truncate block`}>
                                 {registration.full_name} • {registration.building}-{registration.flat}
+                              </span>
+                              {/* Debug: Show raw age_group value */}
+                              <span className={`text-xs font-mono ${themeStyles.muted} block`}>
+                                Debug: age_group = "{registration.age_group}"
+                              </span>
+                              <span className={`text-xs font-mono px-2 py-0.5 rounded-full mt-1 inline-block ${
+                                registration.age_group === '10-13' 
+                                  ? (isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-700')
+                                  : (isDarkMode ? 'bg-orange-900 text-orange-200' : 'bg-orange-100 text-orange-700')
+                              }`}>
+                                {registration.age_group === '10-13' ? '10-13 yrs' : registration.age_group === '13+' ? '13-16 yrs' : (registration.age_group || 'Unknown')}
                               </span>
                             </div>
                           </div>
-                          <div className={`text-xs font-mono ${themeStyles.muted}`}>
-                            #{index + 1}
+                          
+                          {/* Right Side - Idea */}
+                          <div className="flex-1 min-w-0">
+                            <div className={`rounded-md p-3 border-l-3 ${
+                              isDarkMode 
+                                ? 'bg-gradient-to-r from-green-900/20 to-emerald-900/20 border-green-400' 
+                                : 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-500'
+                            }`}>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm flex-shrink-0">💡</span>
+                                <p className={`text-sm font-medium ${themeStyles.text} leading-relaxed`}>
+                                  {registration.website_idea}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div className="flex items-start gap-2">
-                          <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                            isDarkMode ? 'bg-green-800' : 'bg-green-100'
-                          }`}>
-                            <span className={`text-xs ${isDarkMode ? 'text-green-200' : 'text-green-600'}`}>💡</span>
-                          </div>
-                          <div className="flex-1">
-                            <p className={`text-xs line-clamp-2 ${themeStyles.text}`}>{registration.website_idea}</p>
-                          </div>
-                        </div>
+                        
                         {isOptimistic && (
                           <div className="mt-2 text-center">
                             <span className="text-xs text-yellow-600 font-mono animate-pulse">

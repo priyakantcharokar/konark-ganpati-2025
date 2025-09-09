@@ -432,6 +432,7 @@ export class DatabaseService {
       }
       
       console.log('✅ Database: Successfully fetched', data?.length || 0, 'registrations')
+      console.log('🔍 Sample registration from DB:', data?.[0]) // Debug: log first record
       return data || []
     } catch (error) {
       console.error('💥 Database: Error fetching vibe registrations:', error)
