@@ -61,8 +61,8 @@ export default function Home() {
             <Link href="/ganesh-pooja" className="block">
               <div className={`${themeStyles.cardBg} rounded-xl p-6 shadow-lg border hover:shadow-xl transition-all duration-300 transform hover:scale-105`}>
                 {/* Status Ribbon */}
-                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse shadow-lg">
-                  Completed
+                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
+                  Event Completed
                 </div>
                 
                 {/* Card Header */}
