@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Calendar, Clock, Users, X } from 'lucide-react'
 import EventNominationFlow from '@/components/EventNominationFlow'
-import { databaseService } from '@/lib/database-service'
+import { databaseService, maskMobileNumber } from '@/lib/database-service'
 
 // WhatsApp SVG Icon Component
 const WhatsAppIcon = () => (
@@ -346,7 +346,7 @@ export default function EventDetailPage() {
                               {phoneMatch && (
                                 <span className="text-gray-600 ml-2 text-sm font-circular flex items-center gap-1">
                                   <WhatsAppIcon />
-                                  {phoneMatch[1]}
+                                  {maskMobileNumber(phoneMatch[1])}
                                 </span>
                               )}
                             </span>

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Calendar, Clock, Users, MapPin } from 'lucide-react'
+import { maskMobileNumber } from '@/lib/database-service'
 
 // WhatsApp SVG Icon Component
 const WhatsAppIcon = () => (
@@ -179,7 +180,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, index, compact = false }) 
                       {phoneMatch && (
                         <span className="text-gray-600 ml-2 text-sm font-circular flex items-center gap-1">
                           <WhatsAppIcon />
-                          {phoneMatch[1]}
+                          {maskMobileNumber(phoneMatch[1])}
                         </span>
                       )}
                     </span>

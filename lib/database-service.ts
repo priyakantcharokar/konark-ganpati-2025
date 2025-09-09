@@ -1,5 +1,18 @@
 import { supabase } from './supabase'
 
+// Utility function to mask mobile numbers
+export function maskMobileNumber(mobileNumber: string): string {
+  if (!mobileNumber || mobileNumber.length < 5) {
+    return mobileNumber
+  }
+  
+  // Keep first 5 digits, mask last 5 with XXXXX
+  const firstFive = mobileNumber.slice(0, 5)
+  const masked = 'XXXXX'
+  
+  return firstFive + masked
+}
+
 // Database Types
 export interface Booking {
   id: string

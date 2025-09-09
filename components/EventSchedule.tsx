@@ -6,7 +6,7 @@ import { Clock, ChevronDown, ChevronUp, Building, Home, Check, ChevronRight, Use
 import EventCard from './EventCard'
 import AartiBookingFlow from './AartiBookingFlow'
 
-import { databaseService, type Submission } from '@/lib/database-service'
+import { databaseService, type Submission, maskMobileNumber } from '@/lib/database-service'
 
 interface Event {
   id: string
@@ -254,8 +254,9 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
       }
       
       if (monthMap[month] !== undefined) {
-        // Assume year 2025 for the festival
-        return new Date(2025, monthMap[month], day)
+        // Use current year for the festival events
+        const currentYear = new Date().getFullYear()
+        return new Date(currentYear, monthMap[month], day)
       }
     }
     
@@ -875,9 +876,10 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                 
                 {/* Group past events by date */}
                 {(() => {
-                  // For testing purposes, we can set a specific date to see past events
-                  // In production, this would be the actual current date
-                  const currentDate = new Date(2025, 7, 25) // August 25, 2025 for testing
+                  // Use actual current date to determine past events
+                  // For testing past events, you can temporarily set a date after the festival
+                  const currentDate = new Date(2025, 8, 10) // September 10, 2025 for testing
+                  // const currentDate = new Date() // Use this for production
                   
                   // Filter events that have passed
                   const pastEvents = events.filter(event => {
@@ -962,22 +964,48 @@ const EventSchedule: React.FC<EventScheduleProps> = ({ userPhone, userFlat, onLo
                                 <span className="font-medium">{event.date}</span>
                               </div>
                               {event.organizers && (
-                                <div className="flex items-center gap-2 text-gray-600">
-                                  <span className="text-lg">👥</span>
-                                  <span className="font-medium">Contact: {event.organizers}</span>
+                                <div className="flex items-start gap-2 text-gray-600">
+                                  <span className="text-lg mt-1">👥</span>
+                                  <div className="flex-1">
+                                    <span className="font-medium">Contact:</span>
+                                    <div className="mt-1 space-y-1">
+                                      {event.organizers.split(',').map((organizer, index) => {
+                                        const trimmed = organizer.trim()
+                                        const phoneMatch = trimmed.match(/(\d{10})/)
+                                        const nameMatch = trimmed.replace(/\s*-\s*\d{10}/, '').trim()
+                                        
+                                        return (
+                                          <div key={index} className="flex items-center gap-2">
+                                            <span className="font-medium text-gray-800">{nameMatch}</span>
+                                            {phoneMatch && (
+                                              <span className="text-gray-600 text-sm">
+                                                {maskMobileNumber(phoneMatch[1])}
+                                              </span>
+                                            )}
+                                          </div>
+                                        )
+                                      })}
+                                    </div>
+                                  </div>
                                 </div>
                               )}
                             </div>
                             
-                            {/* Photos Button */}
-                            <div className="text-center">
+                            {/* Action Buttons */}
+                            <div className="text-center space-y-3">
+                              {/* Nominations Closed Indicator */}
+                              <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg font-medium">
+                                🚫 Nominations Closed
+                              </div>
+                              
+                              {/* Photos Button */}
                               <button
                                 onClick={() => window.location.href = '/gallery'}
                                 className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
                               >
                                 📸 View Photos
                               </button>
-          </div>
+                            </div>
         </motion.div>
                         ))}
                       </div>
