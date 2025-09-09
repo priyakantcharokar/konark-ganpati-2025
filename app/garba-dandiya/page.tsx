@@ -97,9 +97,6 @@ export default function GarbaDandiyaPage() {
               <Link href="/gallery" className={`${themeStyles.text} hover:text-purple-300 transition-colors duration-200 font-medium digital-text`}>
                 Gallery
               </Link>
-              <Link href="/participation-overview" className={`${themeStyles.text} hover:text-purple-300 transition-colors duration-200 font-medium digital-text`}>
-                Participation
-              </Link>
             </div>
 
             {/* Theme Toggle */}
@@ -187,14 +184,6 @@ export default function GarbaDandiyaPage() {
                             <span className="font-medium">Gallery</span>
                           </Link>
                           
-                          <Link 
-                            href="/participation-overview"
-                            onClick={() => setShowMobileMenu(false)}
-                            className={`flex items-center px-4 py-3 ${themeStyles.text} hover:bg-purple-50 hover:text-purple-600 transition-colors duration-200 digital-text`}
-                          >
-                            <span className="text-lg mr-3">📊</span>
-                            <span className="font-medium">Participation</span>
-                          </Link>
                         </div>
                         
                         <div className="px-4 py-3 border-t border-gray-100">
