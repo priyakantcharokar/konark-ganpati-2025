@@ -584,13 +584,13 @@ export default function GarbaDandiyaPage() {
                   
                   <div className="text-center">
                     <motion.a 
-                      href="tel:‪96876 63916‬" 
+                      href="tel:‪9687663916‬" 
                       className={`inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-xl font-bold font-kievit text-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       <span className="text-2xl">📱</span>
-                      <span>96876 63916</span>
+                      <span>9687663916</span>
                     </motion.a>
                     
                     <div className="mt-4 flex justify-center space-x-6">

@@ -303,10 +303,10 @@ const GarbaEnrolmentFlow: React.FC<GarbaEnrolmentFlowProps> = ({
                         Dr. Bharti
                       </p>
                       <a 
-                        href="tel:‪96876 63916‬" 
+                        href="tel:‪9687663916‬" 
                         className="text-blue-600 hover:text-blue-800 font-bold font-kievit text-lg transition-colors duration-200"
                       >
-                        📱 ‪96876 63916‬
+                        📱 ‪9687663916‬
                       </a>
                     </div>
                   </div>
