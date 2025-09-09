@@ -1127,10 +1127,6 @@ export default function VibeCodingPage() {
                               <span className={`text-xs font-mono ${themeStyles.muted} truncate block`}>
                                 {registration.full_name} • {registration.building}-{registration.flat}
                               </span>
-                              {/* Debug: Show raw age_group value */}
-                              <span className={`text-xs font-mono ${themeStyles.muted} block`}>
-                                Debug: age_group = "{registration.age_group}"
-                              </span>
                               <span className={`text-xs font-mono px-2 py-0.5 rounded-full mt-1 inline-block ${
                                 registration.age_group === '10-13' 
                                   ? (isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-700')
