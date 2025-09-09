@@ -432,9 +432,9 @@ export default function VibeCodingPage() {
                            : 'text-purple-600 hover:text-purple-700 hover:bg-purple-100'
                        }`}
                      >
-                       <span className="text-lg animate-pulse">👨‍💻</span>
-                       <span className="text-lg font-['Style_Script'] animate-pulse">Know more about me</span>
-                       <span className="text-lg animate-pulse">→</span>
+                       <span className="text-lg md:text-xl lg:text-2xl animate-pulse">👨‍💻</span>
+                       <span className="text-lg md:text-xl lg:text-2xl font-['Style_Script'] animate-pulse">Know more about me</span>
+                       <span className="text-lg md:text-xl lg:text-2xl animate-pulse">→</span>
                      </Link>
                    </div>
                  </div>
