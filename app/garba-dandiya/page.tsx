@@ -593,20 +593,7 @@ export default function GarbaDandiyaPage() {
                       <span>9687663916</span>
                     </motion.a>
                     
-                    <div className="mt-4 flex justify-center space-x-6">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${isDarkMode ? 'bg-green-400' : 'bg-green-600'}`}></div>
-                        <span className={`text-sm font-kievit ${themeStyles.muted}`}>Quick Response</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${isDarkMode ? 'bg-blue-400' : 'bg-blue-600'}`}></div>
-                        <span className={`text-sm font-kievit ${themeStyles.muted}`}>Payment Details</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${isDarkMode ? 'bg-purple-400' : 'bg-purple-600'}`}></div>
-                        <span className={`text-sm font-kievit ${themeStyles.muted}`}>Confirmation</span>
-                      </div>
-                    </div>
+                   
                   </div>
                 </div>
               </div>
