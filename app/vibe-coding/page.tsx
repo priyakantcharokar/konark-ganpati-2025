@@ -857,6 +857,28 @@ export default function VibeCodingPage() {
                 </button>
               </div>
               
+              {/* Mobile/Tablet Refresh Button */}
+              <div className="lg:hidden flex items-center justify-center gap-3 mb-4">
+                <Users className="w-5 h-5 text-purple-600" />
+                <h2 className={`text-lg font-bold font-mono ${
+                  isDarkMode ? 'text-white' : 'text-gray-800'
+                }`}>
+                  Registered Coders
+                </h2>
+                <Users className="w-5 h-5 text-purple-600" />
+                <button
+                  onClick={loadRegistrations}
+                  className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
+                    isDarkMode 
+                      ? 'text-purple-300 hover:text-purple-200 hover:bg-purple-900/30' 
+                      : 'text-purple-600 hover:text-purple-700 hover:bg-purple-100'
+                  }`}
+                  title="Refresh data"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                </button>
+              </div>
+              
               {/* Count Display */}
               <div className={`${themeStyles.cardBg} rounded-2xl p-4 md:p-6 mb-6 count-glow`}>
                 <div className="text-center mb-3">
