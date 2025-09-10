@@ -43,7 +43,7 @@ export default function Home() {
           
           <div className={`${themeStyles.cardBg} rounded-xl p-6 border shadow-lg max-w-2xl mx-auto`}>
             <p className={`text-base md:text-lg font-medium leading-relaxed font-kievit ${themeStyles.text}`}>
-              Welcome to <span className={`font-bold ${themeStyles.accent}`}>Konark Exotica Events</span>! 
+              Welcome to <span className={`font-bold ${isDarkMode ? 'text-yellow-400' : 'text-purple-600'}`}>Konark Exotica Events</span>! 
               Choose from our community events below.
             </p>
           </div>
