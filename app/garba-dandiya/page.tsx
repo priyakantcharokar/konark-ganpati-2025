@@ -53,18 +53,41 @@ export default function GarbaDandiyaPage() {
   const fetchParticipants = async () => {
     setLoadingParticipants(true)
     try {
-      const response = await fetch('/api/event-nominations')
+      console.log('📡 Fetching Garba & Dandiya participants...')
+      
+      // Add timestamp to prevent caching
+      const timestamp = Date.now()
+      const response = await fetch(`/api/event-nominations?t=${timestamp}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        },
+        cache: 'no-store'
+      })
+      
+      console.log('📊 Participants response status:', response.status, response.statusText)
+      
       if (response.ok) {
         const data = await response.json()
+        console.log('✅ Successfully loaded participants:', data.length, 'total nominations')
+        
         // Filter for Garba & Dandiya workshop participants
         const garbaParticipants = data.filter((participant: any) => 
           participant.event_title === 'Garba & Dandiya Workshop 2025'
         )
+        
+        console.log('🎭 Garba & Dandiya participants:', garbaParticipants.length)
         setParticipants(garbaParticipants)
-        console.log('🎭 Garba participants found:', garbaParticipants.length)
+      } else {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('❌ Failed to fetch participants:', response.status, response.statusText, errorData)
+        setParticipants([])
       }
     } catch (error) {
-      console.error('Error fetching participants:', error)
+      console.error('💥 Network error fetching participants:', error)
+      setParticipants([])
     } finally {
       setLoadingParticipants(false)
     }

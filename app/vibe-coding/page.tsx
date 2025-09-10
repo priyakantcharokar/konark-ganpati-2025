@@ -103,12 +103,16 @@ export default function VibeCodingPage() {
       console.log('📡 Fetching registrations from API...')
       setIsLoadingRegistrations(true)
       
-      const response = await fetch('/api/vibe-registrations', {
+      // Add timestamp to prevent caching
+      const timestamp = Date.now()
+      const response = await fetch(`/api/vibe-registrations?t=${timestamp}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
         },
-        cache: 'no-cache' // Ensure fresh data
+        cache: 'no-store' // Ensure fresh data
       })
       
       console.log('📊 Response status:', response.status, response.statusText)
@@ -117,14 +121,21 @@ export default function VibeCodingPage() {
         const data = await response.json()
         console.log('✅ Successfully loaded registrations:', data.length, 'records')
         console.log('📊 Sample registration data:', data[0]) // Debug: log first registration
-        setRegistrations(data)
+        
+        // Validate data structure
+        if (Array.isArray(data)) {
+          setRegistrations(data)
+        } else {
+          console.error('❌ Invalid data format received:', typeof data)
+          setRegistrations([])
+        }
       } else {
         const errorData = await response.json().catch(() => ({}))
         console.error('❌ Failed to load registrations:', response.status, response.statusText, errorData)
         
         // If it's an RLS error, show a helpful message
-        if (errorData.code === '42501') {
-          console.error('🔒 RLS policy is blocking data access. Please run the SQL fix.')
+        if (errorData.error?.includes('RLS Policy Error')) {
+          console.error('🔒 RLS policy is blocking data access. Please check database policies.')
         }
         
         // Set empty array to show no registrations
@@ -307,8 +318,14 @@ export default function VibeCodingPage() {
         setFlatNumbers([])
         setValidationErrors({})
         
-        // Immediately reload registrations to get the real data from server
-        console.log('🔄 Immediately reloading registrations...')
+        // Remove optimistic registration and reload real data
+        console.log('🔄 Removing optimistic registration and reloading real data...')
+        setRegistrations(prev => prev.filter(r => r.id !== optimisticRegistration.id))
+        
+        // Wait a moment for database to be consistent
+        await new Promise(resolve => setTimeout(resolve, 500))
+        
+        // Reload registrations to get the real data from server
         await loadRegistrations()
         console.log('✅ Registrations reloaded successfully after submission')
       } else {
@@ -859,14 +876,15 @@ export default function VibeCodingPage() {
                 <Users className="w-6 h-6 md:w-8 md:h-8 text-purple-600" />
                 <button
                   onClick={loadRegistrations}
-                  className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
+                  disabled={isLoadingRegistrations}
+                  className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed ${
                     isDarkMode 
                       ? 'text-purple-300 hover:text-purple-200 hover:bg-purple-900/30' 
                       : 'text-purple-600 hover:text-purple-700 hover:bg-purple-100'
                   }`}
-                  title="Refresh data"
+                  title={isLoadingRegistrations ? "Refreshing..." : "Refresh data"}
                 >
-                  <RefreshCw className="w-5 h-5" />
+                  <RefreshCw className={`w-5 h-5 ${isLoadingRegistrations ? 'animate-spin' : ''}`} />
                 </button>
               </div>
               
@@ -881,14 +899,15 @@ export default function VibeCodingPage() {
                 <Users className="w-4 h-4 text-purple-600" />
                 <button
                   onClick={loadRegistrations}
-                  className={`p-1.5 rounded-lg transition-all duration-200 hover:scale-110 ${
+                  disabled={isLoadingRegistrations}
+                  className={`p-1.5 rounded-lg transition-all duration-200 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed ${
                     isDarkMode 
                       ? 'text-purple-300 hover:text-purple-200 hover:bg-purple-900/30' 
                       : 'text-purple-600 hover:text-purple-700 hover:bg-purple-100'
                   }`}
-                  title="Refresh data"
+                  title={isLoadingRegistrations ? "Refreshing..." : "Refresh data"}
                 >
-                  <RefreshCw className="w-3.5 h-3.5" />
+                  <RefreshCw className={`w-3.5 h-3.5 ${isLoadingRegistrations ? 'animate-spin' : ''}`} />
                 </button>
               </div>
               

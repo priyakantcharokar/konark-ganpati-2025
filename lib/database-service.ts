@@ -420,22 +420,63 @@ export class DatabaseService {
   async getAllVibeRegistrations(): Promise<VibeRegistration[]> {
     try {
       console.log('🗄️ Database: Fetching vibe registrations...')
+      console.log('🌍 Environment:', process.env.NODE_ENV || 'unknown')
+      console.log('🔗 Supabase URL configured:', !!process.env.NEXT_PUBLIC_SUPABASE_URL)
       
-      const { data, error } = await supabase
-        .from('vibe_registrations')
-        .select('*')
-        .order('created_at', { ascending: true })
+      // Add retry logic for production stability
+      let retries = 3
+      let lastError: any = null
+      
+      while (retries > 0) {
+        try {
+          const { data, error } = await supabase
+            .from('vibe_registrations')
+            .select('*')
+            .order('created_at', { ascending: true })
 
-      if (error) {
-        console.error('❌ Database error:', error)
-        throw error
+          if (error) {
+            console.error('❌ Database error (attempt', 4 - retries, '):', error)
+            lastError = error
+            
+            // Check for specific RLS errors
+            if (error.code === '42501') {
+              console.error('🔒 RLS Policy Error: Access denied. Check Row Level Security policies.')
+              throw new Error('RLS Policy Error: Access denied')
+            }
+            
+            // Check for connection errors
+            if (error.message?.includes('connection') || error.message?.includes('timeout')) {
+              console.warn('🔄 Connection error, retrying...')
+              retries--
+              if (retries > 0) {
+                await new Promise(resolve => setTimeout(resolve, 1000)) // Wait 1 second
+                continue
+              }
+            }
+            
+            throw error
+          }
+          
+          console.log('✅ Database: Successfully fetched', data?.length || 0, 'registrations')
+          return data || []
+          
+        } catch (attemptError) {
+          lastError = attemptError
+          retries--
+          if (retries > 0) {
+            console.warn(`🔄 Retrying database fetch... (${retries} attempts left)`)
+            await new Promise(resolve => setTimeout(resolve, 1000))
+          }
+        }
       }
       
-      console.log('✅ Database: Successfully fetched', data?.length || 0, 'registrations')
-      console.log('🔍 Sample registration from DB:', data?.[0]) // Debug: log first record
-      return data || []
+      // If all retries failed
+      throw lastError || new Error('Failed to fetch registrations after multiple attempts')
+      
     } catch (error) {
       console.error('💥 Database: Error fetching vibe registrations:', error)
+      
+      // Return empty array instead of throwing to prevent UI crashes
       return []
     }
   }
