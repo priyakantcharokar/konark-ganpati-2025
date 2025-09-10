@@ -442,18 +442,33 @@ export default function VibeCodingPage() {
                      No boring theory, only fun + creativity. Register below to join the exclusive Exoticas coding session!
                    </p>
                    <div className="text-center mt-4">
-                     <Link 
-                       href="/about-me" 
-                       className={`inline-flex items-center gap-2 text-sm font-mono px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${
-                         isDarkMode 
-                           ? 'text-purple-300 hover:text-purple-200 hover:bg-purple-900/30' 
-                           : 'text-purple-600 hover:text-purple-700 hover:bg-purple-100'
-                       }`}
-                     >
-                       <span className="text-lg md:text-xl lg:text-2xl animate-pulse">👨‍💻</span>
-                       <span className="text-lg md:text-xl lg:text-2xl font-['Style_Script'] animate-pulse">Know more about me</span>
-                       <span className="text-lg md:text-xl lg:text-2xl animate-pulse">→</span>
-                     </Link>
+                     <div className="flex flex-col lg:flex-row items-center justify-center gap-4">
+                       <Link 
+                         href="/vibe-coding/idea-cloud" 
+                         className={`inline-flex items-center gap-2 text-sm font-mono px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                           isDarkMode 
+                             ? 'text-green-300 hover:text-green-200 hover:bg-green-900/30' 
+                             : 'text-green-600 hover:text-green-700 hover:bg-green-100'
+                         }`}
+                       >
+                         <span className="text-lg md:text-xl lg:text-2xl animate-pulse">🌟</span>
+                         <span className="text-lg md:text-xl lg:text-2xl font-['Style_Script'] animate-pulse">View Idea Cloud</span>
+                         <span className="text-lg md:text-xl lg:text-2xl animate-pulse">✨</span>
+                       </Link>
+                       
+                       <Link 
+                         href="/about-me" 
+                         className={`inline-flex items-center gap-2 text-sm font-mono px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+                           isDarkMode 
+                             ? 'text-purple-300 hover:text-purple-200 hover:bg-purple-900/30' 
+                             : 'text-purple-600 hover:text-purple-700 hover:bg-purple-100'
+                         }`}
+                       >
+                         <span className="text-lg md:text-xl lg:text-2xl animate-pulse">👨‍💻</span>
+                         <span className="text-lg md:text-xl lg:text-2xl font-['Style_Script'] animate-pulse">Know more about me</span>
+                         <span className="text-lg md:text-xl lg:text-2xl animate-pulse">→</span>
+                       </Link>
+                     </div>
                    </div>
                  </div>
         </motion.div>
