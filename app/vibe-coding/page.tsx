@@ -438,7 +438,7 @@ export default function VibeCodingPage() {
                            <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl`}>
                    <p className={`text-lg md:text-xl font-medium leading-relaxed font-mono ${themeStyles.text}`}>
                      🚀 Welcome to <span className={`font-bold ${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>Exoticas Kids Vibe Coding</span>! 
-                     Calling all <span className={`font-bold ${isDarkMode ? 'text-green-300' : 'text-green-600'}`}>kids (Age grp - 10 to 16)</span> - imagine building your OWN website idea and bringing your vibe to life online. 
+                     Calling all <span className={`font-bold line-through ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>kids (Age grp - 10 to 16)</span> <span className={`font-bold ${isDarkMode ? 'text-green-300' : 'text-green-600'} drop-shadow-[0_0_15px_rgba(34,197,94,0.8)] animate-pulse`}>Open for all now</span> - imagine building your OWN website idea and bringing your vibe to life online. 
                      No boring theory, only fun + creativity. Register below to join the exclusive Exoticas coding session!
                    </p>
                    <div className="text-center mt-4">
