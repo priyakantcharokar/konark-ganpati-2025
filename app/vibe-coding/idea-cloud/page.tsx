@@ -498,10 +498,10 @@ export default function IdeaCloudPage() {
                           {registration.vibe_code.charAt(0).toUpperCase()}
                         </div>
                         <div className="flex-1">
-                          <h3 className={`text-xl font-bold font-kievit ${themeStyles.text}`}>
+                          <h3 className={`text-xl font-bold font-kievit ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
                             {registration.vibe_code}
                           </h3>
-                          <p className={`text-base font-kievit ${themeStyles.muted}`}>
+                          <p className={`text-base font-kievit ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                             {registration.full_name}
                           </p>
                           <span className={`text-sm px-3 py-1 rounded-full mt-1 inline-block ${
@@ -529,7 +529,7 @@ export default function IdeaCloudPage() {
                             {/* <h4 className={`text-lg font-bold font-kievit ${themeStyles.text} mb-2`}>
                               Website Idea
                             </h4> */}
-                            <p className={`text-base font-kievit ${themeStyles.text} leading-relaxed`}>
+                            <p className={`text-base font-kievit ${isDarkMode ? 'text-green-200' : 'text-green-800'} leading-relaxed font-medium`}>
                               {registration.website_idea}
                             </p>
                           </div>
@@ -551,7 +551,7 @@ export default function IdeaCloudPage() {
                       {/* Location */}
                       <div className="mt-4 flex items-center gap-2">
                         <span className="text-lg">🏠</span>
-                        <span className={`text-sm font-kievit ${themeStyles.muted}`}>
+                        <span className={`text-sm font-kievit ${isDarkMode ? 'text-blue-300' : 'text-blue-600'} font-medium`}>
                           {registration.building}-{registration.flat}
                         </span>
                       </div>
