@@ -350,11 +350,92 @@ export default function IdeaCloudPage() {
           </div>
         </motion.div>
 
-        {/* Main Content */}
+        {/* Filters */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
+          className="mb-8"
+        >
+          <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl max-w-6xl mx-auto`}>
+            <h3 className={`text-xl font-bold font-kievit ${themeStyles.text} mb-4 text-center`}>
+              🔍 Search & Filter Creative Minds
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Search Input */}
+              <div className="space-y-2">
+                <label className={`block text-sm font-bold font-kievit ${themeStyles.text}`}>
+                  🔍 Search Everything
+                </label>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search names, ideas, expectations..."
+                  className={`w-full p-3 border-2 rounded-xl focus:ring-4 focus:ring-purple-200 transition-all duration-300 font-kievit ${themeStyles.inputBg} hover:border-purple-400 focus:border-purple-500`}
+                />
+              </div>
+
+              {/* Age Group Filter */}
+              <div className="space-y-2">
+                <label className={`block text-sm font-bold font-kievit ${themeStyles.text}`}>
+                  🎂 Age Group
+                </label>
+                <select
+                  value={selectedAgeGroup}
+                  onChange={(e) => setSelectedAgeGroup(e.target.value)}
+                  className={`w-full p-3 border-2 border-purple-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-300 font-kievit ${themeStyles.inputBg} hover:border-purple-400 appearance-none cursor-pointer`}
+                >
+                  <option value="">All Ages</option>
+                  <option value="10-13">10-13 years</option>
+                  <option value="13-16">13-16 years</option>
+                  <option value="above-16">Above 16</option>
+                </select>
+              </div>
+
+              {/* Clear Filters */}
+              <div className="space-y-2">
+                <label className={`block text-sm font-bold font-kievit ${themeStyles.text}`}>
+                  🧹 Actions
+                </label>
+                <button
+                  onClick={() => {
+                    setSearchTerm('')
+                    setSelectedAgeGroup('')
+                  }}
+                  className={`w-full p-3 rounded-xl font-bold font-kievit transition-all duration-300 hover:scale-105 ${
+                    isDarkMode 
+                      ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border-2 border-gray-600' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-200'
+                  }`}
+                >
+                  Clear All Filters
+                </button>
+              </div>
+
+              {/* Results Count */}
+              <div className="space-y-2">
+                <label className={`block text-sm font-bold font-kievit ${themeStyles.text}`}>
+                  📊 Results
+                </label>
+                <div className={`w-full p-3 rounded-xl font-bold font-kievit text-center ${
+                  isDarkMode 
+                    ? 'bg-purple-900 text-purple-200' 
+                    : 'bg-purple-100 text-purple-700'
+                }`}>
+                  {filteredRegistrations.length} results
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Main Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
           className="relative"
         >
 
