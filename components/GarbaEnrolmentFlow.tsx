@@ -287,7 +287,7 @@ const GarbaEnrolmentFlow: React.FC<GarbaEnrolmentFlowProps> = ({
                       🎭 Workshop Details
                     </h4>
                     <div className="text-sm text-gray-600 space-y-1 font-kievit">
-                      <p>• 7-day intensive dance workshop</p>
+                      <p>• 7-day intensive Dandiya / Garba workshop</p>
                       <p>• Starting from 14th September</p>
                       <p>• 1.5 hours per session (after 8 PM)</p>
                       <p>• Total Fee: ₹10,500</p>

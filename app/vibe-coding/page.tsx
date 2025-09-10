@@ -563,7 +563,7 @@ export default function VibeCodingPage() {
                   <label className={`block text-sm font-bold mb-3 font-mono ${themeStyles.text} group-hover:text-purple-600 transition-colors duration-200`}>
                     🎂 What's your age group? *
                   </label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                     <button
                       type="button"
                       onClick={() => handleInputChange('ageGroup', '10-13')}
@@ -579,9 +579,9 @@ export default function VibeCodingPage() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleInputChange('ageGroup', '13+')}
+                      onClick={() => handleInputChange('ageGroup', '13-16')}
                       className={`px-6 py-4 rounded-2xl font-bold text-lg font-mono transition-all duration-300 hover:scale-105 building-button ${
-                        formData.ageGroup === '13+'
+                        formData.ageGroup === '13-16'
                           ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg building-selected'
                           : isDarkMode 
                             ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border-2 border-gray-600' 
@@ -589,6 +589,19 @@ export default function VibeCodingPage() {
                       }`}
                     >
                       I am 13 to 16
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('ageGroup', 'above-16')}
+                      className={`px-6 py-4 rounded-2xl font-bold text-lg font-mono transition-all duration-300 hover:scale-105 building-button ${
+                        formData.ageGroup === 'above-16'
+                          ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg building-selected'
+                          : isDarkMode 
+                            ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border-2 border-gray-600' 
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-200'
+                      }`}
+                    >
+                      🎯 Above 16
                     </button>
                   </div>
                   {validationErrors.ageGroup && (
@@ -1130,9 +1143,16 @@ export default function VibeCodingPage() {
                               <span className={`text-xs font-mono px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full mt-1 inline-block ${
                                 registration.age_group === '10-13' 
                                   ? (isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-700')
-                                  : (isDarkMode ? 'bg-orange-900 text-orange-200' : 'bg-orange-100 text-orange-700')
+                                  : registration.age_group === '13-16' || registration.age_group === '13+'
+                                    ? (isDarkMode ? 'bg-purple-900 text-purple-200' : 'bg-purple-100 text-purple-700')
+                                    : registration.age_group === 'above-16'
+                                      ? (isDarkMode ? 'bg-orange-900 text-orange-200' : 'bg-orange-100 text-orange-700')
+                                      : (isDarkMode ? 'bg-gray-900 text-gray-200' : 'bg-gray-100 text-gray-700')
                               }`}>
-                                {registration.age_group === '10-13' ? '10-13 yrs' : registration.age_group === '13+' ? '13-16 yrs' : (registration.age_group || 'Unknown')}
+                                {registration.age_group === '10-13' ? '10-13 yrs' : 
+                                 registration.age_group === '13-16' || registration.age_group === '13+' ? '13-16 yrs' : 
+                                 registration.age_group === 'above-16' ? 'Above 16' : 
+                                 (registration.age_group || 'Unknown')}
                               </span>
                             </div>
                           </div>

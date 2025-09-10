@@ -222,7 +222,7 @@ export default function GarbaDandiyaPage() {
 
         {/* Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {/* Floating Dance Elements */}
+          {/* Floating Dandiya / Garba Elements */}
           <motion.div
             animate={{ 
               y: [0, -20, 0],
@@ -288,9 +288,9 @@ export default function GarbaDandiyaPage() {
               </h1>
             </div>
             
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 sm:mb-6 font-['Pacifico'] text-orange-200 drop-shadow-md">
-              Dance Workshop 2025
-            </h2>
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 sm:mb-6 font-['Epunda_Slab'] text-orange-200 drop-shadow-md">
+                Dandiya / Garba Workshop 2025
+              </h2>
             
             {/* Enhanced Description */}
             <motion.div
@@ -300,9 +300,9 @@ export default function GarbaDandiyaPage() {
               className="relative"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-yellow-100/10 to-orange-100/10 blur-lg rounded-2xl" />
-              <p className="relative text-base sm:text-lg md:text-xl lg:text-2xl text-yellow-100 max-w-3xl mx-auto font-kievit leading-relaxed px-2 sm:px-0 drop-shadow-sm">
-                🌟 Step into the Circle of Joy! 🌟 Learn traditional Gujarati folk dances, master the art of Dandiya sticks, and dance your way through Navratri celebrations!
-              </p>
+                <p className="relative text-base sm:text-lg md:text-xl lg:text-2xl text-yellow-100 max-w-3xl mx-auto font-['Epunda_Slab'] leading-relaxed px-2 sm:px-0 drop-shadow-sm">
+                  🌟 Step into the Circle of Joy! 🌟 Learn traditional Gujarati folk Dandiya / Garbas, master the art of Dandiya sticks, and Dandiya / Garba your way through Navratri celebrations!
+                </p>
             </motion.div>
           </motion.div>
 
@@ -315,18 +315,18 @@ export default function GarbaDandiyaPage() {
           >
             <div className="bg-gradient-to-br from-orange-500/30 to-red-500/30 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-orange-300/40 shadow-lg">
               <div className="text-2xl sm:text-3xl mb-2">🎭</div>
-              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 font-['Dancing_Script'] text-yellow-200">7 Days</div>
-              <div className="text-xs sm:text-sm md:text-base text-orange-100 font-['Quicksand']">Dance Journey</div>
+                <div className="text-base sm:text-lg md:text-xl font-bold mb-1 font-['Epunda_Slab'] text-yellow-200">7 Days</div>
+                <div className="text-xs sm:text-sm md:text-base text-orange-100 font-['Epunda_Slab']">Dandiya / Garba Journey</div>
             </div>
             <div className="bg-gradient-to-br from-pink-500/30 to-purple-500/30 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-pink-300/40 shadow-lg">
               <div className="text-2xl sm:text-3xl mb-2">🕺</div>
-              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 font-['Dancing_Script'] text-yellow-200">1.5 Hours</div>
-              <div className="text-xs sm:text-sm md:text-base text-pink-100 font-['Quicksand']">Per Session</div>
+              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 font-['Epunda_Slab'] text-yellow-200">1.5 Hours</div>
+              <div className="text-xs sm:text-sm md:text-base text-pink-100 font-['Epunda_Slab']">Per Session</div>
             </div>
             <div className="bg-gradient-to-br from-yellow-500/30 to-orange-500/30 backdrop-blur-sm rounded-xl p-3 sm:p-4 md:p-6 border border-yellow-300/40 shadow-lg">
               <div className="text-2xl sm:text-3xl mb-2">👗</div>
-              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 font-['Dancing_Script'] text-yellow-200">Traditional</div>
-              <div className="text-xs sm:text-sm md:text-base text-yellow-100 font-['Quicksand']">Attire</div>
+              <div className="text-base sm:text-lg md:text-xl font-bold mb-1 font-['Epunda_Slab'] text-yellow-200">Traditional</div>
+              <div className="text-xs sm:text-sm md:text-base text-yellow-100 font-['Epunda_Slab']">Attire</div>
             </div>
           </motion.div>
         </div>
@@ -341,7 +341,7 @@ export default function GarbaDandiyaPage() {
           <motion.div
             animate={{ y: [0, 12, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center text-white cursor-pointer group"
+            className="flex flex-col items-center text-white cursor-pointer group mx-auto"
             onClick={() => document.getElementById('workshop-details')?.scrollIntoView({ behavior: 'smooth' })}
           >
             {/* Animated Scroll Indicator */}
@@ -366,7 +366,7 @@ export default function GarbaDandiyaPage() {
             <motion.div
               animate={{ opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-              className="text-xs sm:text-sm font-medium font-kievit mt-3 group-hover:text-yellow-300 transition-colors duration-300"
+              className="text-xs sm:text-sm font-medium font-['Epunda_Slab'] mt-3 group-hover:text-yellow-300 transition-colors duration-300 text-center"
             >
               Discover Workshop
             </motion.div>
@@ -399,207 +399,16 @@ export default function GarbaDandiyaPage() {
             
           </motion.div>
 
-          {/* Combined Workshop & Registration Card */}
+          {/* Action Buttons - Above Cards */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
+            className="max-w-4xl mx-auto mb-8"
           >
-            <div className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border ${themeStyles.border}`}>
-              {/* Header */}
-              <div className="text-center mb-12">
-                
-                <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold mb-6 font-kievit ${themeStyles.text} bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent`}>
-                  🎭 Join Our Dance Circle! 🎭
-                </h3>
-                <p className={`text-xl font-kievit ${themeStyles.muted} max-w-2xl mx-auto leading-relaxed`}>
-                  Let's dance our way through Navratri celebrations! 💃✨
-                </p>
-                
-                {/* Floating Dance Emojis */}
-                <div className="flex justify-center space-x-4 mt-6">
-                  <motion.span
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0 }}
-                    className="text-2xl"
-                  >
-                    💃
-                  </motion.span>
-                  <motion.span
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                    className="text-2xl"
-                  >
-                    🕺
-                  </motion.span>
-                  <motion.span
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    className="text-2xl"
-                  >
-                    ✨
-                  </motion.span>
-                  <motion.span
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                    className="text-2xl"
-                  >
-                    🎪
-                  </motion.span>
-                </div>
-              </div>
-
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Workshop Information */}
-                <div className="space-y-6">
-                  <div>
-                    <h4 className={`text-xl font-bold font-kievit ${themeStyles.text} mb-4 text-center`}>
-                      🎪 Workshop Details
-                    </h4>
-                    <div className="space-y-4">
-                      <div className="flex items-start">
-                        <span className="text-orange-500 mr-3 mt-1">🎭</span>
-                        <div>
-                          <p className={`font-medium font-kievit ${themeStyles.text}`}>7-day intensive dance workshop</p>
-                          <p className={`text-sm font-kievit ${themeStyles.muted}`}>1.5 hours of pure dance joy per session</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-start">
-                        <span className="text-orange-500 mr-3 mt-1">💃</span>
-                        <div>
-                          <p className={`font-medium font-kievit ${themeStyles.text}`}>Starting from 14th September</p>
-                          <p className={`text-sm font-kievit ${themeStyles.muted}`}>Ladies-focused circle dancing</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-start">
-                        <span className="text-orange-500 mr-3 mt-1">🎪</span>
-                        <div>
-                          <p className={`font-medium font-kievit ${themeStyles.text}`}>Expert Garba & Dandiya instructor</p>
-                          <p className={`text-sm font-kievit ${themeStyles.muted}`}>Traditional dance mastery guidance</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-start">
-                        <span className="text-orange-500 mr-3 mt-1">🌙</span>
-                        <div>
-                          <p className={`font-medium font-kievit ${themeStyles.text}`}>Evening sessions after 8 PM</p>
-                          <p className={`text-sm font-kievit ${themeStyles.muted}`}>Perfect for festive night dancing</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Pricing & Registration */}
-                <div className="space-y-6">
-                  <div>
-                    <h4 className={`text-xl font-bold font-kievit ${themeStyles.text} mb-4 text-center`}>
-                      🎫 Dance Pass & Registration
-                    </h4>
-                    
-                    <div className="space-y-4">
-                      <div className={`bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl p-4 ${isDarkMode ? 'from-purple-900/50 to-pink-900/50' : ''}`}>
-                        <p className={`text-lg font-bold font-kievit ${themeStyles.text}`}>
-                          Total Fee: ₹10,500
-                        </p>
-                        <p className={`text-sm font-kievit ${themeStyles.muted}`}>
-                          ₹1,500 per session × 7 sessions
-                        </p>
-                      </div>
-                      
-                      <div className={`bg-gradient-to-r from-green-100 to-emerald-100 rounded-xl p-4 ${isDarkMode ? 'from-green-900/50 to-emerald-900/50' : ''}`}>
-                        <p className={`font-medium font-kievit ${themeStyles.text}`}>
-                          🎉 Group Discount Available!
-                        </p>
-                        <p className={`text-sm font-kievit ${themeStyles.muted}`}>
-                          If we get 30 participants: ₹350 per person
-                        </p>
-                        <p className={`text-xs font-kievit ${themeStyles.muted}`}>
-                          (₹10,500 ÷ 30 = ₹350)
-                        </p>
-                      </div>
-                      
-                      <div className="space-y-3">
-                        <div className="flex items-center">
-                          <Calendar className="w-5 h-5 text-purple-500 mr-3" />
-                          <div>
-                            <p className={`font-medium font-kievit ${themeStyles.text}`}>Registration Deadline</p>
-                            <p className={`text-sm font-kievit ${themeStyles.muted}`}>11th September</p>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center">
-                          <Users className="w-5 h-5 text-pink-500 mr-3" />
-                          <div>
-                            <p className={`font-medium font-kievit ${themeStyles.text}`}>Male Participants</p>
-                            <p className={`text-sm font-kievit ${themeStyles.muted}`}>Separate session if interested</p>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center">
-                          <Star className="w-5 h-5 text-yellow-500 mr-3" />
-                          <div>
-                            <p className={`font-medium font-kievit ${themeStyles.text}`}>Payment Required</p>
-                            <p className={`text-sm font-kievit ${themeStyles.muted}`}>For confirmation</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Information */}
-              <div className={`${themeStyles.cardBg} rounded-2xl p-8 mt-12 shadow-xl border ${themeStyles.border} backdrop-blur-sm relative overflow-hidden`}>
-                {/* Background Pattern */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-50"></div>
-                
-                <div className="relative z-10">
-                  <div className="text-center mb-6">
-                    <motion.div
-                      animate={{ 
-                        scale: [1, 1.1, 1],
-                      }}
-                      transition={{ 
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                      className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg"
-                    >
-                      <span className="text-2xl">📞</span>
-                    </motion.div>
-                    <h4 className={`text-2xl font-bold mb-2 font-kievit ${themeStyles.text}`}>
-                      Contact Dr. Bharti
-                    </h4>
-                    <p className={`text-base font-kievit ${themeStyles.muted}`}>
-                      For enrolment and payment details
-                    </p>
-                  </div>
-                  
-                  <div className="text-center">
-                    <motion.a 
-                      href="tel:‪9687663916‬" 
-                      className={`inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-xl font-bold font-kievit text-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                        <span className="text-2xl">💬</span>
-                      <span>9687663916</span>
-                    </motion.a>
-                    
-                   
-                  </div>
-                </div>
-              </div>
-
-              {/* Enrolment Button */}
-              <div className="text-center mt-8">
+            <div className="text-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <motion.button
                   onClick={() => setShowEnrolmentModal(true)}
                   animate={{
@@ -611,132 +420,218 @@ export default function GarbaDandiyaPage() {
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-xl font-bold font-kievit shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 backdrop-blur-sm"
+                  className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-xl font-bold font-['Epunda_Slab'] shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 backdrop-blur-sm"
                 >
                   🎯 Enrol Now
                 </motion.button>
                 
+                <motion.button
+                  onClick={() => setIsParticipantsCollapsed(false)}
+                  className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-8 py-4 rounded-xl font-bold font-['Epunda_Slab'] shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 backdrop-blur-sm"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  💃 View Participants ({participants.length})
+                </motion.button>
+                
+                <motion.a
+                  href="tel:‪9687663916‬"
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-xl font-bold font-['Epunda_Slab'] shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20 backdrop-blur-sm"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  💬 Contact Dr. Bharti
+                </motion.a>
               </div>
             </div>
           </motion.div>
-        </div>
-      </section>
 
-      {/* Participants List Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className={`${themeStyles.cardBg} rounded-2xl p-6 shadow-xl border ${themeStyles.border} backdrop-blur-sm`}>
-            <motion.button
-              onClick={() => setIsParticipantsCollapsed(!isParticipantsCollapsed)}
-              className={`w-full flex items-center justify-between p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] ${isDarkMode ? 'hover:bg-gray-700/50' : 'hover:bg-gray-50'}`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
-                  <Users className="w-6 h-6 text-white" />
-                </div>
-                  <div className="text-left">
-                    <h4 className={`text-xl font-bold font-kievit ${themeStyles.text}`}>
-                      💃 Dance Circle Participants
-                    </h4>
-                    <p className={`text-sm font-kievit ${themeStyles.muted}`}>
-                      {participants.length} {participants.length === 1 ? 'participant' : 'participants'} enrolled
-                    </p>
-                  </div>
-                  <motion.button
-                    onClick={fetchParticipants}
-                    disabled={loadingParticipants}
-                    className={`p-2 rounded-lg transition-all duration-200 ${isDarkMode ? 'hover:bg-gray-700/50' : 'hover:bg-gray-50'} ${loadingParticipants ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    whileHover={{ scale: loadingParticipants ? 1 : 1.05 }}
-                    whileTap={{ scale: loadingParticipants ? 1 : 0.95 }}
+          {/* Single Unified Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="max-w-5xl mx-auto"
+          >
+            <div className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border ${themeStyles.border}`}>
+              {/* Header */}
+              <div className="text-center mb-10">
+                <h3 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-6 font-['Epunda_Slab'] ${themeStyles.text} bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent`}>
+                  🎭 Dandiya & Garba Workshop 2025 🎭
+                </h3>
+                <p className={`text-xl font-['Epunda_Slab'] ${themeStyles.muted} max-w-3xl mx-auto leading-relaxed mb-6`}>
+                  Let's dance our way through Navratri celebrations! Learn traditional Gujarati folk dances and master the art of Dandiya sticks! 💃✨
+                </p>
+                
+                {/* Floating Dance Emojis */}
+                <div className="flex justify-center space-x-4 mt-6">
+                  <motion.span
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0 }}
+                    className="text-3xl"
                   >
-                    <RefreshCw className={`w-5 h-5 ${themeStyles.text} ${loadingParticipants ? 'animate-spin' : ''}`} />
-                  </motion.button>
+                    💃
+                  </motion.span>
+                  <motion.span
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                    className="text-3xl"
+                  >
+                    🕺
+                  </motion.span>
+                  <motion.span
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="text-3xl"
+                  >
+                    ✨
+                  </motion.span>
+                  <motion.span
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                    className="text-3xl"
+                  >
+                    🎪
+                  </motion.span>
+                </div>
               </div>
-              <motion.div
-                animate={{ rotate: isParticipantsCollapsed ? 0 : 180 }}
-                transition={{ duration: 0.2 }}
-              >
-                {isParticipantsCollapsed ? (
-                  <ChevronDown className={`w-6 h-6 ${themeStyles.text}`} />
-                ) : (
-                  <ChevronUp className={`w-6 h-6 ${themeStyles.text}`} />
-                )}
-              </motion.div>
-            </motion.button>
 
-            <AnimatePresence>
-              {!isParticipantsCollapsed && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="overflow-hidden"
-                >
-                  <div className="pt-4 border-t border-gray-200 dark:border-gray-600">
-                    {loadingParticipants ? (
-                      <div className="text-center py-8">
-                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
-                        <p className={`mt-2 font-kievit ${themeStyles.muted}`}>Loading participants...</p>
-                      </div>
-                    ) : participants.length === 0 ? (
-                      <div className="text-center py-8">
-                        <div className="w-16 h-16 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <Users className="w-8 h-8 text-white" />
-                        </div>
-                        <p className={`text-lg font-kievit ${themeStyles.text}`}>No participants yet</p>
-                        <p className={`text-sm font-kievit ${themeStyles.muted}`}>Be the first to join our dance circle!</p>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {participants.map((participant, index) => (
-                          <motion.div
-                            key={participant.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className={`${themeStyles.cardBg} rounded-xl p-4 border ${themeStyles.border} hover:shadow-lg transition-all duration-200`}
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full flex items-center justify-center shadow-md">
-                                <span className="text-white font-bold text-sm">
-                                  {participant.user_name?.charAt(0)?.toUpperCase() || '?'}
-                                </span>
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className={`font-medium font-kievit ${themeStyles.text} truncate`}>
-                                  {participant.user_name || 'Unknown'}
-                                </p>
-                                <p className={`text-sm font-kievit ${themeStyles.muted}`}>
-                                  {participant.building} - {participant.flat}
-                                </p>
-                                {participant.mobile_number && (
-                                  <p className={`text-xs font-kievit ${themeStyles.muted}`}>
-                                    📱 {participant.mobile_number}
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
-                    )}
+              {/* Main Content Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                {/* Left Column - Workshop Details */}
+                <div className="space-y-6">
+                  <div className="text-center mb-6">
+                    <h4 className={`text-2xl font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-4 bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent`}>
+                      🎪 Workshop Details
+                    </h4>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                  
+                  <div className="space-y-5">
+                    <div className="flex items-start">
+                      <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg mr-4 flex-shrink-0">
+                        <span className="text-white text-xl">🎭</span>
+                      </div>
+                      <div>
+                        <p className={`text-lg font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-1`}>7-Day Intensive Workshop</p>
+                        <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>1.5 hours of pure dance joy per session</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start">
+                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg mr-4 flex-shrink-0">
+                        <span className="text-white text-xl">📅</span>
+                      </div>
+                      <div>
+                        <p className={`text-lg font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-1`}>Starting 14th September</p>
+                        <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>Ladies-focused circle dancing</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start">
+                      <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg mr-4 flex-shrink-0">
+                        <span className="text-white text-xl">👨‍🏫</span>
+                      </div>
+                      <div>
+                        <p className={`text-lg font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-1`}>Expert Instructor</p>
+                        <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>Traditional dance mastery guidance</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start">
+                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg mr-4 flex-shrink-0">
+                        <span className="text-white text-xl">🌙</span>
+                      </div>
+                      <div>
+                        <p className={`text-lg font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-1`}>Evening Sessions (8 PM+)</p>
+                        <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>Perfect for festive night dancing</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start">
+                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg mr-4 flex-shrink-0">
+                        <Calendar className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className={`text-lg font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-1`}>Registration Deadline</p>
+                        <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>11th September</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg mr-4 flex-shrink-0">
+                        <Users className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className={`text-lg font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-1`}>Male Participants</p>
+                        <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>Separate session if interested</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start">
+                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg mr-4 flex-shrink-0">
+                        <Star className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className={`text-lg font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-1`}>Payment Required</p>
+                        <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>For confirmation</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column - Registration & Pricing */}
+                <div className="space-y-6">
+                  <div className="text-center mb-6">
+                    <h4 className={`text-2xl font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-4 bg-gradient-to-r from-green-500 to-blue-500 bg-clip-text text-transparent`}>
+                      🎫 Registration & Pricing
+                    </h4>
+                  </div>
+                  
+                  {/* Pricing Cards */}
+                  <div className="space-y-4">
+                    <div className={`bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-6 ${isDarkMode ? 'from-purple-900/50 to-pink-900/50' : ''} border border-purple-200 dark:border-purple-700`}>
+                      <div className="text-center">
+                        <p className={`text-2xl font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-2`}>
+                          💰 Total Fee: ₹10,500
+                        </p>
+                        <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>
+                          ₹1,500 per session × 7 sessions
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className={`bg-gradient-to-r from-green-100 to-emerald-100 rounded-2xl p-6 ${isDarkMode ? 'from-green-900/50 to-emerald-900/50' : ''} border border-green-200 dark:border-green-700`}>
+                      <div className="text-center">
+                        <p className={`text-xl font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-2`}>
+                          🎉 Group Discount Available!
+                        </p>
+                        <p className={`text-lg font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-1`}>
+                          ₹350 per person
+                        </p>
+                        <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>
+                          If we get 30 participants (₹10,500 ÷ 30)
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
         </div>
       </section>
+
 
       {/* Footer */}
       <footer className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-8 text-center">
-        <p className="text-lg font-medium digital-text">
+        <p className="text-lg font-medium font-['Epunda_Slab'] digital-text">
           🎉 Celebrating Divine Feminine Energy! 🎉
         </p>
-        <p className="text-sm mt-2 opacity-90 digital-text">
+        <p className="text-sm mt-2 opacity-90 font-['Epunda_Slab'] digital-text">
           © 2025 Navratri Utsav Festival. Crafted with ❤️ to bring our community closer through spiritual celebrations.
         </p>
       </footer>
@@ -751,6 +646,117 @@ export default function GarbaDandiyaPage() {
               setShowEnrolmentModal(false)
             }}
           />
+        )}
+      </AnimatePresence>
+
+      {/* Participants Popup Modal */}
+      <AnimatePresence>
+        {!isParticipantsCollapsed && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setIsParticipantsCollapsed(true)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ duration: 0.3 }}
+              className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border ${themeStyles.border} max-w-4xl w-full max-h-[80vh] overflow-hidden`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className={`text-2xl font-bold font-['Epunda_Slab'] ${themeStyles.text} bg-gradient-to-r from-green-500 to-blue-500 bg-clip-text text-transparent`}>
+                      💃 Dandiya / Garba Circle Participants
+                    </h3>
+                    <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>
+                      {participants.length} {participants.length === 1 ? 'participant' : 'participants'} enrolled
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <motion.button
+                    onClick={fetchParticipants}
+                    disabled={loadingParticipants}
+                    className={`p-2 rounded-lg transition-all duration-200 ${isDarkMode ? 'hover:bg-gray-700/50' : 'hover:bg-gray-50'} ${loadingParticipants ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    whileHover={{ scale: loadingParticipants ? 1 : 1.05 }}
+                    whileTap={{ scale: loadingParticipants ? 1 : 0.95 }}
+                  >
+                    <RefreshCw className={`w-5 h-5 ${themeStyles.text} ${loadingParticipants ? 'animate-spin' : ''}`} />
+                  </motion.button>
+                  
+                  <motion.button
+                    onClick={() => setIsParticipantsCollapsed(true)}
+                    className={`p-2 rounded-lg transition-all duration-200 ${isDarkMode ? 'hover:bg-gray-700/50' : 'hover:bg-gray-50'}`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <X className={`w-6 h-6 ${themeStyles.text}`} />
+                  </motion.button>
+                </div>
+              </div>
+
+              {/* Participants Content */}
+              <div className="overflow-y-auto max-h-[60vh]">
+                {loadingParticipants ? (
+                  <div className="text-center py-12">
+                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mb-4"></div>
+                        <p className={`text-lg font-['Epunda_Slab'] ${themeStyles.muted}`}>Loading participants...</p>
+                  </div>
+                ) : participants.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="w-20 h-20 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Users className="w-10 h-10 text-white" />
+                    </div>
+                        <h4 className={`text-xl font-bold font-['Epunda_Slab'] ${themeStyles.text} mb-2`}>No participants yet</h4>
+                        <p className={`text-base font-['Epunda_Slab'] ${themeStyles.muted}`}>Be the first to join our Dandiya / Garba circle!</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {participants.map((participant, index) => (
+                      <motion.div
+                        key={participant.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className={`${themeStyles.cardBg} rounded-2xl p-6 border ${themeStyles.border} hover:shadow-lg transition-all duration-200 hover:scale-[1.02]`}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full flex items-center justify-center shadow-md">
+                            <span className="text-white font-bold text-lg">
+                              {participant.user_name?.charAt(0)?.toUpperCase() || '?'}
+                            </span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h5 className={`font-bold font-['Epunda_Slab'] ${themeStyles.text} text-lg mb-1 truncate`}>
+                              {participant.user_name || 'Unknown'}
+                            </h5>
+                            <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted} mb-1`}>
+                              🏠 {participant.building} - {participant.flat}
+                            </p>
+                            {participant.mobile_number && (
+                              <p className={`text-sm font-['Epunda_Slab'] ${themeStyles.muted}`}>
+                                📱 {participant.mobile_number}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 
