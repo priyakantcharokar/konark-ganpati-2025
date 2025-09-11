@@ -613,26 +613,25 @@ export default function IdeaCloudPage() {
               transition={{ duration: 0.3 }}
               className="fixed inset-4 z-50 flex items-center justify-center"
             >
-              <div className={`${themeStyles.cardBg} rounded-3xl p-6 max-w-2xl w-full max-h-[80vh] overflow-hidden shadow-2xl border`}>
+              <div className={`${themeStyles.cardBg} rounded-3xl p-8 max-w-3xl w-full max-h-[85vh] overflow-hidden shadow-2xl border`}>
                 {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-start justify-between mb-8">
+                  <div className="flex items-center gap-4 flex-1 min-w-0">
                     <div 
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold"
+                      className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0"
                       style={{ backgroundColor: selectedWord.color }}
                     >
                       {selectedWord.text.charAt(0).toUpperCase()}
                     </div>
-                    <h2 className={`text-2xl md:text-3xl font-bold font-kievit ${themeStyles.text}`}>
-                      "{selectedWord.text}" Ideas
-                    </h2>
-                    <span className={`text-sm px-2 py-1 rounded-full ${isDarkMode ? 'bg-purple-900 text-purple-200' : 'bg-purple-100 text-purple-700'}`}>
-                      {selectedWord.count} creators
-                    </span>
+                    <div className="flex-1 min-w-0">
+                      <h2 className={`text-2xl md:text-3xl font-bold font-kievit ${themeStyles.text} break-words leading-tight`}>
+                        "{selectedWord.text}" Ideas
+                      </h2>
+                    </div>
                   </div>
                   <button
                     onClick={() => setShowParticipants(false)}
-                    className={`p-2 rounded-full hover:bg-gray-100 transition-colors duration-200 ${isDarkMode ? 'hover:bg-gray-700' : ''}`}
+                    className={`p-3 rounded-full hover:bg-gray-100 transition-colors duration-200 flex-shrink-0 ${isDarkMode ? 'hover:bg-gray-700' : ''}`}
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -641,55 +640,57 @@ export default function IdeaCloudPage() {
                 </div>
 
                 {/* Participants List */}
-                <div className="space-y-4 max-h-60 overflow-y-auto">
+                <div className="space-y-6 max-h-80 overflow-y-auto pr-2">
                   {selectedWord.participants.map((participant, index) => (
                     <motion.div
                       key={participant.id}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className={`${themeStyles.cardBg} rounded-xl p-4 border hover:border-purple-300 transition-all duration-300`}
+                      className={`${themeStyles.cardBg} rounded-2xl p-6 border hover:border-purple-300 transition-all duration-300 hover:shadow-lg`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                           {participant.vibe_code.charAt(0).toUpperCase()}
                         </div>
-                        <div className="flex-1">
-                          <h3 className={`font-bold font-kievit text-lg ${themeStyles.text}`}>
-                            {participant.vibe_code}
-                          </h3>
-                          <p className={`text-base font-kievit ${themeStyles.muted}`}>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h3 className={`font-bold font-kievit text-xl ${isDarkMode ? 'text-purple-300' : 'text-purple-700'} break-words`}>
+                              {participant.vibe_code}
+                            </h3>
+                            <span className={`text-xs px-3 py-1 rounded-full flex-shrink-0 ${
+                              participant.age_group === '10-13' 
+                                ? (isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-700')
+                                : participant.age_group === '13-16' || participant.age_group === '13+'
+                                  ? (isDarkMode ? 'bg-purple-900 text-purple-200' : 'bg-purple-100 text-purple-700')
+                                  : participant.age_group === 'above-16'
+                                    ? (isDarkMode ? 'bg-orange-900 text-orange-200' : 'bg-orange-100 text-orange-700')
+                                    : (isDarkMode ? 'bg-gray-900 text-gray-200' : 'bg-gray-100 text-gray-700')
+                            }`}>
+                              {participant.age_group === '10-13' ? '10-13 yrs' : 
+                               participant.age_group === '13-16' || participant.age_group === '13+' ? '13-16 yrs' : 
+                               participant.age_group === 'above-16' ? 'Above 16' : 
+                               (participant.age_group || 'Unknown')}
+                            </span>
+                          </div>
+                          <p className={`text-base font-kievit ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-4 break-words`}>
                             {participant.full_name} • {participant.building}-{participant.flat}
                           </p>
-                          <span className={`text-xs px-2 py-1 rounded-full mt-1 inline-block ${
-                            participant.age_group === '10-13' 
-                              ? (isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-700')
-                              : participant.age_group === '13-16' || participant.age_group === '13+'
-                                ? (isDarkMode ? 'bg-purple-900 text-purple-200' : 'bg-purple-100 text-purple-700')
-                                : participant.age_group === 'above-16'
-                                  ? (isDarkMode ? 'bg-orange-900 text-orange-200' : 'bg-orange-100 text-orange-700')
-                                  : (isDarkMode ? 'bg-gray-900 text-gray-200' : 'bg-gray-100 text-gray-700')
-                          }`}>
-                            {participant.age_group === '10-13' ? '10-13 yrs' : 
-                             participant.age_group === '13-16' || participant.age_group === '13+' ? '13-16 yrs' : 
-                             participant.age_group === 'above-16' ? 'Above 16' : 
-                             (participant.age_group || 'Unknown')}
-                          </span>
+                          <div className={`p-4 rounded-xl bg-gradient-to-r ${isDarkMode ? 'from-green-900/30 to-emerald-900/30' : 'from-green-50 to-emerald-50'} border-l-4 border-green-500`}>
+                            <p className={`text-base font-medium font-kievit ${isDarkMode ? 'text-green-200' : 'text-green-800'} break-words leading-relaxed`}>
+                              💡 {participant.website_idea}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <div className={`mt-3 p-3 rounded-lg bg-gradient-to-r ${isDarkMode ? 'from-green-900/30 to-emerald-900/30' : 'from-green-50 to-emerald-50'} border-l-4 border-green-500`}>
-                        <p className={`text-base font-medium font-kievit ${themeStyles.text}`}>
-                          💡 {participant.website_idea}
-                        </p>
                       </div>
                     </motion.div>
                   ))}
                 </div>
 
                 {/* Footer */}
-                <div className={`mt-6 pt-4 border-t ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+                <div className={`mt-8 pt-6 border-t ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
                   <div className="text-center">
-                    <p className={`text-lg font-kievit ${themeStyles.muted}`}>
+                    <p className={`text-lg font-kievit ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} break-words leading-relaxed`}>
                       {selectedWord.count} creative minds thinking about "{selectedWord.text}"
                     </p>
                   </div>

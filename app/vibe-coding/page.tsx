@@ -124,7 +124,20 @@ export default function VibeCodingPage() {
         
         // Validate data structure
         if (Array.isArray(data)) {
-          setRegistrations(data)
+          // Clean and normalize data to ensure consistency
+          const cleanData = data.map(registration => ({
+            ...registration,
+            // Ensure all fields are clean strings
+            id: String(registration.id || ''),
+            full_name: String(registration.full_name || '').trim(),
+            age_group: String(registration.age_group || 'Unknown').trim(),
+            building: String(registration.building || '').trim(),
+            flat: String(registration.flat || '').trim(),
+            website_idea: String(registration.website_idea || '').trim(),
+            vibe_code: String(registration.vibe_code || '').trim(),
+            expectations: String(registration.expectations || '').trim()
+          }))
+          setRegistrations(cleanData)
         } else {
           console.error('❌ Invalid data format received:', typeof data)
           setRegistrations([])
@@ -357,7 +370,7 @@ export default function VibeCodingPage() {
   }
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900' : 'bg-gradient-to-br from-green-400 via-purple-500 to-yellow-400'} relative overflow-hidden`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900' : 'bg-gradient-to-br from-green-400 via-purple-500 to-yellow-400'} relative`}>
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Floating Code Elements - Enhanced visibility */}
@@ -525,7 +538,7 @@ export default function VibeCodingPage() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border min-h-[600px] flex flex-col`}
+            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border h-[600px] flex flex-col overflow-hidden`}
           >
             {submitSuccess ? (
               <motion.div
@@ -551,7 +564,7 @@ export default function VibeCodingPage() {
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col">
+              <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col overflow-y-auto pr-2 scrollbar-container py-2">
                 <h2 className={`text-2xl font-bold text-center mb-8 font-mono ${themeStyles.text}`}>
                   <Code className="inline w-8 h-8 text-purple-600 mr-2" />
                   Join the Coding Adventure!
@@ -569,7 +582,7 @@ export default function VibeCodingPage() {
                       value={formData.fullName}
                       onChange={(e) => handleInputChange('fullName', e.target.value)}
                       placeholder="Enter your awesome name!"
-                      className={`w-full p-4 pl-12 border-2 rounded-2xl focus:ring-4 focus:ring-purple-200 transition-all duration-300 font-mono text-sm md:text-base ${themeStyles.inputBg} hover:border-purple-400 group-hover:shadow-lg ${
+                      className={`w-full p-4 pl-12 border-2 rounded-2xl focus:ring-4 focus:ring-purple-200 transition-all duration-300 font-mono text-sm md:text-base ${themeStyles.inputBg} ${isDarkMode ? 'text-white' : 'text-gray-900'} hover:border-purple-400 group-hover:shadow-lg ${
                         validationErrors.fullName ? 'border-red-500 focus:border-red-500' : 'border-purple-300 focus:border-purple-500'
                       }`}
                     />
@@ -683,7 +696,7 @@ export default function VibeCodingPage() {
                       disabled={!selectedBuilding}
                       value={formData.flatNumber}
                       onChange={(e) => handleInputChange('flatNumber', e.target.value)}
-                      className={`w-full p-4 pl-12 border-2 border-purple-300 rounded-2xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-300 font-mono ${themeStyles.inputBg} hover:border-purple-400 group-hover:shadow-lg appearance-none cursor-pointer ${
+                      className={`w-full p-4 pl-12 border-2 border-purple-300 rounded-2xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-300 font-mono ${themeStyles.inputBg} ${isDarkMode ? 'text-white' : 'text-gray-900'} hover:border-purple-400 group-hover:shadow-lg appearance-none cursor-pointer ${
                         !selectedBuilding ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     >
@@ -733,7 +746,7 @@ export default function VibeCodingPage() {
                       onChange={(e) => handleInputChange('websiteIdea', e.target.value)}
                       placeholder="Describe your amazing website idea! (e.g., A game website, a pet blog, a music player...)"
                       rows={4}
-                      className={`w-full p-4 pl-12 border-2 rounded-2xl focus:ring-4 focus:ring-green-200 transition-all duration-300 font-mono text-sm md:text-base resize-none ${themeStyles.inputBg} hover:border-green-400 group-hover:shadow-lg ${
+                      className={`w-full p-4 pl-12 border-2 rounded-2xl focus:ring-4 focus:ring-green-200 transition-all duration-300 font-mono text-sm md:text-base resize-none ${themeStyles.inputBg} ${isDarkMode ? 'text-white' : 'text-gray-900'} hover:border-green-400 group-hover:shadow-lg ${
                         validationErrors.websiteIdea ? 'border-red-500 focus:border-red-500' : 'border-green-300 focus:border-green-500'
                       }`}
                     />
@@ -766,7 +779,7 @@ export default function VibeCodingPage() {
                       value={formData.vibeCode}
                       onChange={(e) => handleInputChange('vibeCode', e.target.value)}
                       placeholder="e.g., cool gamer, nature lover, disco vibe, tech wizard..."
-                      className={`w-full p-4 pl-12 border-2 border-yellow-300 rounded-2xl focus:ring-4 focus:ring-yellow-200 focus:border-yellow-500 transition-all duration-300 font-mono text-sm md:text-base ${themeStyles.inputBg} hover:border-yellow-400 group-hover:shadow-lg`}
+                      className={`w-full p-4 pl-12 border-2 border-yellow-300 rounded-2xl focus:ring-4 focus:ring-yellow-200 focus:border-yellow-500 transition-all duration-300 font-mono text-sm md:text-base ${themeStyles.inputBg} ${isDarkMode ? 'text-white' : 'text-gray-900'} hover:border-yellow-400 group-hover:shadow-lg`}
                     />
                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-yellow-500">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -787,7 +800,7 @@ export default function VibeCodingPage() {
                       onChange={(e) => handleInputChange('expectations', e.target.value)}
                       placeholder="What do you hope to learn or create? (optional)"
                       rows={3}
-                      className={`w-full p-4 pl-12 border-2 border-pink-300 rounded-2xl focus:ring-4 focus:ring-pink-200 focus:border-pink-500 transition-all duration-300 font-mono text-sm md:text-base resize-none ${themeStyles.inputBg} hover:border-pink-400 group-hover:shadow-lg`}
+                      className={`w-full p-4 pl-12 border-2 border-pink-300 rounded-2xl focus:ring-4 focus:ring-pink-200 focus:border-pink-500 transition-all duration-300 font-mono text-sm md:text-base resize-none ${themeStyles.inputBg} ${isDarkMode ? 'text-white' : 'text-gray-900'} hover:border-pink-400 group-hover:shadow-lg`}
                     />
                     <div className="absolute left-4 top-6 text-pink-500">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -878,7 +891,7 @@ export default function VibeCodingPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border hidden lg:block min-h-[600px] flex flex-col`}
+            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border hidden lg:block h-[600px] flex flex-col`}
           >
             <div className="text-center mb-6">
               <div className="hidden lg:flex items-center justify-center gap-3 mb-4">
@@ -996,12 +1009,12 @@ export default function VibeCodingPage() {
                 <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Your amazing idea could be next!</p>
               </div>
             ) : (
-              <div className="space-y-4 flex-1 overflow-y-auto">
+              <div className="space-y-4 flex-1 overflow-y-auto max-h-[400px] pr-2 scrollbar-container">
                 {registrations.map((registration, index) => {
                   const isOptimistic = registration.id.startsWith('temp-')
                   return (
                     <motion.div
-                      key={registration.id}
+                      key={`${registration.id}-${registration.vibe_code}-${index}`}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -1057,13 +1070,13 @@ export default function VibeCodingPage() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="text-center mt-8"
         >
-          <div className={`${themeStyles.cardBg} rounded-2xl p-6 border`}>
-            <div className="flex items-center justify-center gap-4 mb-3">
-              <Laptop className={`w-8 h-8 ${isDarkMode ? 'text-white' : 'text-gray-700'}`} />
-              <Star className="w-8 h-8 text-yellow-300" />
-              <Code className="w-8 h-8 text-purple-300" />
+          <div className={`${themeStyles.cardBg} rounded-xl p-4 border`}>
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <Laptop className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-gray-700'}`} />
+              <Star className="w-5 h-5 text-yellow-300" />
+              <Code className="w-5 h-5 text-purple-300" />
             </div>
-            <p className={`font-mono text-lg ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+            <p className={`font-mono text-sm ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
               Ready to code your dreams into reality? Let's make magic happen! ✨
             </p>
           </div>
@@ -1113,7 +1126,7 @@ export default function VibeCodingPage() {
               </div>
 
               {/* Content */}
-              <div className="space-y-4 max-h-60 overflow-y-auto">
+              <div className="space-y-4 max-h-96 overflow-y-auto pr-2 scrollbar-container">
                 {isLoadingRegistrations ? (
                   <div className="space-y-4">
                     {/* Skeleton Registration Cards for Popup */}
@@ -1153,7 +1166,7 @@ export default function VibeCodingPage() {
                     const isOptimistic = registration.id.startsWith('temp-')
                     return (
                       <motion.div
-                        key={registration.id}
+                        key={`mobile-${registration.id}-${registration.vibe_code}-${index}`}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -1233,6 +1246,31 @@ export default function VibeCodingPage() {
           </motion.div>
         </>
       )}
+      
+      <style jsx>{`
+        .scrollbar-container::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        .scrollbar-container::-webkit-scrollbar-track {
+          background: ${isDarkMode ? '#374151' : '#f3f4f6'};
+          border-radius: 4px;
+        }
+        
+        .scrollbar-container::-webkit-scrollbar-thumb {
+          background: ${isDarkMode ? '#8b5cf6' : '#a855f7'};
+          border-radius: 4px;
+        }
+        
+        .scrollbar-container::-webkit-scrollbar-thumb:hover {
+          background: ${isDarkMode ? '#7c3aed' : '#9333ea'};
+        }
+        
+        .scrollbar-container {
+          scrollbar-width: thin;
+          scrollbar-color: ${isDarkMode ? '#8b5cf6 #374151' : '#a855f7 #f3f4f6'};
+        }
+      `}</style>
     </div>
   )
 }
