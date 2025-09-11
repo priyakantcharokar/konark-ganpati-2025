@@ -532,13 +532,13 @@ export default function VibeCodingPage() {
         </motion.div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Left Side - Registration Form */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border h-[600px] flex flex-col overflow-hidden`}
+            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border min-h-[600px] flex flex-col`}
           >
             {submitSuccess ? (
               <motion.div
@@ -564,7 +564,7 @@ export default function VibeCodingPage() {
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col overflow-y-auto pr-2 scrollbar-container py-2">
+              <form onSubmit={handleSubmit} className="space-y-5 flex-1 flex flex-col">
                 <h2 className={`text-2xl font-bold text-center mb-8 font-mono ${themeStyles.text}`}>
                   <Code className="inline w-8 h-8 text-purple-600 mr-2" />
                   Join the Coding Adventure!
@@ -891,7 +891,7 @@ export default function VibeCodingPage() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border hidden lg:block h-[600px] flex flex-col`}
+            className={`${themeStyles.cardBg} rounded-3xl p-8 shadow-2xl border hidden lg:block min-h-[600px] flex flex-col`}
           >
             <div className="text-center mb-6">
               <div className="hidden lg:flex items-center justify-center gap-3 mb-4">
@@ -1009,8 +1009,8 @@ export default function VibeCodingPage() {
                 <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Your amazing idea could be next!</p>
               </div>
             ) : (
-              <div className="space-y-4 flex-1 overflow-y-auto max-h-[400px] pr-2 scrollbar-container">
-                {registrations.map((registration, index) => {
+              <div className="space-y-4 flex-1 overflow-hidden">
+                {registrations.slice(0, 7).map((registration, index) => {
                   const isOptimistic = registration.id.startsWith('temp-')
                   return (
                     <motion.div
@@ -1058,6 +1058,27 @@ export default function VibeCodingPage() {
                    </motion.div>
                  )
                })}
+               
+               {/* View More Link */}
+               {registrations.length > 7 && (
+                 <div className="text-center mt-6 pt-4 border-t border-gray-200">
+                   <Link 
+                     href="/vibe-coding/idea-cloud"
+                     className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl font-mono font-medium transition-all duration-300 hover:scale-105 ${
+                       isDarkMode 
+                         ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl' 
+                         : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-lg hover:shadow-xl'
+                     }`}
+                   >
+                     <span className="text-lg">🌟</span>
+                     View more ideas
+                     <span className="text-lg">✨</span>
+                   </Link>
+                   <p className={`text-sm mt-2 font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                     See all {registrations.length} creative minds and their amazing ideas!
+                   </p>
+                 </div>
+               )}
               </div>
             )}
           </motion.div>
@@ -1068,9 +1089,9 @@ export default function VibeCodingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-center mt-8"
+          className="text-center mt-16 mb-8"
         >
-          <div className={`${themeStyles.cardBg} rounded-xl p-4 border`}>
+          <div className={`${themeStyles.cardBg} rounded-xl p-4 border relative z-10`}>
             <div className="flex items-center justify-center gap-3 mb-2">
               <Laptop className={`w-5 h-5 ${isDarkMode ? 'text-white' : 'text-gray-700'}`} />
               <Star className="w-5 h-5 text-yellow-300" />
@@ -1162,7 +1183,7 @@ export default function VibeCodingPage() {
                     <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Your amazing idea could be next!</p>
                   </div>
                 ) : (
-                  registrations.map((registration, index) => {
+                  registrations.slice(0, 7).map((registration, index) => {
                     const isOptimistic = registration.id.startsWith('temp-')
                     return (
                       <motion.div
@@ -1231,6 +1252,27 @@ export default function VibeCodingPage() {
                       </motion.div>
                     )
                   })
+                )}
+                
+                {/* View More Link for Mobile */}
+                {registrations.length > 7 && (
+                  <div className="text-center mt-4 pt-4 border-t border-gray-200">
+                    <Link 
+                      href="/vibe-coding/idea-cloud"
+                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono font-medium transition-all duration-300 hover:scale-105 ${
+                        isDarkMode 
+                          ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl' 
+                          : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-lg hover:shadow-xl'
+                      }`}
+                    >
+                      <span className="text-sm">🌟</span>
+                      View Idea Cloud
+                      <span className="text-sm">✨</span>
+                    </Link>
+                    <p className={`text-xs mt-1 font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      See all {registrations.length} creative minds!
+                    </p>
+                  </div>
                 )}
               </div>
 
