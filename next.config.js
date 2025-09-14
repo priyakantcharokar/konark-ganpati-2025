@@ -12,7 +12,41 @@ const nextConfig = {
   },
   
   // Ensure proper asset handling
-  assetPrefix: ''
+  assetPrefix: '',
+  
+  // Disable all caching for API routes to ensure fresh data
+  // Note: Removed experimental.staticPageGenerationTimeout as it's not valid in Next.js 14
+  
+  // Disable caching for all API routes
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate, max-age=0, private, no-transform',
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
+          },
+          {
+            key: 'Expires',
+            value: '0',
+          },
+          {
+            key: 'Surrogate-Control',
+            value: 'no-store',
+          },
+          {
+            key: 'X-Accel-Expires',
+            value: '0',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

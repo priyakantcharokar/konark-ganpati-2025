@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowLeft, Sparkles, Lightbulb, Users, RefreshCw, Home, Star, Code, Rocket, Sun, Moon } from 'lucide-react'
 import { useTheme } from '@/lib/theme-context'
 import Link from 'next/link'
@@ -30,8 +30,6 @@ export default function IdeaCloudPage() {
   const [registrations, setRegistrations] = useState<VibeRegistrationData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [wordCloudData, setWordCloudData] = useState<WordCloudItem[]>([])
-  const [selectedWord, setSelectedWord] = useState<WordCloudItem | null>(null)
-  const [showParticipants, setShowParticipants] = useState(false)
   const { isDarkMode, toggleTheme, themeStyles } = useTheme()
 
   // Filter states
@@ -111,6 +109,7 @@ export default function IdeaCloudPage() {
       if (response.ok) {
         const data = await response.json()
         console.log('✅ Successfully loaded registrations:', data.length, 'records')
+        console.log('🔍 Age groups found:', data.map((r: VibeRegistrationData) => r.age_group))
         setRegistrations(data)
         createWordCloud(data)
       } else {
@@ -188,11 +187,6 @@ export default function IdeaCloudPage() {
     return colors[Math.floor(Math.random() * colors.length)]
   }
 
-  const handleWordClick = (word: WordCloudItem) => {
-    setSelectedWord(word)
-    setShowParticipants(true)
-  }
-
   const handleBackClick = () => {
     window.location.href = '/vibe-coding'
   }
@@ -202,13 +196,13 @@ export default function IdeaCloudPage() {
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Floating Code Elements */}
-        <div className={`absolute top-20 left-10 text-xs opacity-60 animate-pulse font-mono font-bold ${isDarkMode ? 'text-green-400' : 'text-green-300'}`}>
+        <div className={`absolute top-20 left-10 text-xs opacity-60 animate-pulse font-orbitron font-bold ${isDarkMode ? 'text-green-400' : 'text-green-300'}`}>
           &lt;ideas&gt;✨&lt;/ideas&gt;
         </div>
-        <div className={`absolute top-40 right-20 text-xs opacity-60 animate-pulse font-mono font-bold ${isDarkMode ? 'text-purple-400' : 'text-purple-300'}`} style={{animationDelay: '1s'}}>
+        <div className={`absolute top-40 right-20 text-xs opacity-60 animate-pulse font-orbitron font-bold ${isDarkMode ? 'text-purple-400' : 'text-purple-300'}`} style={{animationDelay: '1s'}}>
           wordCloud.generate()
         </div>
-        <div className={`absolute bottom-40 left-20 text-xs opacity-60 animate-pulse font-mono font-bold ${isDarkMode ? 'text-yellow-400' : 'text-yellow-300'}`} style={{animationDelay: '2s'}}>
+        <div className={`absolute bottom-40 left-20 text-xs opacity-60 animate-pulse font-orbitron font-bold ${isDarkMode ? 'text-yellow-400' : 'text-yellow-300'}`} style={{animationDelay: '2s'}}>
           creativity++
         </div>
         
@@ -263,13 +257,13 @@ export default function IdeaCloudPage() {
             </button>
           </div>
           
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white font-mono text-center mb-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white font-orbitron text-center mb-8">
             🌟 Creative Minds & Ideas 🌟
           </h1>
           
           <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl max-w-4xl mx-auto`}>
             <div className="relative">
-              <p className={`text-xl md:text-2xl lg:text-3xl font-mono leading-relaxed tracking-wider ${themeStyles.text}`}>
+              <p className={`text-xl md:text-2xl lg:text-3xl font-orbitron leading-relaxed tracking-wider ${themeStyles.text}`}>
                 <span className={`${isDarkMode ? 'text-green-300' : 'text-green-600'}`}>🎨</span> 
                 <span className={`${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`}> Meet our amazing </span>
                 <span className={`font-bold ${isDarkMode ? 'text-cyan-300' : 'text-cyan-600'}`}>creative coders</span> 
@@ -293,10 +287,10 @@ export default function IdeaCloudPage() {
                 <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
               </button>
               <div className="flex items-center gap-2">
-                <span className={`text-4xl md:text-5xl lg:text-6xl font-mono font-bold ${isDarkMode ? 'text-cyan-300' : 'text-cyan-600'} drop-shadow-[0_0_20px_rgba(34,211,238,0.8)] animate-pulse`}>
+                <span className={`text-4xl md:text-5xl lg:text-6xl font-orbitron font-bold ${isDarkMode ? 'text-cyan-300' : 'text-cyan-600'} drop-shadow-[0_0_20px_rgba(34,211,238,0.8)] animate-pulse`}>
                   {displayCount}
                 </span>
-                <span className={`text-lg md:text-xl font-mono tracking-wider ${themeStyles.muted}`}>
+                <span className={`text-lg md:text-xl font-orbitron tracking-wider ${themeStyles.muted}`}>
                   <span className={`${isDarkMode ? 'text-yellow-300' : 'text-yellow-600'}`}>creative minds</span> 
                   <span className={`${isDarkMode ? 'text-green-300' : 'text-green-600'}`}> sharing their amazing ideas</span>
                 </span>
@@ -316,20 +310,20 @@ export default function IdeaCloudPage() {
             <div className="text-center">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <span className="text-3xl">🚀</span>
-                <h3 className={`text-2xl md:text-3xl font-bold font-kievit ${themeStyles.text}`}>
+                <h3 className={`text-2xl md:text-3xl font-bold font-orbitron ${themeStyles.text}`}>
                   Ready to Share Your Ideas?
                 </h3>
                 <span className="text-3xl">💡</span>
               </div>
               
-              <p className={`text-lg md:text-xl font-kievit ${themeStyles.muted} mb-6 leading-relaxed`}>
+              <p className={`text-lg md:text-xl font-orbitron ${themeStyles.muted} mb-6 leading-relaxed`}>
                 Join our amazing community of creative coders and showcase your brilliant website ideas!
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link 
                   href="/vibe-coding"
-                  className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl font-bold font-kievit text-lg transition-all duration-300 hover:scale-105 shadow-lg ${
+                  className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl font-bold font-orbitron text-lg transition-all duration-300 hover:scale-105 shadow-lg ${
                     isDarkMode 
                       ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-500 hover:to-pink-500' 
                       : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-400 hover:to-pink-400'
@@ -340,7 +334,7 @@ export default function IdeaCloudPage() {
                   <Rocket className="w-6 h-6" />
                 </Link>
                 
-                <div className={`text-sm font-kievit ${themeStyles.muted} px-4 py-2 rounded-lg ${
+                <div className={`text-sm font-orbitron ${themeStyles.muted} px-4 py-2 rounded-lg ${
                   isDarkMode ? 'bg-purple-900/30' : 'bg-purple-100'
                 }`}>
                   ✨ Free Registration • All Ages Welcome
@@ -358,14 +352,14 @@ export default function IdeaCloudPage() {
           className="mb-8"
         >
           <div className={`${themeStyles.cardBg} rounded-2xl p-6 border shadow-xl max-w-6xl mx-auto`}>
-            <h3 className={`text-xl font-bold font-kievit ${themeStyles.text} mb-4 text-center`}>
+            <h3 className={`text-xl font-bold font-orbitron ${themeStyles.text} mb-4 text-center`}>
               🔍 Search & Filter Creative Minds
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Search Input */}
               <div className="space-y-2">
-                <label className={`block text-sm font-bold font-kievit ${themeStyles.text}`}>
+                <label className={`block text-sm font-bold font-orbitron ${themeStyles.text}`}>
                   🔍 Search Everything
                 </label>
                 <input
@@ -373,19 +367,19 @@ export default function IdeaCloudPage() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search names, ideas, expectations..."
-                  className={`w-full p-3 border-2 rounded-xl focus:ring-4 focus:ring-purple-200 transition-all duration-300 font-kievit ${themeStyles.inputBg} hover:border-purple-400 focus:border-purple-500`}
+                  className={`w-full p-3 border-2 rounded-xl focus:ring-4 focus:ring-purple-200 transition-all duration-300 font-orbitron ${themeStyles.inputBg} hover:border-purple-400 focus:border-purple-500`}
                 />
               </div>
 
               {/* Age Group Filter */}
               <div className="space-y-2">
-                <label className={`block text-sm font-bold font-kievit ${themeStyles.text}`}>
+                <label className={`block text-sm font-bold font-orbitron ${themeStyles.text}`}>
                   🎂 Age Group
                 </label>
                 <select
                   value={selectedAgeGroup}
                   onChange={(e) => setSelectedAgeGroup(e.target.value)}
-                  className={`w-full p-3 border-2 border-purple-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-300 font-kievit ${themeStyles.inputBg} hover:border-purple-400 appearance-none cursor-pointer`}
+                  className={`w-full p-3 border-2 border-purple-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 transition-all duration-300 font-orbitron ${themeStyles.inputBg} hover:border-purple-400 appearance-none cursor-pointer`}
                 >
                   <option value="">All Ages</option>
                   <option value="10-13">10-13 years</option>
@@ -396,7 +390,7 @@ export default function IdeaCloudPage() {
 
               {/* Clear Filters */}
               <div className="space-y-2">
-                <label className={`block text-sm font-bold font-kievit ${themeStyles.text}`}>
+                <label className={`block text-sm font-bold font-orbitron ${themeStyles.text}`}>
                   🧹 Actions
                 </label>
                 <button
@@ -404,7 +398,7 @@ export default function IdeaCloudPage() {
                     setSearchTerm('')
                     setSelectedAgeGroup('')
                   }}
-                  className={`w-full p-3 rounded-xl font-bold font-kievit transition-all duration-300 hover:scale-105 ${
+                  className={`w-full p-3 rounded-xl font-bold font-orbitron transition-all duration-300 hover:scale-105 ${
                     isDarkMode 
                       ? 'bg-gray-700 text-gray-200 hover:bg-gray-600 border-2 border-gray-600' 
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-200'
@@ -416,10 +410,10 @@ export default function IdeaCloudPage() {
 
               {/* Results Count */}
               <div className="space-y-2">
-                <label className={`block text-sm font-bold font-kievit ${themeStyles.text}`}>
+                <label className={`block text-sm font-bold font-orbitron ${themeStyles.text}`}>
                   📊 Results
                 </label>
-                <div className={`w-full p-3 rounded-xl font-bold font-kievit text-center ${
+                <div className={`w-full p-3 rounded-xl font-bold font-orbitron text-center ${
                   isDarkMode 
                     ? 'bg-purple-900 text-purple-200' 
                     : 'bg-purple-100 text-purple-700'
@@ -445,34 +439,32 @@ export default function IdeaCloudPage() {
               <div className="flex items-center justify-center h-96">
                 <div className="text-center">
                   <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                  <p className={`text-xl md:text-2xl font-kievit ${themeStyles.text}`}>Loading creative minds...</p>
+                  <p className={`text-xl md:text-2xl font-orbitron ${themeStyles.text}`}>Loading creative minds...</p>
                 </div>
               </div>
             ) : registrations.length === 0 ? (
               <div className="flex items-center justify-center h-96">
                 <div className="text-center">
                   <div className="text-6xl mb-4">🌟</div>
-                  <p className={`text-xl md:text-2xl font-kievit ${themeStyles.text}`}>No creative minds yet!</p>
-                  <p className={`text-lg md:text-xl font-kievit ${themeStyles.muted}`}>Be the first to share your amazing website idea!</p>
+                  <p className={`text-xl md:text-2xl font-orbitron ${themeStyles.text}`}>No creative minds yet!</p>
+                  <p className={`text-lg md:text-xl font-orbitron ${themeStyles.muted}`}>Be the first to share your amazing website idea!</p>
                 </div>
               </div>
             ) : filteredRegistrations.length === 0 ? (
               <div className="flex items-center justify-center h-96">
                 <div className="text-center">
                   <div className="text-6xl mb-4">🔍</div>
-                  <p className={`text-xl md:text-2xl font-kievit ${themeStyles.text}`}>No results found!</p>
-                  <p className={`text-lg md:text-xl font-kievit ${themeStyles.muted}`}>Try adjusting your search or filters</p>
+                  <p className={`text-xl md:text-2xl font-orbitron ${themeStyles.text}`}>No results found!</p>
+                  <p className={`text-lg md:text-xl font-orbitron ${themeStyles.muted}`}>Try adjusting your search or filters</p>
                 </div>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <AnimatePresence>
-                  {filteredRegistrations.map((registration, index) => (
+                {filteredRegistrations.map((registration, index) => (
                     <motion.div
                       key={registration.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
                       transition={{ 
                         duration: 0.5, 
                         delay: index * 0.1,
@@ -480,17 +472,7 @@ export default function IdeaCloudPage() {
                         stiffness: 100
                       }}
                       whileHover={{ scale: 1.05, y: -5 }}
-                      className={`${themeStyles.cardBg} rounded-3xl p-6 shadow-2xl border hover:shadow-3xl transition-all duration-300 cursor-pointer`}
-                      onClick={() => {
-                        setSelectedWord({
-                          text: registration.website_idea,
-                          count: 1,
-                          size: 24,
-                          color: getRandomColor(),
-                          participants: [registration]
-                        })
-                        setShowParticipants(true)
-                      }}
+                      className={`${themeStyles.cardBg} rounded-3xl p-6 shadow-2xl border hover:shadow-3xl transition-all duration-300`}
                     >
                       {/* Person Header */}
                       <div className="flex items-center gap-4 mb-4">
@@ -498,26 +480,31 @@ export default function IdeaCloudPage() {
                           {registration.vibe_code.charAt(0).toUpperCase()}
                         </div>
                         <div className="flex-1">
-                          <h3 className={`text-xl font-bold font-kievit ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
+                          <h3 className={`text-xl font-bold font-orbitron ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>
                             {registration.vibe_code}
                           </h3>
-                          <p className={`text-base font-kievit ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                          <p className={`text-base font-orbitron ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                             {registration.full_name}
                           </p>
-                          <span className={`text-sm px-3 py-1 rounded-full mt-1 inline-block ${
-                            registration.age_group === '10-13' 
-                              ? (isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-700')
-                              : registration.age_group === '13-16' || registration.age_group === '13+'
-                                ? (isDarkMode ? 'bg-purple-900 text-purple-200' : 'bg-purple-100 text-purple-700')
-                                : registration.age_group === 'above-16'
-                                  ? (isDarkMode ? 'bg-orange-900 text-orange-200' : 'bg-orange-100 text-orange-700')
-                                  : (isDarkMode ? 'bg-gray-900 text-gray-200' : 'bg-gray-100 text-gray-700')
-                          }`}>
-                            {registration.age_group === '10-13' ? '10-13 yrs' : 
-                             registration.age_group === '13-16' || registration.age_group === '13+' ? '13-16 yrs' : 
-                             registration.age_group === 'above-16' ? 'Above 16' : 
-                             (registration.age_group || 'Unknown')}
-                          </span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className={`text-sm font-orbitron ${isDarkMode ? 'text-blue-300' : 'text-blue-600'} font-medium`}>
+                              🏠 {registration.building}-{registration.flat}
+                            </span>
+                            <span className={`text-sm px-3 py-1 rounded-full inline-block font-orbitron ${
+                              registration.age_group === '10-13' 
+                                ? (isDarkMode ? 'bg-blue-600 text-blue-100' : 'bg-blue-100 text-blue-700')
+                                : (registration.age_group === '13-16' || registration.age_group === '13+')
+                                  ? (isDarkMode ? 'bg-purple-600 text-purple-100' : 'bg-purple-100 text-purple-700')
+                                  : registration.age_group === 'above-16'
+                                    ? (isDarkMode ? 'bg-orange-600 text-orange-100' : 'bg-orange-100 text-orange-700')
+                                    : (isDarkMode ? 'bg-gray-600 text-gray-100' : 'bg-gray-100 text-gray-700')
+                            }`}>
+                              {registration.age_group === '10-13' ? '10-13 yrs' : 
+                               registration.age_group === '13-16' || registration.age_group === '13+' ? '13-16 yrs' : 
+                               registration.age_group === 'above-16' ? 'Above 16 yrs' : 
+                               (registration.age_group || 'Unknown')}
+                            </span>
+                          </div>
                         </div>
                       </div>
 
@@ -526,10 +513,10 @@ export default function IdeaCloudPage() {
                         <div className="flex items-start gap-3">
                           <span className="text-2xl flex-shrink-0">💡</span>
                           <div className="flex-1">
-                            {/* <h4 className={`text-lg font-bold font-kievit ${themeStyles.text} mb-2`}>
+                            {/* <h4 className={`text-lg font-bold font-orbitron ${themeStyles.text} mb-2`}>
                               Website Idea
                             </h4> */}
-                            <p className={`text-base font-kievit ${isDarkMode ? 'text-green-200' : 'text-green-800'} leading-relaxed font-medium`}>
+                            <p className={`text-base font-orbitron ${isDarkMode ? 'text-green-200' : 'text-green-800'} leading-relaxed font-medium`}>
                               {registration.website_idea}
                             </p>
                           </div>
@@ -541,30 +528,15 @@ export default function IdeaCloudPage() {
                         <div className={`mt-4 bg-gradient-to-r ${isDarkMode ? 'from-blue-900/30 to-indigo-900/30' : 'from-blue-50 to-indigo-50'} rounded-xl p-3`}>
                           <div className="flex items-start gap-2">
                             <span className="text-lg flex-shrink-0">🎯</span>
-                            <p className={`text-sm font-kievit ${themeStyles.text} leading-relaxed`}>
+                            <p className={`text-sm font-orbitron ${themeStyles.text} leading-relaxed`}>
                               {registration.expectations}
                             </p>
                           </div>
                         </div>
                       )}
 
-                      {/* Location */}
-                      <div className="mt-4 flex items-center gap-2">
-                        <span className="text-lg">🏠</span>
-                        <span className={`text-sm font-kievit ${isDarkMode ? 'text-blue-300' : 'text-blue-600'} font-medium`}>
-                          {registration.building}-{registration.flat}
-                        </span>
-                      </div>
-
-                      {/* Click Hint */}
-                      <div className="mt-4 text-center">
-                        <span className={`text-xs font-kievit ${themeStyles.muted} opacity-70`}>
-                          👆 Click to explore more
-                        </span>
-                      </div>
                     </motion.div>
                   ))}
-                </AnimatePresence>
               </div>
             )}
           </div>
@@ -584,122 +556,12 @@ export default function IdeaCloudPage() {
               <Code className="w-8 h-8 text-purple-300" />
               <Rocket className="w-8 h-8 text-pink-300" />
             </div>
-            <p className={`font-kievit text-xl md:text-2xl lg:text-3xl ${themeStyles.text}`}>
+            <p className={`font-orbitron text-xl md:text-2xl lg:text-3xl ${themeStyles.text}`}>
               Every creative mind brings unique ideas that can change the world! ✨
             </p>
           </div>
         </motion.div>
       </div>
-
-      {/* Participants Modal */}
-      <AnimatePresence>
-        {showParticipants && selectedWord && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
-              onClick={() => setShowParticipants(false)}
-            />
-            
-            {/* Modal */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-4 z-50 flex items-center justify-center"
-            >
-              <div className={`${themeStyles.cardBg} rounded-3xl p-8 max-w-3xl w-full max-h-[85vh] overflow-hidden shadow-2xl border`}>
-                {/* Header */}
-                <div className="flex items-start justify-between mb-8">
-                  <div className="flex items-center gap-4 flex-1 min-w-0">
-                    <div 
-                      className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0"
-                      style={{ backgroundColor: selectedWord.color }}
-                    >
-                      {selectedWord.text.charAt(0).toUpperCase()}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h2 className={`text-2xl md:text-3xl font-bold font-kievit ${themeStyles.text} break-words leading-tight`}>
-                        "{selectedWord.text}" Ideas
-                      </h2>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => setShowParticipants(false)}
-                    className={`p-3 rounded-full hover:bg-gray-100 transition-colors duration-200 flex-shrink-0 ${isDarkMode ? 'hover:bg-gray-700' : ''}`}
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Participants List */}
-                <div className="space-y-6 max-h-80 overflow-y-auto pr-2">
-                  {selectedWord.participants.map((participant, index) => (
-                    <motion.div
-                      key={participant.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className={`${themeStyles.cardBg} rounded-2xl p-6 border hover:border-purple-300 transition-all duration-300 hover:shadow-lg`}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-                          {participant.vibe_code.charAt(0).toUpperCase()}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className={`font-bold font-kievit text-xl ${isDarkMode ? 'text-purple-300' : 'text-purple-700'} break-words`}>
-                              {participant.vibe_code}
-                            </h3>
-                            <span className={`text-xs px-3 py-1 rounded-full flex-shrink-0 ${
-                              participant.age_group === '10-13' 
-                                ? (isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-700')
-                                : participant.age_group === '13-16' || participant.age_group === '13+'
-                                  ? (isDarkMode ? 'bg-purple-900 text-purple-200' : 'bg-purple-100 text-purple-700')
-                                  : participant.age_group === 'above-16'
-                                    ? (isDarkMode ? 'bg-orange-900 text-orange-200' : 'bg-orange-100 text-orange-700')
-                                    : (isDarkMode ? 'bg-gray-900 text-gray-200' : 'bg-gray-100 text-gray-700')
-                            }`}>
-                              {participant.age_group === '10-13' ? '10-13 yrs' : 
-                               participant.age_group === '13-16' || participant.age_group === '13+' ? '13-16 yrs' : 
-                               participant.age_group === 'above-16' ? 'Above 16' : 
-                               (participant.age_group || 'Unknown')}
-                            </span>
-                          </div>
-                          <p className={`text-base font-kievit ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-4 break-words`}>
-                            {participant.full_name} • {participant.building}-{participant.flat}
-                          </p>
-                          <div className={`p-4 rounded-xl bg-gradient-to-r ${isDarkMode ? 'from-green-900/30 to-emerald-900/30' : 'from-green-50 to-emerald-50'} border-l-4 border-green-500`}>
-                            <p className={`text-base font-medium font-kievit ${isDarkMode ? 'text-green-200' : 'text-green-800'} break-words leading-relaxed`}>
-                              💡 {participant.website_idea}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Footer */}
-                <div className={`mt-8 pt-6 border-t ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-                  <div className="text-center">
-                    <p className={`text-lg font-kievit ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} break-words leading-relaxed`}>
-                      {selectedWord.count} creative minds thinking about "{selectedWord.text}"
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
 
       <style jsx>{`
         @keyframes float-gentle {

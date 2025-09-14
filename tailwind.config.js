@@ -36,10 +36,12 @@ module.exports = {
         'helvetica': ['Helvetica', 'Arial', 'sans-serif'], // Subheadings
         'circular': ['Circular Std', 'sans-serif'], // Branding and UI
         'style-script': ['Style Script', 'cursive'], // Keep existing for special text
+        'orbitron': ['Orbitron', 'monospace'], // Vibe coding pages - futuristic tech font
         
         // Default fallbacks
         'sans': ['Circular Std', 'Helvetica', 'Arial', 'sans-serif'],
         'serif': ['Charter', 'Georgia', 'serif'],
+        'mono': ['Orbitron', 'Courier New', 'monospace'], // Override default mono for vibe coding
       },
       animation: {
         'float': 'float 3s ease-in-out infinite',
