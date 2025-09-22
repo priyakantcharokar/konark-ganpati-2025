@@ -18,7 +18,31 @@ interface VibeRegistrationData {
 
 async function getRegistrations(): Promise<VibeRegistrationData[]> {
   try {
-    // Use internal API call for server-side rendering
+    // Import the database service directly instead of using API call
+    const { supabase } = await import('@/lib/supabase')
+    
+    const { data, error } = await supabase
+      .from('vibe_registrations')
+      .select('*')
+      .order('created_at', { ascending: false })
+    
+    if (error) {
+      console.error('Database error:', error)
+      // Fallback to API call if direct database access fails
+      return await getRegistrationsFromAPI()
+    }
+    
+    return data || []
+  } catch (error) {
+    console.error('Error fetching registrations directly:', error)
+    // Fallback to API call
+    return await getRegistrationsFromAPI()
+  }
+}
+
+async function getRegistrationsFromAPI(): Promise<VibeRegistrationData[]> {
+  try {
+    // Fallback API call
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}` 
       : 'http://localhost:3000'
@@ -33,7 +57,7 @@ async function getRegistrations(): Promise<VibeRegistrationData[]> {
     
     return await response.json()
   } catch (error) {
-    console.error('Error fetching registrations:', error)
+    console.error('Error fetching registrations from API:', error)
     return []
   }
 }
@@ -42,6 +66,14 @@ export default async function WallOfFamePage() {
   const registrations = await getRegistrations()
   const websiteCreators = registrations.filter(reg => reg.website)
   const regularParticipants = registrations.filter(reg => !reg.website)
+
+  // Debug logging for production
+  console.log('Wall of Fame Debug:', {
+    totalRegistrations: registrations.length,
+    websiteCreators: websiteCreators.length,
+    regularParticipants: regularParticipants.length,
+    environment: process.env.NODE_ENV
+  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 relative">
