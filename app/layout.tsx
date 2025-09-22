@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   title: 'Konark Exotica - Where Love Resides',
   description: 'Complete schedule and information for the Ganesh Pooja Festival 2025 at Konark Exotica',
   keywords: 'Ganesh Pooja, Festival, Schedule, Events, Ganpati, Konark Exotica',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=5',
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
@@ -25,6 +24,12 @@ export const metadata: Metadata = {
     ],
   },
   manifest: '/site.webmanifest',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
 }
 
 export default function RootLayout({

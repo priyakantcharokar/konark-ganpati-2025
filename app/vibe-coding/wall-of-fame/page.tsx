@@ -142,7 +142,7 @@ export default async function WallOfFamePage() {
                         </div>
                       )}
                       <a 
-                        href={registration.website}
+                        href={registration.website || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-xs sm:text-sm lg:text-base text-white hover:text-gray-200 underline hover:no-underline font-bold font-orbitron transition-all duration-300 hover:scale-105"
