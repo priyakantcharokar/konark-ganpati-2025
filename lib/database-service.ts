@@ -98,6 +98,8 @@ export interface VibeRegistration {
   vibe_code: string
   expectations: string
   event_type: string
+  website?: string | null
+  rank?: number | null
   created_at: string
   updated_at: string
 }

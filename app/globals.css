@@ -15,6 +15,26 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Mobile optimization */
+@media (max-width: 640px) {
+  /* Reduce animations on mobile for better performance */
+  .float-gentle {
+    animation-duration: 6s;
+  }
+  
+  /* Improve touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Optimize text rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
 /* Custom fonts */
 @font-face {
   font-family: 'Charter';

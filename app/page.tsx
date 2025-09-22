@@ -112,11 +112,10 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="group relative"
           >
-            <Link href="/vibe-coding" className="block">
-              <div className={`${themeStyles.cardBg} rounded-xl p-6 shadow-lg border hover:shadow-xl transition-all duration-300 transform hover:scale-105`}>
+            <div className={`${themeStyles.cardBg} rounded-xl p-6 shadow-lg border hover:shadow-xl transition-all duration-300 transform hover:scale-105`}>
                 {/* Status Ribbon */}
-                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse shadow-lg">
-                  Registration Open
+                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                  Event Completed
                 </div>
                 
                 {/* Card Header */}
@@ -136,27 +135,39 @@ export default function Home() {
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center gap-2">
                     <Users className={`w-4 h-4 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
-                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Website Registration</span>
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Creative Ideas Shared</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Star className={`w-4 h-4 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
-                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Community Building</span>
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Community Built</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className={`w-4 h-4 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} />
-                    <span className={`text-sm font-kievit ${themeStyles.text}`}>WhatsApp Group</span>
+                    <span className={`text-sm font-kievit ${themeStyles.text}`}>Session Completed</span>
                   </div>
                 </div>
 
-                {/* CTA Button */}
-                <div className="text-center">
-                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-lg font-medium text-sm hover:from-green-600 hover:to-blue-600 transition-all duration-300 font-kievit">
-                    <span>Join Coding</span>
-                    <ArrowRight className="w-4 h-4" />
+                {/* CTA Buttons */}
+                <div className="text-center space-y-2">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                    <Link 
+                      href="/vibe-coding/idea-cloud"
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 rounded-lg font-medium text-sm hover:from-purple-600 hover:to-pink-600 transition-all duration-200 font-kievit"
+                    >
+                      <span>Idea Cloud</span>
+                      <span>🌟</span>
+                    </Link>
+                    
+                    <Link 
+                      href="/vibe-coding/wall-of-fame"
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-2 rounded-lg font-medium text-sm hover:from-yellow-600 hover:to-orange-600 transition-all duration-200 font-kievit"
+                    >
+                      <span>Wall of Fame</span>
+                      <span>🏆</span>
+                    </Link>
                   </div>
                 </div>
-              </div>
-            </Link>
+            </div>
           </motion.div>
 
           {/* Navratri Utsav Card */}
